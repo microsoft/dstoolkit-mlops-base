@@ -19,33 +19,33 @@ jobs:
 ##  COMPUTE CLUSTERS  ##
 ########################
 
-- job: aml_compute_training
-  displayName: 'Deploy AML Training Compute'
-  steps:
-  - template: ../utils/run-aml-code.template.yml
-    parameters:
-      serviceConnection: ${{parameters.serviceConnection}}
-      resourceGroup: ${{parameters.resourceGroup}}
-      amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/create_compute.py
-      scriptArguments: |
-        --name $(TRAINING_COMPUTE) \
-        --config-path configuration/compute/${{parameters.environment}}-training-compute.yml
-      scriptExtraDependencies: pyyaml
+# - job: aml_compute_training
+#   displayName: 'Deploy AML Training Compute'
+#   steps:
+#   - template: ../utils/run-aml-code.template.yml
+#     parameters:
+#       serviceConnection: ${{parameters.serviceConnection}}
+#       resourceGroup: ${{parameters.resourceGroup}}
+#       amlWorkspace: ${{parameters.amlWorkspace}}
+#       scriptPath: operation/execution/create_compute.py
+#       scriptArguments: |
+#         --name $(TRAINING_COMPUTE) \
+#         --config-path configuration/compute/${{parameters.environment}}-training-compute.yml
+#       scriptExtraDependencies: pyyaml
 
-- job: aml_compute_batchinference
-  displayName: 'Deploy AML Batch Inference Compute'
-  steps:
-  - template: ../utils/run-aml-code.template.yml
-    parameters:
-      serviceConnection: ${{parameters.serviceConnection}}
-      resourceGroup: ${{parameters.resourceGroup}}
-      amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/create_compute.py
-      scriptArguments: |
-        --name $(BATCHINFERENCE_COMPUTE) \
-        --config-path configuration/compute/${{parameters.environment}}-batchinference-compute.yml
-      scriptExtraDependencies: pyyaml
+# - job: aml_compute_batchinference
+#   displayName: 'Deploy AML Batch Inference Compute'
+#   steps:
+#   - template: ../utils/run-aml-code.template.yml
+#     parameters:
+#       serviceConnection: ${{parameters.serviceConnection}}
+#       resourceGroup: ${{parameters.resourceGroup}}
+#       amlWorkspace: ${{parameters.amlWorkspace}}
+#       scriptPath: operation/execution/create_compute.py
+#       scriptArguments: |
+#         --name $(BATCHINFERENCE_COMPUTE) \
+#         --config-path configuration/compute/${{parameters.environment}}-batchinference-compute.yml
+#       scriptExtraDependencies: pyyaml
 
 
 ################################
