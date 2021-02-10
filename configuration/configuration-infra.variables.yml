@@ -1,0 +1,30 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Definition of infra-related environment variables
+
+variables:
+
+  # DEV Environment
+  DEV_RESOURCE_GROUP: rg-mlops-dev-001
+  DEV_LOCATION: westeurope
+  DEV_NAMESPACE: mlops-dev-001
+  DEV_SERVICECONNECTION_RG: conn-mlops-sub-infra
+  DEV_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev
+  DEV_AMLWORKSPACE: aml-$(DEV_NAMESPACE)
+  DEV_STORAGEACCOUNT: sa-$(DEV_NAMESPACE)
+  DEV_KEYVAULT: kv-$(DEV_NAMESPACE)
+  DEV_APPINSIGHTS: ai-$(DEV_NAMESPACE)
+  DEV_CONTAINERREGISTRY: cr-$(DEV_NAMESPACE)
+
+  # PRD Environment
+  PRD_RESOURCE_GROUP: rg-mlops-prod-001
+  PRD_LOCATION: westeurope
+  PRD_NAMESPACE: mlops-prod-001
+  PRD_SERVICECONNECTION_RG: conn-mlops-sub-infra
+  PRD_SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod
+  PRD_AMLWORKSPACE: aml-$(PRD_NAMESPACE)
+  PRD_STORAGEACCOUNT: sa-$(PRD_NAMESPACE)
+  PRD_KEYVAULT: kv-$(PRD_NAMESPACE)
+  PRD_APPINSIGHTS: ai-$(PRD_NAMESPACE)
+  PRD_CONTAINERREGISTRY: cr-$(PRD_NAMESPACE)

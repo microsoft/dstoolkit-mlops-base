@@ -1,0 +1,83 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that deploys the infrastructure and sets up compute & data in the AML workspace
+
+trigger: none
+
+variables:
+- template: ../../configuration/configuration-infra.variables.yml 
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+####################
+##  DEPLOY INFRA  ##
+####################
+
+# Deploy DEV Environment
+- stage: deployinfra_dev
+  displayName: 'Deploy DEV Environment'
+  jobs:
+  - template: deploy-env-infra.template.yml
+    parameters:
+      environment: DEV
+      serviceConnection: $(DEV_SERVICECONNECTION_RG)
+      resourceGroup: $(DEV_RESOURCE_GROUP)
+      location: $(DEV_LOCATION)
+      storageAccount: $(DEV_STORAGEACCOUNT)
+      keyVault: $(DEV_KEYVAULT)
+      appInsights: $(DEV_APPINSIGHTS)
+      containerRegistry: $(DEV_CONTAINERREGISTRY)
+      amlWorkspace: $(DEV_AMLWORKSPACE)
+
+
+# Deploy PRD Environment
+- stage: deployinfra_prd
+  displayName: 'Deploy PRD Environment'
+  jobs:
+  - template: deploy-env-infra.template.yml
+    parameters:
+      environment: PRD
+      serviceConnection: $(PRD_SERVICECONNECTION_RG)
+      resourceGroup: $(PRD_RESOURCE_GROUP)
+      location: $(PRD_LOCATION)
+      storageAccount: $(PRD_STORAGEACCOUNT)
+      keyVault: $(PRD_KEYVAULT)
+      appInsights: $(PRD_APPINSIGHTS)
+      containerRegistry: $(PRD_CONTAINERREGISTRY)
+      amlWorkspace: $(PRD_AMLWORKSPACE)
+
+
+#####################
+##  COMPUTE SETUP  ##
+#####################
+
+# Compute Setup DEV Environment
+- stage: computesetup_dev
+  displayName: 'Compute Setup DEV Environment'
+  dependsOn: deployinfra_dev
+  jobs:
+  - template: compute-setup.template.yml
+    parameters:
+      environment: DEV
+      serviceConnection: $(DEV_SERVICECONNECTION_RG)
+      resourceGroup: $(DEV_RESOURCE_GROUP)
+      amlWorkspace: $(DEV_AMLWORKSPACE)
+
+
+# Compute Setup PRD Environment
+- stage: computesetup_prd
+  displayName: 'Compute Setup PRD Environment'
+  dependsOn: deployinfra_prd
+  jobs:
+  - template: compute-setup.template.yml
+    parameters:
+      environment: PRD
+      serviceConnection: $(PRD_SERVICECONNECTION_RG)
+      resourceGroup: $(PRD_RESOURCE_GROUP)
+      amlWorkspace: $(PRD_AMLWORKSPACE)
+
+
