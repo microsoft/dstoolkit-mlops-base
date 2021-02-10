@@ -40,7 +40,7 @@ stages:
   jobs:
   - template: deploy-env-infra.template.yml
     parameters:
-      environment: PRD
+      environment: PROD
       serviceConnection: $(PRD_SERVICECONNECTION_RG)
       resourceGroup: $(PRD_RESOURCE_GROUP)
       location: $(PRD_LOCATION)
