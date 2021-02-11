@@ -55,29 +55,29 @@ stages:
 ##  COMPUTE SETUP  ##
 #####################
 
-# # Compute Setup DEV Environment
-# - stage: computesetup_dev
-#   displayName: 'Compute Setup DEV Environment'
-#   dependsOn: deployinfra_dev
-#   jobs:
-#   - template: compute-setup.template.yml
-#     parameters:
-#       environment: DEV
-#       serviceConnection: $(DEV_SERVICECONNECTION_RG)
-#       resourceGroup: $(DEV_RESOURCE_GROUP)
-#       amlWorkspace: $(DEV_AMLWORKSPACE)
+# Compute Setup DEV Environment
+- stage: computesetup_dev
+  displayName: 'Compute Setup DEV Environment'
+  dependsOn: deployinfra_dev
+  jobs:
+  - template: compute-setup.template.yml
+    parameters:
+      environment: DEV
+      serviceConnection: $(DEV_SERVICECONNECTION_RG)
+      resourceGroup: $(DEV_RESOURCE_GROUP)
+      amlWorkspace: $(DEV_AMLWORKSPACE)
 
 
-# # Compute Setup PRD Environment
-# - stage: computesetup_prd
-#   displayName: 'Compute Setup PRD Environment'
-#   dependsOn: deployinfra_prd
-#   jobs:
-#   - template: compute-setup.template.yml
-#     parameters:
-#       environment: PRD
-#       serviceConnection: $(PRD_SERVICECONNECTION_RG)
-#       resourceGroup: $(PRD_RESOURCE_GROUP)
-#       amlWorkspace: $(PRD_AMLWORKSPACE)
+# Compute Setup PRD Environment
+- stage: computesetup_prd
+  displayName: 'Compute Setup PRD Environment'
+  dependsOn: deployinfra_prd
+  jobs:
+  - template: compute-setup.template.yml
+    parameters:
+      environment: PROD
+      serviceConnection: $(PRD_SERVICECONNECTION_RG)
+      resourceGroup: $(PRD_RESOURCE_GROUP)
+      amlWorkspace: $(PRD_AMLWORKSPACE)
 
 
