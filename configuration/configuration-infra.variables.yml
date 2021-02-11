@@ -8,7 +8,7 @@ variables:
   # DEV Environment
   DEV_RESOURCE_GROUP: rg-mlops-dev-001
   DEV_LOCATION: westeurope
-  DEV_NAMESPACE: mlopsdev001
+  DEV_NAMESPACE: mlopsdev
   DEV_SERVICECONNECTION_RG: conn-mlops-sub-infra
   DEV_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev
   DEV_AMLWORKSPACE: aml$(DEV_NAMESPACE)
@@ -20,7 +20,7 @@ variables:
   # PRD Environment
   PRD_RESOURCE_GROUP: rg-mlops-prod-001
   PRD_LOCATION: westeurope
-  PRD_NAMESPACE: mlopsprod001
+  PRD_NAMESPACE: mlopsprod
   PRD_SERVICECONNECTION_RG: conn-mlops-sub-infra
   PRD_SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod
   PRD_AMLWORKSPACE: aml$(PRD_NAMESPACE)
