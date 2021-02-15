@@ -10,7 +10,7 @@ In order to successfully complete your solution, you will need to have access to
 - Access to an Azure Devops subscription
 - Service Principal
 
-# Getting Started   
+# Getting Started
 
 You will find all the guidelines to setup your own mlops process in [Getting started](docs/how-to/GettingStarted.md). Depending on your mlops maturity implemetnation, you can use this template in different ways:
 
