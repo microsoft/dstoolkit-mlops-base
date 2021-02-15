@@ -1,0 +1,7 @@
+COMPUTE_TYPE: AciWebservice
+COMPUTE_CONFIG:
+# Parameters as passed to AciServiceDeploymentConfiguration constructor
+# See: https://docs.microsoft.com/python/api/azureml-core/azureml.core.webservice.aci.aciservicedeploymentconfiguration
+  cpu_cores: 1
+  memory_gb: 0.5
+  # ...

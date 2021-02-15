@@ -1,0 +1,14 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Definition of code-related environment variables
+
+variables: #TODO
+    experiment: "exp-churn"
+    compute_target: "std-ds3-v2"
+    inference_target: "inference-target"
+    environment_base: "AzureML-Minimal"
+    dataset: ""
+    model_file_name: ""
+    model_name: ""
+    target_metric: ""
