@@ -79,6 +79,7 @@ def run_registration(
 
     try:
         # Register model
+        model_path = os.path.join(model_path, model_file_name)
         model = AMLModel.register(
                                     model_path=model_path,
                                     model_name=model_name,
