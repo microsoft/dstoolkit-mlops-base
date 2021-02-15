@@ -13,7 +13,7 @@ def parse_args(args=None):
 
     parser.add_argument(
         '--model-path',
-        dest=model_path,
+        dest='model_path',
         type=str,
         help=('The input from previous steps')
     )
