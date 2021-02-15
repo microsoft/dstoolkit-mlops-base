@@ -1,0 +1,64 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for Data Preparation in specified Workspace
+
+parameters:
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: amlWorkspace
+  type: string
+- name: dataPath
+  type: string
+  default: oj_sales_data
+
+jobs:
+
+- job: sample_files
+  displayName: 'Sample Files Setup'
+  steps:
+
+    - template: ../utils/run-aml-code.template.yml
+      parameters:
+        serviceConnection: ${{parameters.serviceConnection}}
+        resourceGroup: ${{parameters.resourceGroup}}
+        amlWorkspace: ${{parameters.amlWorkspace}}
+        scriptPath: src/utils/create_rawset.py
+        scriptArguments: --data_path ${{parameters.dataPath}}
+        scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
+
+    - task: AzureCLI@1
+      name: datastore_upload
+      displayName: 'Upload files to AML datastore'
+      inputs:
+        azureSubscription: ${{parameters.serviceConnection}}
+        scriptLocation: inlineScript
+        inlineScript: |
+          workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
+          # Install ML extension
+          az extension add -n azure-cli-ml
+          # Get default datastore
+          datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
+          # Upload files
+          az ml datastore upload --name $datastore \
+                                 --src-path ${{parameters.dataPath}} \
+                                 --target-path ${{parameters.dataPath}} \
+                                 --overwrite true \
+                                 $workspace_params
+          echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
+
+- job: register_dataset
+  displayName: 'Register Dataset'
+  dependsOn: sample_files
+  variables: 
+    datastore: $[ dependencies.sample_files.outputs['datastore_upload.datastore'] ]
+  steps:
+  - template: ../utils/run-aml-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/register_dataset.py
+      scriptArguments: --name $(AML_DATASET) --datastore $(DATASTORE) --path ${{parameters.dataPath}}
