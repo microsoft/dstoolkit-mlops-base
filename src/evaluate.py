@@ -27,14 +27,6 @@ def parse_args(args=None):
     )
 
     parser.add_argument(
-        '--model-name',
-        dest='model_name',
-        type=str,
-        help='The name of the model',
-        default='sale_regression',
-    )
-
-    parser.add_argument(
         '--model-metric-name',
         dest='model_metric_name',
         type=str,
@@ -56,7 +48,6 @@ def parse_args(args=None):
 def run_evaluation(
                     model_path,
                     model_file_name,
-                    model_name,
                     model_metric_name,
                     maximize=True):
     """Evaluate the model.
@@ -64,7 +55,6 @@ def run_evaluation(
     Args:
         model_path (str): The path to the model file
         model_file_name (str): The name of the model file
-        model_name (str): The name of the model
         model_metric_name (str): The file name used to save a trained ML model  # NOQA: E501
         maximize: The indicator if a metric should be maximized or minimized
 
@@ -84,7 +74,7 @@ def run_evaluation(
         ws = run.experiment.workspace
         model = get_model(
                             workspace=ws,
-                            model_name=model_name,
+                            model_name=model_file_name,
                             model_path=os.path.join(model_path, model_file_name)  # NOQA: E501
         )
     else:
@@ -138,14 +128,12 @@ if __name__ == '__main__':
     args = parse_args()
     model_path = args.model_path
     model_file_name = args.model_file_name
-    model_name = args.model_name
     model_metric_name = args.model_metric_name
     maximize = args.maximize
 
     run_evaluation(
                     model_path,
                     model_file_name,
-                    model_name,
                     model_metric_name,
                     maximize
     )
