@@ -19,8 +19,8 @@ def parse_args(args=None):
     )
 
     parser.add_argument(
-        '--model-file-name',
-        dest='model_file_name',
+        '--model-name',
+        dest='model_name',
         type=str,
         help='The name of the model file',
         default='sale_regression.pkl',
@@ -47,14 +47,14 @@ def parse_args(args=None):
 
 def run_evaluation(
                     model_path,
-                    model_file_name,
+                    model_name,
                     model_metric_name,
                     maximize=True):
     """Evaluate the model.
 
     Args:
         model_path (str): The path to the model file
-        model_file_name (str): The name of the model file
+        model_name (str): The name of the model file
         model_metric_name (str): The file name used to save a trained ML model  # NOQA: E501
         maximize: The indicator if a metric should be maximized or minimized
 
@@ -74,8 +74,8 @@ def run_evaluation(
         ws = run.experiment.workspace
         model = get_model(
                             workspace=ws,
-                            model_name=model_file_name,
-                            model_path=os.path.join(model_path, model_file_name)  # NOQA: E501
+                            model_name=model_name,
+                            model_path=os.path.join(model_path, model_name)  # NOQA: E501
         )
     else:
         print('evaluation script is not supported in local runs')
@@ -127,13 +127,13 @@ def run_evaluation(
 if __name__ == '__main__':
     args = parse_args()
     model_path = args.model_path
-    model_file_name = args.model_file_name
+    model_name = args.model_name
     model_metric_name = args.model_metric_name
     maximize = args.maximize
 
     run_evaluation(
                     model_path,
-                    model_file_name,
+                    model_name,
                     model_metric_name,
                     maximize
     )
