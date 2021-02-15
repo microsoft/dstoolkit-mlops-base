@@ -12,27 +12,31 @@ def parse_args(args=None):
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        '--model_path',
+        '--model-path',
+        dest=model_path,
         type=str,
         help=('The input from previous steps')
     )
 
     parser.add_argument(
-        '--model_file_name',
+        '--model-file-name',
+        dest='model_file_name',
         type=str,
         help='The name of the model file',
         default='sale_regression.pkl',
     )
 
     parser.add_argument(
-        '--model_name',
+        '--model-name',
+        dest='model_name',
         type=str,
         help='The name of the model',
         default='sale_regression',
     )
 
     parser.add_argument(
-        '--model_description',
+        '--model-description',
+        dest='model_description',
         type=str,
         help=('The description of the model')
     )
