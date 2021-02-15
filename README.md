@@ -14,9 +14,9 @@ In order to successfully complete your solution, you will need to have access to
 
 You will find all the guidelines to setup your own mlops process in [Getting started](docs/how-to/GettingStarted.md). Depending on your mlops maturity implemetnation, you can use this template in different ways:
 
-- if you already have a preferred architecture and Azure resources, you can delete the infrastructure folder. To use this template, you will simply have to provide some variables names in _operation/configuration/configuration.yaml_ and some environment variables in ADO.
+- if you already have a preferred architecture and Azure resources, you can disregard the infrastructure folder in _azure-pipelines_. To use this template, you will simply have to provide some variables names in _configuration/configuration.yaml_ and some environment variables in ADO.
 
-- If you are starting with MLOPs, we provide some scripts to setup the recommended infrastructure in the folder _infrastructure_.
+- If you are starting with MLOPs, we provide some ADO yaml file to setup the recommended infrastructure in the folder _azure-pipelines_.
  
 # General Coding Guidelines
 
@@ -28,7 +28,7 @@ For more details on the coding guidelines and folder structure, please go to _da
 
 3. Core scripts should receive parameters/config variables only via code arguments and must not contain any hardcoded variables in the code (like dataset names, model names, input/output path, ...). If you want to provide constant variables in those scripts, write default values in the argument parser.
 
-4. Variable values must be stored in **_operation/configuration.yml_**. These files will be used by the execution scripts (azureml python sdk or azure-cli) to extract the variables and run the core scripts.
+4. Variable values must be stored in yaml files in **_configuration_**. These files will be used by the execution scripts (azureml python sdk or azure-cli) to extract the variables and run the core scripts.
 
 5. 2 distinct configuration files for environment creation:
    - (A) for local dev/experimentation: may be stored in the project root folder (requirement.txt or environment.yml). It is required to install the project environment on a different laptop, devops agent, etc.
@@ -48,11 +48,8 @@ For more details on the coding guidelines and folder structure, please go to _da
 │   ├── references      # for collecting and documenting external resources relevant to the project
 │   └── solution_architecture.md    # describe and diagram solution design and architecture
 ├───notebooks           # experimentation folder with notebooks, code and other. The files don't need to be committed
+├───configuration       # any configuration files (model name, dev environment name, compute target name, ...)
 ├───operation           # all the code and configuration to execute the source scripts
-│   ├───configuration   # any configuration files
-│   │   ├───environment_data (optional)
-│   │   ├───environment_train (optional)
-│   │   └───environment_inference (optional)
 │   ├───execution       # azure ml scripts to run source script on remote
 │   ├───monitoring      # anything related to monitoring, model performance, data drifts, model scoring, etc
 │   └───tests           # for testing your code, data, and outputs
