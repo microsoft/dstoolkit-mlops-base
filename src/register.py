@@ -19,8 +19,8 @@ def parse_args(args=None):
     )
 
     parser.add_argument(
-        '--model-file-name',
-        dest='model_file_name',
+        '--model-name',
+        dest='model_name',
         type=str,
         help='The name of the model file',
         default='sale_regression.pkl',
@@ -39,14 +39,14 @@ def parse_args(args=None):
 
 def run_registration(
                         model_path,
-                        model_file_name,
+                        model_name,
                         model_description
     ):
     """Register the model.
 
     Args:
         model_path (str): The path to the model file
-        model_file_name (str): The name of the model file
+        model_name (str): The name of the model file
         model_description (str): The description of the model
 
     Returns:
@@ -69,10 +69,10 @@ def run_registration(
 
     try:
         # Register model
-        model_path = os.path.join(model_path, model_file_name)
+        model_path = os.path.join(model_path, model_name)
         model = AMLModel.register(
                                     model_path=model_path,
-                                    model_name=model_file_name,
+                                    model_name=model_name,
                                     tags=parent_tags,
                                     description=model_description,
                                     workspace=ws
@@ -86,11 +86,11 @@ def run_registration(
 if __name__ == '__main__':
     args = parse_args()
     model_path = args.model_path
-    model_file_name = args.model_file_name
+    model_name = args.model_name
     model_description = args.model_description
 
     run_registration(
                         model_path,
-                        model_file_name,
+                        model_name,
                         model_description
     )
