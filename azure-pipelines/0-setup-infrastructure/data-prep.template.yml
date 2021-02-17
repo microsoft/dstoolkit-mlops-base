@@ -25,9 +25,9 @@ jobs:
         serviceConnection: ${{parameters.serviceConnection}}
         resourceGroup: ${{parameters.resourceGroup}}
         amlWorkspace: ${{parameters.amlWorkspace}}
-        scriptPath: src/utils/create_rawset.py
-        scriptArguments: --data_path ${{parameters.dataPath}}
-        scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
+        # scriptPath: src/utils/create_rawset.py
+        # scriptArguments: --data_path ${{parameters.dataPath}}
+        # scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
 
     - task: AzureCLI@1
       name: datastore_upload
