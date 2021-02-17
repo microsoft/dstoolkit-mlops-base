@@ -5,7 +5,7 @@ import argparse
 from azureml.core import Run
 from azureml.core.model import Model as AMLModel
 from azureml.core.run import _OfflineRun
-from utils import append_traceability_logs
+# from utils import append_traceability_logs
 
 
 def parse_args(args=None):
@@ -23,7 +23,7 @@ def parse_args(args=None):
         dest='model_name',
         type=str,
         help='The name of the model file',
-        default='sale_regression.pkl',
+        default='sales_regression.pkl',
     )
 
     parser.add_argument(

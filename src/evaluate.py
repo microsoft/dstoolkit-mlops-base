@@ -23,7 +23,7 @@ def parse_args(args=None):
         dest='model_name',
         type=str,
         help='The name of the model file',
-        default='sale_regression.pkl',
+        default='sales_regression.pkl',
     )
 
     parser.add_argument(
@@ -106,7 +106,9 @@ def run_evaluation(
                         metric_best = 100000000000
                     if (metric_new_model < metric_best):
                         register = True
-
+                print(f"register {register}")
+                print(f"metric new model {metric_new_model}")
+                print(f"best metric {metric_best}")
                 if register:
                     print('New mode should be registered, because metric_new_model is better than metric_best')  # NOQA: E501
                 else:

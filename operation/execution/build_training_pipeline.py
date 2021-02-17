@@ -3,7 +3,7 @@
 
 import os, sys
 import argparse
-from azureml.core import Experiment
+from azureml.core import Experiment, Datastore
 from azureml.pipeline.core import Pipeline, PipelineData
 from azureml.pipeline.core.graph import PipelineParameter
 from azureml.pipeline.steps import PythonScriptStep
@@ -39,9 +39,9 @@ def main(model_name):
     run_config = RunConfiguration()
     run_config.environment = env
 
-    # create a PipelineData 
-    output_dir = PipelineData(
-        "output_dir", datastore=ws.get_default_datastore()
+    # create a PipelineData to pass data between steps
+    pipeline_data = PipelineData(
+        'pipeline_data', datastore=Datastore.get(ws, os.getenv('DATASTORE_NAME', 'workspaceblobstore'))  # NOQA: E501
     )
 
     regres_train_step = PythonScriptStep(
@@ -49,10 +49,10 @@ def main(model_name):
         script_name = "train.py",
         compute_target = compute_target,
         source_directory = "src",
-        outputs=[output_dir],
+        outputs=[pipeline_data],
         arguments = [
             '--dataset-name', dataset_name,
-            '--output-dir', output_dir
+            '--output-dir', pipeline_data
         ],
         runconfig = run_config,
         allow_reuse = True
@@ -63,7 +63,9 @@ def main(model_name):
         script_name = "evaluate.py",
         compute_target = compute_target,
         source_directory = "src",
+        inputs = [pipeline_data],
         arguments = [
+            '--model-path', pipeline_data,
             '--model-name', model_name
         ],
         runconfig = run_config,
@@ -75,17 +77,19 @@ def main(model_name):
         script_name = "register.py",
         compute_target = compute_target,
         source_directory = "src",
-        inputs = [output_dir],
+        inputs = [pipeline_data],
         arguments = [
-            '--model-path', output_dir,
+            '--model-path', pipeline_data,
             '--model-name', model_name
         ],
         runconfig = run_config,
         allow_reuse = True
     )
     
+    # set the sequence of steps in a pipeline
     evaluate_step.run_after(regres_train_step)
     register_step.run_after(evaluate_step)
+
     published_pipeline = pipeline.publish_pipeline(ws, 
         name=pipeline_name,
         steps=[regres_train_step, evaluate_step, register_step],
@@ -99,7 +103,7 @@ def main(model_name):
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument("--model-name", type=str, default="sale_regression.pkl")
+    parser.add_argument("--model-name", type=str, default="sales_regression.pkl")
     args_parsed = parser.parse_args(args)
     return args_parsed
 

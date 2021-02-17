@@ -66,14 +66,12 @@ def get_model_metrics(model, X_test, y_test):
     """"
     Get model metrics
     """
-    metrics = {}
     pred = model.predict(X_test)
     mse = mean_squared_error(pred, y_test)
-    metrics['mse'] = mse
     return mse
 
 
-def main(dataset_name, output_dir, model_file_name):
+def main(dataset_name, output_dir, model_name):
     run = Run.get_context()
     ws = utils.retrieve_workspace()
     # Get dataset
@@ -99,18 +97,31 @@ def main(dataset_name, output_dir, model_file_name):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
+    model_path = os.path.join(output_dir, model_name)
     print("Save model in output folder")
-    model_path = os.path.join(output_dir, model_file_name)
-
+    print(model_path)
+    
     with open(model_path,'wb') as file_path:
         joblib.dump(model, file_path)
 
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset-name', type=str, default='oj_sales_ds')
-    parser.add_argument('--output-dir', type=str, default='outputs/models/')
-    parser.add_argument('--output-file', type=str, default='sales_regression.pkl')
+    parser.add_argument(
+        '--dataset-name',
+        dest='dataset_name',
+        type=str, 
+        default='oj_sales_ds')
+    parser.add_argument(
+        '--output-dir',
+        dest='output_dir',
+        type=str, 
+        default='./outputs')
+    parser.add_argument(
+        '--model-name', 
+        dest='model_name',
+        type=str, 
+        default='sales_regression.pkl')
     args_parsed = parser.parse_args(args)
 
     return args_parsed
@@ -122,5 +133,5 @@ if __name__ == '__main__':
     main(
         dataset_name=args.dataset_name,
         output_dir=args.output_dir,
-        model_file_name=args.output_file
+        model_name=args.model_name
     )
