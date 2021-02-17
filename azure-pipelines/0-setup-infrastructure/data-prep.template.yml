@@ -20,11 +20,11 @@ jobs:
   displayName: 'Sample Files Setup'
   steps:
 
-    - template: ../utils/run-aml-code.template.yml
-      parameters:
-        serviceConnection: ${{parameters.serviceConnection}}
-        resourceGroup: ${{parameters.resourceGroup}}
-        amlWorkspace: ${{parameters.amlWorkspace}}
+    # - template: ../utils/run-aml-code.template.yml
+    #   parameters:
+    #     serviceConnection: ${{parameters.serviceConnection}}
+    #     resourceGroup: ${{parameters.resourceGroup}}
+    #     amlWorkspace: ${{parameters.amlWorkspace}}
         # scriptPath: src/utils/create_rawset.py
         # scriptArguments: --data_path ${{parameters.dataPath}}
         # scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
