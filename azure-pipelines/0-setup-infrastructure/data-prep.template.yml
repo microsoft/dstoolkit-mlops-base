@@ -20,14 +20,14 @@ jobs:
   displayName: 'Sample Files Setup'
   steps:
 
-    # - template: ../utils/run-aml-code.template.yml
-    #   parameters:
-    #     serviceConnection: ${{parameters.serviceConnection}}
-    #     resourceGroup: ${{parameters.resourceGroup}}
-    #     amlWorkspace: ${{parameters.amlWorkspace}}
-        # scriptPath: src/utils/create_rawset.py
-        # scriptArguments: --data_path ${{parameters.dataPath}}
-        # scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
+    - template: ../utils/run-aml-code.template.yml
+      parameters:
+        serviceConnection: ${{parameters.serviceConnection}}
+        resourceGroup: ${{parameters.resourceGroup}}
+        amlWorkspace: ${{parameters.amlWorkspace}}
+        scriptPath: src/create_rawset.py
+        scriptArguments: --data_path ${{parameters.dataPath}}
+        scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
 
     - task: AzureCLI@1
       name: datastore_upload
