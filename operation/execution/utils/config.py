@@ -18,12 +18,18 @@ def get_env_var(name): #TODO read variables from files in local executions
         str: The value of the environment variable
 
     """
+    var = None
     try:
-        return os.environ[name]
+        var = os.environ[name]
     except KeyError:
-        print(f"Environment variable '{name}' is not defined. Load this variable manually from yml file.")
-        return retrieve_config()[name]
-
+        print(f"Environment variable '{name}' is not defined. Loading in the local yml file.")
+        try:
+            var = retrieve_config()[name]
+        except Exception:
+            print(f"Environment variable '{name}' is not defined in local yml file.")
+    if var is None:
+        print(f"Some error happens while loading variable {name}")
+    return var
 
 def retrieve_config(): #TODO: is this being used?
     """Retrieve configuration data.

@@ -66,9 +66,11 @@ def get_model_metrics(model, X_test, y_test):
     """"
     Get model metrics
     """
+    metrics = {}
     pred = model.predict(X_test)
     mse = mean_squared_error(pred, y_test)
-    return mse
+    metrics['mse'] = mse
+    return metrics
 
 
 def main(dataset_name, output_dir, model_name):
@@ -88,9 +90,17 @@ def main(dataset_name, output_dir, model_name):
 
     if not isinstance(run,_OfflineRun):
         if run.parent is not None:
-            run.parent.log("mse", float(metrics))
+            for (k,v) in metrics.items():
+                run.tag(k,v)
+                run.parrent.tag(k,v)
+                run.log(k,v)
+                run.parrent.log(k,v)
+            #run.parent.log("mse", float(metrics))
         else:
-            run.log("mse", float(metrics))
+            for (k,v) in metrics.items():
+                run.tag(k,v)
+                run.log(k,v)
+            #run.log("mse", float(metrics))
     
     # Save model in output folder
     # create folder if not exists
