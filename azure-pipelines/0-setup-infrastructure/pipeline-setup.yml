@@ -35,20 +35,20 @@ stages:
       amlWorkspace: $(DEV_AMLWORKSPACE)
 
 # Deploy TEST Environment
-- stage: deployinfra_test
-  displayName: 'Deploy TEST Environment'
-  jobs:
-  - template: deploy-env-infra.template.yml
-    parameters:
-      environment: TEST
-      serviceConnection: $(TEST_SERVICECONNECTION_RG)
-      resourceGroup: $(TEST_RESOURCE_GROUP)
-      location: $(TEST_LOCATION)
-      storageAccount: $(TEST_STORAGEACCOUNT)
-      keyVault: $(TEST_KEYVAULT)
-      appInsights: $(TEST_APPINSIGHTS)
-      containerRegistry: $(TEST_CONTAINERREGISTRY)
-      amlWorkspace: $(TEST_AMLWORKSPACE)
+# - stage: deployinfra_test
+#   displayName: 'Deploy TEST Environment'
+#   jobs:
+#   - template: deploy-env-infra.template.yml
+#     parameters:
+#       environment: TEST
+#       serviceConnection: $(TEST_SERVICECONNECTION_RG)
+#       resourceGroup: $(TEST_RESOURCE_GROUP)
+#       location: $(TEST_LOCATION)
+#       storageAccount: $(TEST_STORAGEACCOUNT)
+#       keyVault: $(TEST_KEYVAULT)
+#       appInsights: $(TEST_APPINSIGHTS)
+#       containerRegistry: $(TEST_CONTAINERREGISTRY)
+#       amlWorkspace: $(TEST_AMLWORKSPACE)
 
 # Deploy PRD Environment
 - stage: deployinfra_prd
@@ -83,17 +83,17 @@ stages:
       resourceGroup: $(DEV_RESOURCE_GROUP)
       amlWorkspace: $(DEV_AMLWORKSPACE)
 
-# Compute Setup TEST Environment
-- stage: computesetup_test
-  displayName: 'Compute Setup TEST Environment'
-  dependsOn: deployinfra_test
-  jobs:
-  - template: compute-setup.template.yml
-    parameters:
-      environment: TEST
-      serviceConnection: $(TEST_SERVICECONNECTION_RG)
-      resourceGroup: $(TEST_RESOURCE_GROUP)
-      amlWorkspace: $(TEST_AMLWORKSPACE)
+# # Compute Setup TEST Environment
+# - stage: computesetup_test
+#   displayName: 'Compute Setup TEST Environment'
+#   dependsOn: deployinfra_test
+#   jobs:
+#   - template: compute-setup.template.yml
+#     parameters:
+#       environment: TEST
+#       serviceConnection: $(TEST_SERVICECONNECTION_RG)
+#       resourceGroup: $(TEST_RESOURCE_GROUP)
+#       amlWorkspace: $(TEST_AMLWORKSPACE)
 
 # Compute Setup PRD Environment
 - stage: computesetup_prd
@@ -123,16 +123,16 @@ stages:
       resourceGroup: $(DEV_RESOURCE_GROUP)
       amlWorkspace: $(DEV_AMLWORKSPACE)
 
-# Data Prep TEST Environment
-- stage: dataprep_test
-  displayName: 'Data Preparation TEST Environment'
-  dependsOn: deployinfra_test
-  jobs:
-  - template: data-prep.template.yml
-    parameters:
-      serviceConnection: $(TEST_SERVICECONNECTION_RG)
-      resourceGroup: $(TEST_RESOURCE_GROUP)
-      amlWorkspace: $(TEST_AMLWORKSPACE)
+# # Data Prep TEST Environment
+# - stage: dataprep_test
+#   displayName: 'Data Preparation TEST Environment'
+#   dependsOn: deployinfra_test
+#   jobs:
+#   - template: data-prep.template.yml
+#     parameters:
+#       serviceConnection: $(TEST_SERVICECONNECTION_RG)
+#       resourceGroup: $(TEST_RESOURCE_GROUP)
+#       amlWorkspace: $(TEST_AMLWORKSPACE)
 
 # Data Prep PRD Environment
 - stage: dataprep_prd
