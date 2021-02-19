@@ -3,7 +3,7 @@
 
 import os, sys
 import argparse
-from azureml.core import Experiment, Datastore
+from azureml.core import Experiment, Datastore, Environment
 from azureml.pipeline.core import Pipeline, PipelineData
 from azureml.pipeline.core.graph import PipelineParameter
 from azureml.pipeline.steps import PythonScriptStep
@@ -21,8 +21,7 @@ def main(model_name):
     #TODO: should we have defaults for all of these variables? decide which ones should/shouldn't
     output_dir = os.environ.get("OUTPUT_DIR", "outputs/models")
     build_id = os.environ.get("BUILD_ID", 1)
-    enviroment_name = os.environ.get("AML_TRAINING_ENV_NAME", "training-env")
-    training_env_file = os.environ.get("AML_TRAINING_ENV_PATH", "configuration/environments/environment_training/conda_dependencies.yml")
+    training_env_file = os.environ.get("AML_TRAINING_ENV_PATH", "configuration/environments/environment_training")
 
     #retrieve workspace
     ws =  workspace.retrieve_workspace()
@@ -31,9 +30,7 @@ def main(model_name):
     compute_target = compute.get_compute_target(ws, compute_name)
 
     #get environment
-    env = environment.get_environment(ws, 
-                            enviroment_name, 
-                            training_env_file)
+    env = Environment.load_from_directory(path = training_env_file)
 
     #create run config
     run_config = RunConfiguration()
