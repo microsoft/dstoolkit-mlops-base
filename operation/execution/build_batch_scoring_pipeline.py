@@ -45,7 +45,7 @@ if __name__ == "__main__":
     compute_target = compute.get_compute_target(ws, compute_name)
 
     #get environment
-    env = environment.get_environment(ws, environment_name='batch_env', env_path=scoring_env_file)
+    env = Environment.load_from_directory(path = scoring_env_file)
 
     #create run config
     run_config = RunConfiguration()
