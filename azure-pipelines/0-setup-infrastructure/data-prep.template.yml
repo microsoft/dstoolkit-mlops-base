@@ -25,7 +25,7 @@ jobs:
         serviceConnection: ${{parameters.serviceConnection}}
         resourceGroup: ${{parameters.resourceGroup}}
         amlWorkspace: ${{parameters.amlWorkspace}}
-        scriptPath: src/create_rawset.py
+        scriptPath: operation/execution/create_rawset.py
         scriptArguments: --data_path ${{parameters.dataPath}}
         scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
 
