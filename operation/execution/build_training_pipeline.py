@@ -48,7 +48,8 @@ def main(model_name):
         outputs=[pipeline_data],
         arguments = [
             '--dataset-name', dataset_name,
-            '--output-dir', pipeline_data
+            '--output-dir', pipeline_data,
+            '--model-metric-name', model_metric_name,
         ],
         runconfig = run_config,
         allow_reuse = True

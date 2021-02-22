@@ -38,6 +38,7 @@ def parse_args(args=None):
         '--maximize',
         default=True,
         action='store_true',
+        type=bool,
         help=('The evaluation metric should be maximized: true or false')
     )
 
@@ -49,7 +50,7 @@ def run_evaluation(
                     model_path,
                     model_name,
                     model_metric_name,
-                    maximize=True):
+                    maximize):
     """Evaluate the model.
 
     Args:
@@ -106,6 +107,8 @@ def run_evaluation(
                         metric_best = 100000000000
                     if (metric_new_model < metric_best):
                         register = True
+                print(f"model metric name is {model_metric_name}")
+                print(f"maximize {maximize}")
                 print(f"register {register}")
                 print(f"metric new model {metric_new_model}")
                 print(f"best metric {metric_best}")
