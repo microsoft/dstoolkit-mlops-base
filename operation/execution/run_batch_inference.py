@@ -8,32 +8,33 @@ from utils import workspace, config
 
 def main():
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--build_id',
-        default="1",
-        help=("version of the last build_training_pipeline")
-    )
-    args = parser.parse_args()
-    build_id = args.build_id
+    #TODO should we get build_id from yml file?
+    # parser = argparse.ArgumentParser()
+    # parser.add_argument(
+    #     '--build_id',
+    #     default="1",
+    #     help=("version of the last build_training_pipeline")
+    # )
+    # args = parser.parse_args()
+    # build_id = args.build_id
 
     #get argurment from environment. These variable should be in yml file
     pipeline_name = config.get_env_var("BATCHINFERENCE_PIPELINE")
+    build_id = config.get_env_var("BATCH_SCORING_PIPELINE_BUILD_ID")
     model_name = config.get_env_var("AML_MODEL_NAME")
     experiment_name = config.get_env_var("BATCHINFERENCE_EXPERIMENT")
-
+    
     #retrieve workspace
     ws =  workspace.retrieve_workspace()
 
     # Find the pipeline that was published by the specified build ID
     pipelines = PublishedPipeline.list(ws)
     matched_pipes = []
-
+    
     for p in pipelines:
         if p.name == pipeline_name:
-            if p.version == build_id:
+            if str(p.version) == str(build_id):
                 matched_pipes.append(p)
-
     if(len(matched_pipes) > 1):
         published_pipeline = None
         raise Exception(f"Multiple active pipelines are published for build {build_id}.")  # NOQA: E501
