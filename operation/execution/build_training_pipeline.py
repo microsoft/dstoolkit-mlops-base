@@ -63,7 +63,7 @@ def main(model_name):
         arguments = [
             '--model-path', pipeline_data,
             '--model-name', model_name,
-            '--model_metric_name', model_metric_name,
+            '--model-metric-name', model_metric_name,
             '--maximize', maximize
         ],
         runconfig = run_config,
