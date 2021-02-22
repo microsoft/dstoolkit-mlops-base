@@ -1,13 +1,13 @@
 import os, sys
 import argparse
 
-from azureml.core import Experiment
+from azureml.core import Experiment, Environment, Datastore
+from azureml.core.runconfig import RunConfiguration
 from azureml.pipeline.core import Pipeline, PipelineData
 from azureml.pipeline.core.graph import PipelineParameter
 from azureml.pipeline.steps import PythonScriptStep
-from azureml.core.runconfig import RunConfiguration
-from azureml.core import Datastore
-from azureml.automl.core.forecasting_parameters import ForecastingParameters
+from azureml.data.data_reference import DataReference
+from msrest.exceptions import HttpOperationError
 
 from utils import config, workspace, dataset, compute, pipeline
 
@@ -22,11 +22,11 @@ if __name__ == "__main__":
     model_name = args.model_name
 
     # get argurment from environment. These variable should be in yml file
-    pipeline_name = config.get_env_var("BATCH_SCORING_PIPELINE")
+    pipeline_name = config.get_env_var("BATCHINFERENCE_PIPELINE")
     compute_name = config.get_env_var("BATCHINFERENCE_COMPUTE")
     output_dir_name = config.get_env_var("BATCH_SCORING_OUTPUT_DIR")
     output_container_name = config.get_env_var("BATCH_SCORING_OUTPUT_CONTAINER")
-    build_id = config.getenv("BATCH_SCORING_PIPELINE_BUILD_ID")
+    build_id = config.get_env_var("BATCH_SCORING_PIPELINE_BUILD_ID")
     scoring_env_file = config.get_env_var("AML_BATCH_SCORING_ENV_PATH")
 
     #retrieve workspace
@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     #define output datastore account
     default_datastore = ws.get_default_datastore()
+    datastore_output_name = default_datastore.name
     account_name = default_datastore.account_name
     account_key = default_datastore.account_key
 
@@ -49,13 +50,16 @@ if __name__ == "__main__":
 
     #retrieve datastore and setup output folder
     batchscore_input = default_datastore.as_mount()
-
-    batchscore_ds = Datastore.register_azure_blob_container(ws, 
-                        datastore_name=datastore_output_name, 
-                        container_name=output_container_name, 
-                        account_name=account_name,
-                        account_key = account_key,
-                        create_if_not_exists=True)
+    try:
+        batchscore_ds = Datastore.get(ws, datastore_output_name)
+        print("Found Blob Datastore with name: %s" % datastore_output_name)
+    except HttpOperationError:
+        batchscore_ds = Datastore.register_azure_blob_container(ws, 
+                            datastore_name=datastore_output_name, 
+                            container_name=output_container_name, 
+                            account_name=account_name,
+                            account_key = account_key,
+                            create_if_not_exists=True)
 
     batchscore_dir = DataReference(
         batchscore_ds, 

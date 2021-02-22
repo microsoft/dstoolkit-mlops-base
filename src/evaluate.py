@@ -30,14 +30,12 @@ def parse_args(args=None):
         '--model-metric-name',
         dest='model_metric_name',
         type=str,
-        help='The name of the evaluation metric used in Train step',
-        default='mse',
+        help='The name of the evaluation metric used in Train step'
     )
 
     parser.add_argument(
         '--maximize',
-        default=True,
-        action='store_true',
+        dest='maximize',
         type=bool,
         help=('The evaluation metric should be maximized: true or false')
     )

@@ -4,7 +4,7 @@ from azureml.pipeline.core import PublishedPipeline
 from azureml.core import Experiment, Workspace
 import argparse
 import os
-from utils import workspace
+from utils import workspace, config
 
 def main():
 
@@ -18,9 +18,9 @@ def main():
     build_id = args.build_id
 
     #get argurment from environment. These variable should be in yml file
-    pipeline_name = os.environ.get("PIPELINE_NAME", "uc-pipeline-inference")
-    model_name = os.environ.get("MODEL_NAME", "sale_regression.pkl")
-    experiment_name = os.environ.get("EXPERIMENT_NAME", "uc-experiment-run")
+    pipeline_name = config.get_env_var("BATCHINFERENCE_PIPELINE")
+    model_name = config.get_env_var("AML_MODEL_NAME")
+    experiment_name = config.get_env_var("BATCHINFERENCE_EXPERIMENT")
 
     #retrieve workspace
     ws =  workspace.retrieve_workspace()

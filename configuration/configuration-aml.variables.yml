@@ -8,7 +8,7 @@ variables: #TODO
   SDK_VERSION: 1.20
   
   AML_DATASET: oj_sales_ds
-  AML_MODEL: oj_sales_model
+  AML_MODEL_NAME: oj_sales_model
 
   # Training
   TRAINING_EXPERIMENT: retraining-ojsales
@@ -22,7 +22,7 @@ variables: #TODO
   # Batch inference
   BATCHINFERENCE_EXPERIMENT: batchinference-ojsales
   BATCHINFERENCE_PIPELINE: batchinference-pipeline-ojsales
-  BATCHINFERENCE_COMPUTE: $(TRAINING_COMPUTE)
+  BATCHINFERENCE_COMPUTE: cpucompute
   BATCH_SCORING_PIPELINE_BUILD_ID: 1
   BATCH_SCORING_OUTPUT_DIR: forecasting_results
   BATCH_SCORING_OUTPUT_CONTAINER: modelprediction
