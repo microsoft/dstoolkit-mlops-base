@@ -29,8 +29,7 @@ def main():
     parser.add_argument('--dataset-name',dest='dataset_name',default='oj_sales_ds', type=str, help='')
     parser.add_argument('--output-dir',dest='output_idr',default='./', type=str, help='')
     parser.add_argument('--forecast-name',dest='forecast_name',default='forecast.csv', type=str, help='')
-    parser.add_argument('--model-name',dest='model_name',default='sale_regression.pkl', type=str, help='')
-    # parser.add_argument('--model_file_name', default='sale_regression.pkl', type=str, help='')
+    parser.add_argument('--model-name',dest='model_name',default='oj_sales_model.pkl', type=str, help='')
     args, _ = parser.parse_known_args()
 
     ws = retrieve_workspace()

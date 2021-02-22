@@ -23,7 +23,7 @@ def parse_args(args=None):
         dest='model_name',
         type=str,
         help='The name of the model file',
-        default='sales_regression.pkl',
+        default='oj_sales_model.pkl',
     )
 
     parser.add_argument(

@@ -23,7 +23,7 @@ def parse_args(args=None):
         dest='model_name',
         type=str,
         help='The name of the model file',
-        default='sales_regression.pkl',
+        default='oj_sales_model.pkl',
     )
 
     parser.add_argument(
@@ -36,7 +36,8 @@ def parse_args(args=None):
     parser.add_argument(
         '--maximize',
         dest='maximize',
-        type=bool,
+        default=None,
+        type=eval,
         help=('The evaluation metric should be maximized: true or false')
     )
 
@@ -105,11 +106,9 @@ def run_evaluation(
                         metric_best = 100000000000
                     if (metric_new_model < metric_best):
                         register = True
-                print(f"model metric name is {model_metric_name}")
-                print(f"maximize {maximize}")
-                print(f"register {register}")
-                print(f"metric new model {metric_new_model}")
-                print(f"best metric {metric_best}")
+                print(f"Model metric name is {model_metric_name}")
+                print(f"New model metric is {metric_new_model}")
+                print(f"Best metric is {metric_best}")
                 if register:
                     print('New mode should be registered, because metric_new_model is better than metric_best')  # NOQA: E501
                 else:
@@ -133,7 +132,6 @@ if __name__ == '__main__':
     model_name = args.model_name
     model_metric_name = args.model_metric_name
     maximize = args.maximize
-
     run_evaluation(
                     model_path,
                     model_name,

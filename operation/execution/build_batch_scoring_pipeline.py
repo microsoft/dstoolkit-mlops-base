@@ -13,15 +13,8 @@ from utils import config, workspace, dataset, compute, pipeline
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    # args.add_argument('--is_new_training', default='yes')
-    # model should be regression or forecasting
-    parser.add_argument("--model-name", type=str, default="sales_regression.pkl")
-
-    args = parser.parse_args()
-    model_name = args.model_name
-
     # get argurment from environment. These variable should be in yml file
+    model_name = config.get_env_var("AML_MODEL_NAME")
     pipeline_name = config.get_env_var("BATCHINFERENCE_PIPELINE")
     compute_name = config.get_env_var("BATCHINFERENCE_COMPUTE")
     output_dir_name = config.get_env_var("BATCH_SCORING_OUTPUT_DIR")

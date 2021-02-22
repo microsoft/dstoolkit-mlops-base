@@ -130,7 +130,7 @@ def parse_args(args=None):
         '--model-name', 
         dest='model_name',
         type=str, 
-        default='sales_regression.pkl')
+        default='oj_sales_model.pkl')
     
     parser.add_argument(
         '--model-metric-name',

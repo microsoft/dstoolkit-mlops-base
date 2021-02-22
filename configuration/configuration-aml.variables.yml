@@ -8,7 +8,7 @@ variables: #TODO
   SDK_VERSION: 1.20
   
   AML_DATASET: oj_sales_ds
-  AML_MODEL_NAME: oj_sales_model
+  AML_MODEL_NAME: oj_sales_model.pkl
 
   # Training
   TRAINING_EXPERIMENT: retraining-ojsales

@@ -12,8 +12,9 @@ from azureml.automl.core.forecasting_parameters import ForecastingParameters
 from utils import config, workspace, dataset, compute, pipeline
 
 
-def main(model_name):
+def main():
     #get argurment from environment. These variable should be in yml file
+    model_name = config.get_env_var("AML_MODEL_NAME")
     pipeline_name = config.get_env_var("TRAINING_PIPELINE")
     dataset_name = config.get_env_var("AML_DATASET")
     compute_name = config.get_env_var("TRAINING_COMPUTE")
@@ -21,7 +22,7 @@ def main(model_name):
     maximize = config.get_env_var("MAXIMIZE")
     build_id = config.get_env_var("TRAINING_PIPELINE_BUILD_ID")
     training_env_file = config.get_env_var("AML_TRAINING_ENV_PATH")
-
+    
     #retrieve workspace
     ws =  workspace.retrieve_workspace()
 
@@ -48,6 +49,7 @@ def main(model_name):
         outputs=[pipeline_data],
         arguments = [
             '--dataset-name', dataset_name,
+            '--model-name', model_name,
             '--output-dir', pipeline_data,
             '--model-metric-name', model_metric_name,
         ],
@@ -108,5 +110,4 @@ def parse_args(args=None):
 
 
 if __name__ == "__main__":
-    args = parse_args()
-    main(args.model_name)
+    main()
