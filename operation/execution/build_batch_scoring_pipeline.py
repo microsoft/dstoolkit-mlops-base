@@ -11,8 +11,7 @@ from msrest.exceptions import HttpOperationError
 
 from utils import config, workspace, dataset, compute, pipeline
 
-
-if __name__ == "__main__":
+def main():
     # get argurment from environment. These variable should be in yml file
     model_name = config.get_env_var("AML_MODEL_NAME")
     pipeline_name = config.get_env_var("BATCHINFERENCE_PIPELINE")
@@ -87,3 +86,7 @@ if __name__ == "__main__":
 
     print(f"Published pipeline: {published_pipeline.name}")
     print(f"for build {published_pipeline.version}")
+    
+if __name__ == "__main__":
+    main()
+    
