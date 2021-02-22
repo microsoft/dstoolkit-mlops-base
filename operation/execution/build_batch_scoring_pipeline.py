@@ -9,29 +9,25 @@ from azureml.core.runconfig import RunConfiguration
 from azureml.core import Datastore
 from azureml.automl.core.forecasting_parameters import ForecastingParameters
 
-from utils import config, workspace, dataset, compute, pipeline, environment
+from utils import config, workspace, dataset, compute, pipeline
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # args.add_argument('--is_new_training', default='yes')
     # model should be regression or forecasting
-    parser.add_argument("--model-name", type=str, default="sale_regression.pkl")
-    # args.add_argument('--dataset_name', default='oj_sale_ds')
+    parser.add_argument("--model-name", type=str, default="sales_regression.pkl")
 
     args = parser.parse_args()
     model_name = args.model_name
-    # dataset_name = parse.dataset_name
 
     # get argurment from environment. These variable should be in yml file
-    # pipeline_name = config.get_env_var("BATCH_SCORING_PIPELINE")
-    pipeline_name = os.getenv("BATCHINFERENCE_PIPELINE", "uc-pipeline-inference")
-    compute_name = os.getenv("BATCH_SCORING_COMPUTE", "cpucompute")
-    output_dir_name = os.getenv("BATCH_SCORING_OUTPUT_DIR", "forecasting_results")
-    output_container_name = os.getenv("BATCH_SCORING_OUTPUT_CONTAINER", "modelprediction")
-
-    build_id = os.getenv("BUILD_ID", 1)
-    scoring_env_file = os.getenv("AML_BATCH_SCORING_ENV_PATH", "configuration/environments/environment_inference")
+    pipeline_name = config.get_env_var("BATCH_SCORING_PIPELINE")
+    compute_name = config.get_env_var("BATCHINFERENCE_COMPUTE")
+    output_dir_name = config.get_env_var("BATCH_SCORING_OUTPUT_DIR")
+    output_container_name = config.get_env_var("BATCH_SCORING_OUTPUT_CONTAINER")
+    build_id = config.getenv("BATCH_SCORING_PIPELINE_BUILD_ID")
+    scoring_env_file = config.get_env_var("AML_BATCH_SCORING_ENV_PATH")
 
     #retrieve workspace
     ws =  workspace.retrieve_workspace()

@@ -14,11 +14,19 @@ variables: #TODO
   TRAINING_EXPERIMENT: retraining-ojsales
   TRAINING_PIPELINE: retraining-pipeline-ojsales
   TRAINING_COMPUTE: cpucompute
+  TRAINING_PIPELINE_BUILD_ID: 1
+  AML_TRAINING_ENV_PATH: configuration/environments/environment_training
+  MODEL_METRIC_NAME: mse
+  MAXIMIZE: False
 
   # Batch inference
   BATCHINFERENCE_EXPERIMENT: batchinference-ojsales
   BATCHINFERENCE_PIPELINE: batchinference-pipeline-ojsales
   BATCHINFERENCE_COMPUTE: $(TRAINING_COMPUTE)
+  BATCH_SCORING_PIPELINE_BUILD_ID: 1
+  BATCH_SCORING_OUTPUT_DIR: forecasting_results
+  BATCH_SCORING_OUTPUT_CONTAINER: modelprediction
+  AML_BATCH_SCORING_ENV_PATH: configuration/environments/environment_inference
 
   # Real-time inference
   AKS_COMPUTE: aks-compute

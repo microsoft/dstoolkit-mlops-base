@@ -91,16 +91,14 @@ def main(dataset_name, output_dir, model_name):
     if not isinstance(run,_OfflineRun):
         if run.parent is not None:
             for (k,v) in metrics.items():
-                run.tag(k,v)
-                run.parrent.tag(k,v)
-                run.log(k,v)
-                run.parrent.log(k,v)
-            #run.parent.log("mse", float(metrics))
+                run.tag(k, v)
+                run.parent.tag(k, v)
+                run.log(k, v)
+                run.parent.log(k, v)
         else:
             for (k,v) in metrics.items():
                 run.tag(k,v)
                 run.log(k,v)
-            #run.log("mse", float(metrics))
     
     # Save model in output folder
     # create folder if not exists

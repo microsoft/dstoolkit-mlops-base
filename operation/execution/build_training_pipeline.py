@@ -9,7 +9,7 @@ from azureml.pipeline.core.graph import PipelineParameter
 from azureml.pipeline.steps import PythonScriptStep
 from azureml.core.runconfig import RunConfiguration
 from azureml.automl.core.forecasting_parameters import ForecastingParameters
-from utils import config, workspace, dataset, compute, pipeline, environment
+from utils import config, workspace, dataset, compute, pipeline
 
 
 def main(model_name):
@@ -17,11 +17,10 @@ def main(model_name):
     pipeline_name = config.get_env_var("TRAINING_PIPELINE")
     dataset_name = config.get_env_var("AML_DATASET")
     compute_name = config.get_env_var("TRAINING_COMPUTE")
-
-    #TODO: should we have defaults for all of these variables? decide which ones should/shouldn't
-    output_dir = os.environ.get("OUTPUT_DIR", "outputs/models")
-    build_id = os.environ.get("BUILD_ID", 1)
-    training_env_file = os.environ.get("AML_TRAINING_ENV_PATH", "configuration/environments/environment_training")
+    model_metric_name = config.get_env_var("MODEL_METRIC_NAME")
+    maximize = config.get_env_var("MAXIMIZE")
+    build_id = config.get_env_var("TRAINING_PIPELINE_BUILD_ID")
+    training_env_file = config.get_env_var("AML_TRAINING_ENV_PATH")
 
     #retrieve workspace
     ws =  workspace.retrieve_workspace()
@@ -63,7 +62,9 @@ def main(model_name):
         inputs = [pipeline_data],
         arguments = [
             '--model-path', pipeline_data,
-            '--model-name', model_name
+            '--model-name', model_name,
+            '--model_metric_name', model_metric_name,
+            '--maximize', maximize
         ],
         runconfig = run_config,
         allow_reuse = True
