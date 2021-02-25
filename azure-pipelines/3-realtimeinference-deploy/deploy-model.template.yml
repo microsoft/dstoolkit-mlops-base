@@ -1,0 +1,50 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for deploying models
+
+parameters:
+- name: environment
+  type: string
+- name: deploymentType
+  type: string
+- name: webserviceName
+  type: string
+
+
+jobs:
+
+- job: check_aks
+  displayName: 'Check AKS'
+  steps:
+    - bash: |
+        if [ "${{parameters.deploymentType}}" != "aks" ]; then
+          echo "Not AKS deployment. Skipping check."
+        elif [ "$(AKS_COMPUTE)" == "" ]; then
+          >&2 echo "Error: variable AKS_COMPUTE must be set for AKS deployments"
+        fi
+      displayName: 'Check AKS_COMPUTE variable'
+      failOnStderr: true
+
+- job: deploy_model
+  displayName: 'Deploy Model'
+  dependsOn: check_aks
+  timeoutInMinutes: 0
+  steps:
+  - template: ../utils/run-aml-code.template.yml
+    parameters:
+      serviceConnection: $(DEV_SERVICECONNECTION_WS)
+      resourceGroup: $(DEV_RESOURCE_GROUP)
+      amlWorkspace: $(DEV_AMLWORKSPACE)
+      scriptPath: operation/execution/model_deployment.py
+      scriptArguments: |
+        --model-name $(AML_MODEL) \
+        --config-path configuration/compute/${{parameters.environment}}-realtimeinference-${{parameters.deploymentType}}.yml \
+        --service-name ${{parameters.webserviceName}} \
+        --aks-target-name $(AKS_COMPUTE)
+      scriptExtraDependencies: pyyaml
+
+# - job: smoke_test
+#   displayName: 'Test Webservice'
+#   dependsOn: deploy_model
+#   steps: #TODO

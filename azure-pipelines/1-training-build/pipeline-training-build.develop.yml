@@ -1,0 +1,51 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that publishes AML Pipeline for model training
+
+trigger:
+- none
+
+# trigger:
+#   branches:
+#     include:
+#     - develop
+#   paths:
+#     include:
+#     - azure-pipelines/1-training-build/*
+#     - operation/execution/training_pipeline.py
+#     - src/
+
+# TODO: define proper paths
+
+variables:
+- template: ../../configuration/configuration-aml.variables.yml
+- template: ../../configuration/configuration-infra.variables.yml
+# TODO: reorganize variables once finished
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+#TODO tests
+# - stage: tests
+#   displayName: 'Run Code Tests'
+#   jobs:
+#   - template: run-tests.template.yml
+
+- stage: training_build
+  displayName: 'Publish Training AML Pipeline'
+  # dependsOn: tests
+  jobs:
+    - job: training_build
+      displayName: 'Publish Training AML Pipeline'
+      steps:
+      - template: ../utils/run-aml-code.template.yml
+        parameters:
+          serviceConnection: $(DEV_SERVICECONNECTION_WS)
+          resourceGroup: $(DEV_RESOURCE_GROUP)
+          amlWorkspace: $(DEV_AMLWORKSPACE)
+          scriptPath: operation/execution/build_training_pipeline.py
+          scriptExtraDependencies: pyyaml
+          scriptArguments: --model-name $(AML_MODEL)

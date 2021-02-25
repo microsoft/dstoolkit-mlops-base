@@ -1,0 +1,46 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that publishes AML Pipeline for model training
+
+trigger:
+- none
+
+# trigger:
+#   branches:
+#     include:
+#     - develop
+#   paths:
+#     include:
+#     - azure-pipelines/1-training-build/*
+#     - operation/execution/training_pipeline.py
+#     - src/
+# TODO: define proper triggers and paths 
+
+variables:
+- template: ../../configuration/configuration-aml.variables.yml
+- template: ../../configuration/configuration-infra.variables.yml
+# TODO: reorganize variables once finished
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+#TODO
+# - stage: update_data
+#   displayName: 'Update Data for Training/Retraining'
+#   jobs:
+#   - template: update-data.template.yml
+
+- stage: run_batch_inference
+  displayName: 'Run Batch Inference'
+  jobs:
+    - template: ../utils/invoke-aml-pipeline.template.yml
+      parameters:
+        jobDisplayName: 'Invoke Batch Inference AML Pipeline'
+        serviceConnection: $(DEV_SERVICECONNECTION_WS)
+        resourceGroup: $(DEV_RESOURCE_GROUP)
+        amlWorkspace: $(DEV_AMLWORKSPACE)
+        pipelineName: $(BATCHINFERENCE_PIPELINE)
+        experimentName: $(BATCHINFERENCE_EXPERIMENT)

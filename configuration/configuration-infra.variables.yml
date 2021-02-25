@@ -1,0 +1,42 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Definition of infra-related environment variables
+
+variables:
+
+  # DEV Environment
+  DEV_RESOURCE_GROUP: rg-mlops-dev-001
+  DEV_LOCATION: westeurope
+  DEV_NAMESPACE: mlopsdev002
+  DEV_SERVICECONNECTION_RG: conn-mlops-sub-infra
+  DEV_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev
+  DEV_AMLWORKSPACE: aml$(DEV_NAMESPACE)
+  DEV_STORAGEACCOUNT: sa$(DEV_NAMESPACE)
+  DEV_KEYVAULT: kv$(DEV_NAMESPACE)
+  DEV_APPINSIGHTS: ai$(DEV_NAMESPACE)
+  DEV_CONTAINERREGISTRY: cr$(DEV_NAMESPACE)
+
+  # TEST Environment
+  TEST_RESOURCE_GROUP: rg-mlops-test-001
+  TEST_LOCATION: westeurope
+  TEST_NAMESPACE: amlmlops
+  TEST_SERVICECONNECTION_RG: conn-mlops-sub-infra
+  TEST_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev
+  TEST_AMLWORKSPACE: $(TEST_NAMESPACE)test001
+  TEST_STORAGEACCOUNT: $(TEST_NAMESPACE)sa
+  TEST_KEYVAULT: $(TEST_NAMESPACE)kv
+  TEST_APPINSIGHTS: $(TEST_NAMESPACE)ai
+  TEST_CONTAINERREGISTRY: $(TEST_NAMESPACE)cr
+
+  # PRD Environment
+  PRD_RESOURCE_GROUP: rg-mlops-prod-001
+  PRD_LOCATION: westeurope
+  PRD_NAMESPACE: mlopsprod001
+  PRD_SERVICECONNECTION_RG: conn-mlops-sub-infra
+  PRD_SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod
+  PRD_AMLWORKSPACE: aml$(PRD_NAMESPACE)
+  PRD_STORAGEACCOUNT: sa$(PRD_NAMESPACE)
+  PRD_KEYVAULT: kv$(PRD_NAMESPACE)
+  PRD_APPINSIGHTS: ai$(PRD_NAMESPACE)
+  PRD_CONTAINERREGISTRY: cr$(PRD_NAMESPACE)

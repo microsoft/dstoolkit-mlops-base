@@ -1,0 +1,33 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Definition of AML-related environment variables
+
+variables: #TODO
+
+  SDK_VERSION: 1.20
+  
+  AML_DATASET: oj_sales_ds
+  AML_MODEL_NAME: oj_sales_model.pkl
+
+  # Training
+  TRAINING_EXPERIMENT: retraining-ojsales
+  TRAINING_PIPELINE: retraining-pipeline-ojsales
+  TRAINING_COMPUTE: cpucompute
+  TRAINING_PIPELINE_BUILD_ID: 1
+  AML_TRAINING_ENV_PATH: configuration/environments/environment_training
+  MODEL_METRIC_NAME: mse
+  MAXIMIZE: False
+
+  # Batch inference
+  BATCHINFERENCE_EXPERIMENT: batchinference-ojsales
+  BATCHINFERENCE_PIPELINE: batchinference-pipeline-ojsales
+  BATCHINFERENCE_COMPUTE: cpucompute
+  BATCH_SCORING_PIPELINE_BUILD_ID: 1
+  BATCH_SCORING_OUTPUT_DIR: forecasting_results
+  BATCH_SCORING_OUTPUT_CONTAINER: modelprediction
+  AML_BATCH_SCORING_ENV_PATH: configuration/environments/environment_inference
+
+  # Real-time inference
+  AKS_COMPUTE: aks-compute
+  AML_WEBSERVICE: ojsales-webservice
