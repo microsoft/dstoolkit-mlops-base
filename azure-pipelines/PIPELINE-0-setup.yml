@@ -38,6 +38,7 @@ stages:
 # Deploy PRD Environment
 - stage: deployinfra_prd
   displayName: 'Deploy PRD Environment'
+  condition: eq(variables['build.sourceBranch'], 'refs/heads/main')
   jobs:
   - template: templates/deploy-env-infra.template.yml
     parameters:
@@ -72,6 +73,7 @@ stages:
 - stage: computesetup_prd
   displayName: 'Compute Setup PRD Environment'
   dependsOn: deployinfra_prd
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   jobs:
   - template: templates/setup-compute.template.yml
     parameters:
@@ -100,6 +102,7 @@ stages:
 - stage: dataprep_prd
   displayName: 'Data Preparation PRD Environment'
   dependsOn: deployinfra_prd
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
   jobs:
   - template: templates/update-data.template.yml
     parameters:
