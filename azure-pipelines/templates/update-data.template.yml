@@ -26,7 +26,7 @@ jobs:
         serviceConnection: ${{parameters.serviceConnection}}
         resourceGroup: ${{parameters.resourceGroup}}
         amlWorkspace: ${{parameters.amlWorkspace}}
-        scriptPath: src/create_rawset.py
+        scriptPath: src/download_data.py
         scriptArguments: --data-path ${{parameters.dataPath}}
         scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
         displayName: 'Download Sample Data'

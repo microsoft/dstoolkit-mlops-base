@@ -21,7 +21,7 @@ def main(data_path, maxfiles=None):
 
 def parse_args(args=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_path', type=str, required=True)
+    parser.add_argument('--data-path', type=str, required=True)
     parser.add_argument('--maxfiles', type=int, default=10)
     args_parsed = parser.parse_args(args)
 
