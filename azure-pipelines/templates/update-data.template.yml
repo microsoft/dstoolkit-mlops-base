@@ -52,6 +52,7 @@ jobs:
                                  $workspace_params
           echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
           echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
+        failOnStandardError: true
 
 - job: register_dataset
   displayName: 'Register Dataset'
@@ -60,6 +61,7 @@ jobs:
     datastore: $[ dependencies.data_snapshot.outputs['datastore_upload.datastore'] ]
     datapath: $[ dependencies.data_snapshot.outputs['datastore_upload.datapath'] ]
   steps:
+
   - template: utils/run-aml-python-code.template.yml
     parameters:
       serviceConnection: ${{parameters.serviceConnection}}

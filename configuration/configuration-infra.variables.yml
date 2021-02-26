@@ -8,7 +8,7 @@ variables:
   # DEV Environment
   DEV_RESOURCE_GROUP: rg-mlops-dev-001
   DEV_LOCATION: westeurope
-  DEV_NAMESPACE: mlopsdev002
+  DEV_NAMESPACE: mlopsdev001
   DEV_SERVICECONNECTION_RG: conn-mlops-sub-infra
   DEV_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev-001
   DEV_AMLWORKSPACE: aml$(DEV_NAMESPACE)
