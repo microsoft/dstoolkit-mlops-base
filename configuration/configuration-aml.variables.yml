@@ -22,7 +22,7 @@ variables: #TODO
   # Batch inference
   BATCHINFERENCE_EXPERIMENT: batchinference-ojsales
   BATCHINFERENCE_PIPELINE: batchinference-pipeline-ojsales
-  BATCHINFERENCE_COMPUTE: cpucompute
+  BATCHINFERENCE_COMPUTE: $(TRAINING_COMPUTE)
   BATCH_SCORING_PIPELINE_BUILD_ID: 1
   BATCH_SCORING_OUTPUT_DIR: forecasting_results
   BATCH_SCORING_OUTPUT_CONTAINER: modelprediction
