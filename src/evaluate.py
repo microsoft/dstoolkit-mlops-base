@@ -36,9 +36,9 @@ def run_evaluation(model_path, model_name, model_metric_name, maximize):
     if not isinstance(run, _OfflineRun):
         ws = run.experiment.workspace
         model = get_model(
-                            workspace=ws,
-                            model_name=model_name,
-                            model_path=os.path.join(model_path, model_name)  # NOQA: E501
+            ws,
+            model_name=model_name,
+            model_path=os.path.join(model_path, model_name)
         )
     else:
         print('evaluation script is not supported in local runs')

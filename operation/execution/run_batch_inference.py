@@ -49,9 +49,7 @@ def main():
         pipeline_parameters = {"model_name": model_name}
         tags = {"BuildId": build_id}
 
-        experiment = Experiment(
-            workspace=ws,
-            name=experiment_name)
+        experiment = Experiment(ws, name=experiment_name)
 
         run = experiment.submit(
             published_pipeline,

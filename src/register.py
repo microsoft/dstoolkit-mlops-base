@@ -5,8 +5,7 @@ import os
 import sys
 import argparse
 
-from azureml.core import Run
-from azureml.core.model import Model as AMLModel
+from azureml.core import Run, Model
 from azureml.core.run import _OfflineRun
 
 # from utils import append_traceability_logs
@@ -41,12 +40,12 @@ def run_registration(model_path, model_name, model_description):
     try:
         # Register model
         model_path = os.path.join(model_path, model_name)
-        model = AMLModel.register(
+        model = Model.register(
+            workspace=ws,
             model_path=model_path,
             model_name=model_name,
             tags=parent_tags,
-            description=model_description,
-            workspace=ws
+            description=model_description
         )
         print('registered a new model {}'.format(model.name))
     except Exception:

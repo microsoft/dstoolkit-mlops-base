@@ -16,11 +16,8 @@ def register_dataset(ws, datastore, data_path, dataset_name):
         separator=",",
         support_multi_line=True
     )
-    dataset = dataset.register(
-        workspace=ws,
-        name=dataset_name,
-        create_new_version=True
-    )
+
+    dataset = dataset.register(ws, name=dataset_name, create_new_version=True)
     print(f"Register dataset {dataset_name}")
 
     return dataset
