@@ -21,7 +21,7 @@ jobs:
     displayName: 'Install project requirements'
 
   - script: |   
-      flake8 --output-file=flake8-testresults.xml --format junit-xml
+      flake8 --output-file=flake8-testresults.xml --format junit-xml --exit-zero
     displayName: 'Run code quality tests (Flake8)'
 
   - script: |      

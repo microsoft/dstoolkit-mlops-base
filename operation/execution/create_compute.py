@@ -7,8 +7,8 @@ from utils import workspace, compute
 
 
 def main(name, config_path):
-    
-    ws =  workspace.retrieve_workspace()
+
+    ws = workspace.retrieve_workspace()
 
     if not name:
         print("Compute target name not defined. Skipping.")

@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import yaml
 import inspect
 
 from azureml.core import Webservice, Environment
@@ -20,7 +19,7 @@ DEFAULT_PARAMS = {
 }
 
 
-def build_deployment_params(ws, script_dir, script_file, environment_path, compute_config_file, 
+def build_deployment_params(ws, script_dir, script_file, environment_path, compute_config_file,
                             aks_target_name=None):
 
     # Inference environment
@@ -98,8 +97,8 @@ def build_update_params(service, deployment_params):
     params = {
         **{
             # Take params of the configuration object that are defined as arguments in the update function
-            k:v for k,v in inspect.getmembers(deployment_params['deployment_config']) 
-                if k in update_function_args and v is not None
+            k: v for k, v in inspect.getmembers(deployment_params['deployment_config'])
+            if k in update_function_args and v is not None
         },
         'inference_config': deployment_params['inference_config']
     }

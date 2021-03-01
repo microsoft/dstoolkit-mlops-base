@@ -7,11 +7,11 @@ from utils import workspace, dataset
 
 
 def main(dataset_name, datastore_name, data_path):
-    
-    ws =  workspace.retrieve_workspace()
+
+    ws = workspace.retrieve_workspace()
 
     _ = dataset.register_dataset(
-        ws, 
+        ws,
         datastore=datastore_name,
         data_path=data_path,
         dataset_name=dataset_name

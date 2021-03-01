@@ -1,20 +1,20 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
+
+from azureml.core import Experiment
 from azureml.pipeline.core import PublishedPipeline
-from azureml.core import Experiment, Workspace
-import argparse
-import os
+
 from utils import workspace, config
 
 
 def main():
-    #get argurment from environment. These variable should be in yml file
+    # Get argurment from environment. These variable should be in yml file
     pipeline_name = config.get_env_var("TRAINING_PIPELINE")
     experiment_name = config.get_env_var("TRAINING_EXPERIMENT")
     build_id = config.get_env_var("TRAINING_PIPELINE_BUILD_ID")
 
-    #retrieve workspace
-    ws =  workspace.retrieve_workspace()
+    # Retrieve workspace
+    ws = workspace.retrieve_workspace()
 
     # Find the pipeline that was published by the specified name and buile ID
     pipelines = PublishedPipeline.list(ws)
@@ -40,12 +40,12 @@ def main():
             workspace=ws,
             name=experiment_name)
 
-
         run = experiment.submit(
             published_pipeline,
             tags=tags)
 
         print("Pipeline run initiated ", run.id)
+
 
 if __name__ == "__main__":
     main()

@@ -1,9 +1,13 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
 import sys
 import os
-sys.path.append(os.path.abspath('src'))
+import pytest
 
 import pandas as pd
-import pytest
+
+sys.path.append(os.path.abspath('src'))
 from batch_score import preprocessing
 
 
@@ -20,6 +24,3 @@ def data():
 def test_preprocessing(data):
     X = preprocessing(data)
     assert isinstance(X, pd.DataFrame)
-    
-
-

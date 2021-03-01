@@ -14,6 +14,7 @@ import pandas as pd
 
 model = None
 
+
 def preprocessing(X):
     """
     Create Week_number from WeekStarting
@@ -22,15 +23,16 @@ def preprocessing(X):
     X['WeekStarting'] = pd.to_datetime(X['WeekStarting'])
     X['week_number'] = X['WeekStarting'].apply(lambda x: x.strftime("%U"))
     # Drop 'WeekStarting','Revenue' columns if it exist
-    X = X.drop(['WeekStarting','Revenue','Quantity'], axis = 1, errors ='ignore')
+    X = X.drop(['WeekStarting', 'Revenue', 'Quantity'], axis=1, errors='ignore')
     return X
+
 
 def init():
     global model
-    
+
     models_root_path = Path(os.getenv('AZUREML_MODEL_DIR'))
     models_files = [f for f in models_root_path.glob('**/*') if f.is_file()]
-    if len(models_files) > 1: #TODO: support for more than one?
+    if len(models_files) > 1:  # TODO: support for more than one?
         raise RuntimeError(f'Found more than one model:\n\t{models_files}')
 
     model_path = models_files[0]

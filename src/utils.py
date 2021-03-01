@@ -1,20 +1,23 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+import os
+import sys
+import joblib
+
+import pandas as pd
 from azureml.core import Run, Dataset, Workspace
 from azureml.core.model import Model as AMLModel
 from azureml.core.authentication import ServicePrincipalAuthentication
 from azureml.core.run import _OfflineRun
-import argparse
-import sys
-import os
-from pathlib import Path
-import pandas as pd
-import joblib
+
 
 def retrieve_workspace() -> Workspace:
     ws = None
 
     try:
         run = Run.get_context()
-        if not isinstance(run,_OfflineRun):
+        if not isinstance(run, _OfflineRun):
             ws = run.experiment.workspace
             return ws
     except Exception as e:
@@ -27,28 +30,27 @@ def retrieve_workspace() -> Workspace:
         print('Workspace config not found in local folder', e)
 
     try:
-        sp = ServicePrincipalAuthentication(tenant_id=os.environ['AML_TENANT_ID'],
-                                    service_principal_id=os.environ['AML_PRINCIPAL_ID'],
-                                    service_principal_password=os.environ['AML_PRINCIPAL_PASS']
-                                    )
-        ws = Workspace.get(name="ml-example",
-                   auth=sp,
-                   subscription_id="your-sub-id")
+        sp = ServicePrincipalAuthentication(
+            tenant_id=os.environ['AML_TENANT_ID'],
+            service_principal_id=os.environ['AML_PRINCIPAL_ID'],
+            service_principal_password=os.environ['AML_PRINCIPAL_PASS']
+        )
+        ws = Workspace.get(
+            name="<ml-example>",
+            auth=sp,
+            subscription_id="<your-sub-id>"
+        )
     except Exception as e:
         print('Workspace config not found in project', e)
-    
+
     return ws
 
 
-def get_dataset(
-                workspace=None,
-                filename=None,
-                path_datastore=None
-    ):
+def get_dataset(ws, filename=None, path_datastore=None):
     """Get a dataset.
 
     Args:
-        workspace (Workspace): The Azure Machine Learning workspace object
+        ws (Workspace): The Azure Machine Learning workspace object
         filename (str): The name of VM (compute target)
         path_datastore (str): The path to a model file (including file name)
 
@@ -70,7 +72,7 @@ def get_dataset(
         print('Cannot retrieve a dataset from run. Trying to retrieve it from datastore by dataset name...')  # NOQA: E501
     # get dataset from Dataset registry
     try:
-        dataset = Dataset.get_by_name(workspace, filename)
+        dataset = Dataset.get_by_name(ws, filename)
         df = dataset.to_pandas_dataframe()
         print('Dataset retrieved from datastore by dataset name')
         return df
@@ -78,7 +80,7 @@ def get_dataset(
         print('Cannot retrieve a dataset from datastore by dataset name. Trying to retrieve it from datastore by path...')  # NOQA: E501
     # get dataset directly from datastore
     try:
-        datastore = workspace.get_default_datastore()
+        datastore = ws.get_default_datastore()
         dataset = Dataset.Tabular.from_delimited_files(path=(datastore, path_datastore))  # NOQA: E501
         df = dataset.to_pandas_dataframe()
         print('Dataset retrieved from datastore by path')
@@ -100,16 +102,11 @@ def get_dataset(
     return df
 
 
-def get_model(
-                workspace=None,
-                model_name=None,
-                model_version=None,  # NOQA: E501
-                model_path=None
-):
+def get_model(ws, model_name, model_version=None, model_path=None):
     """Get or create a compute target.
 
     Args:
-        workspace (Workspace): The Azure Machine Learning workspace object
+        ws (Workspace): The Azure Machine Learning workspace object
         model_name (str): The name of ML model
         model_version (int): The version of ML model (If None, the function returns latest model)  # NOQA: E501
         model_path (str): The path to a model file (including file name). This parameter is used to load a model from a local path.  # NOQA: E501
@@ -123,23 +120,15 @@ def get_model(
     model = None
 
     try:
-        model = AMLModel(
-                            workspace,
-                            name=model_name,
-                            version=model_version
-        )
-        print('Found the model by name {} and version {}'.format(model_name, model_version))  # NOQA: E501
+        model = AMLModel(ws, name=model_name, version=model_version)
+        print(f'Found the model by name {model_name} and version {model_version}')
         return model
     except Exception:
-        print('Cannot load a model from AML workspace by model name {} and model_version {}. Trying to load it by name only.'.format(model_name, model_version))  # NOQA: E501
+        print(f'Cannot load a model from AML workspace by model name {model_name} and model_version {model_version}. Trying to load it by name only.')  # NOQA: E501
     try:
-        models = AMLModel.list(
-                                workspace,
-                                name=model_name,
-                                latest=True
-        )
+        models = AMLModel.list(ws, name=model_name, latest=True)
         if len(models) == 1:
-            print('Found the model by name {}'.format(model_name))
+            print(f'Found the model by name {model_name}')
             model = models[0]
             return model
         elif len(models) > 1:
@@ -147,7 +136,7 @@ def get_model(
         else:
             print('Empty list of models.')
     except Exception:
-        print('Cannot load a model from AML workspace by model name {}. Trying to load it from a local path.'.format(model_name))  # NOQA: E501
+        print(f'Cannot load a model from AML workspace by model name {model_name}. Trying to load it from a local path.')  # NOQA: E501
 
     try:
         model = joblib.load(model_path)

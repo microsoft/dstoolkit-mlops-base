@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import os
 import argparse
 
 from azureml.core import Model
@@ -12,10 +11,10 @@ from utils import workspace, deployment
 def main(model_name, service_name, compute_config_file, aks_target_name=None):
 
     ws = workspace.retrieve_workspace()
-    model = Model(ws, name=model_name) #TODO support for more than 1 model?
+    model = Model(ws, name=model_name)  # TODO: support for more than 1 model?
 
-    #TODO where should this come from?
-    conda_dependencies_file = "configuration/environments/environment_inference/" #conda_dependencies.yml
+    # TODO: where should this come from?
+    conda_dependencies_file = "configuration/environments/environment_inference/"  # conda_dependencies.yml
     script_dir = "src"
     script_file = 'score.py'
 

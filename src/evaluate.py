@@ -1,9 +1,14 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
 import os
 import sys
 import argparse
+
 from azureml.core import Run
 from azureml.core.model import Model as AMLModel
 from azureml.core.run import _OfflineRun
+
 from utils import get_model
 
 
@@ -65,7 +70,7 @@ def run_evaluation(
 
     try:
         run = Run.get_context()
-    except Exception as e:
+    except Exception:
         print('evaluation script is not supported in local runs')
         sys.exit(-1)
 

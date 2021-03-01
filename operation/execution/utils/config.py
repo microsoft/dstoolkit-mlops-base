@@ -8,7 +8,7 @@ import importlib
 from pathlib import Path
 
 
-def get_env_var(name): #TODO read variables from files in local executions
+def get_env_var(name):  # TODO read variables from files in local executions
     """Get value from environment variable.
        Raises informative message if not set.
 
@@ -32,7 +32,8 @@ def get_env_var(name): #TODO read variables from files in local executions
         print(f"Some error happens while loading variable {name}")
     return var
 
-def retrieve_config(): #TODO: is this being used?
+
+def retrieve_config():  # TODO: is this being used?
     """Retrieve configuration data.
 
     Args:
@@ -65,7 +66,7 @@ def read_config_file(config_file_path):
     return config
 
 
-def build_compute_config(config_file_path=None, default_compute=None, default_params={}, 
+def build_compute_config(config_file_path=None, default_compute=None, default_params={},
                          compute_module='azureml.core.compute'):
     """Read compute configuration file
 
@@ -129,7 +130,7 @@ def validate_config(defined_params, build_method, default_params={}):
 
     # Complete with default params if necessary
     for param, default_value in default_params.items():
-        if param in build_method_args and not param in defined_params:
+        if param in build_method_args and param not in defined_params:
             print(f'{param} not defined, using default: {default_value}')
             defined_params[param] = default_value
 
