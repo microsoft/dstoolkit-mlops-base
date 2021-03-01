@@ -2,3 +2,48 @@
 # Licensed under the MIT License.
 
 #TODO
+
+  
+jobs:
+
+- job: 'run_unit_tests'
+  displayName: "Running unit tests"
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
+      architecture: 'x64'
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install pytest codecov pydocstyle pytest-cov flake8==3.7.* flake8_formatter_junit_xml==0.0.*
+    displayName: 'Install testing dependencies'
+  
+  - script: |
+      pip install -r requirements.txt
+    displayName: 'Install project requirements'
+
+  - script: |
+      pytest -v operation/tests/unit/ --doctest-modules --junitxml=unit-testresults.xml --cov=src --cov-append --cov-report=xml:coverage.xml --cov-report=html:htmlcov
+    displayName: 'Run all unit tests'
+
+  # - script: |      
+  #     pylint --output-format=pylint_junit.JUnitReporter --disable=C0114,C0115,C0116,E0110,E1101,E1123,R0801 src/ > linting-testresults.xml
+  #   displayName: 'Run code quality tests (Pylint)'
+  
+  
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/*-testresults.xml'
+      testRunTitle: '$(Agent.OS) - $(Build.BuildNumber)[$(Agent.JobName)] - Python $(python.version) - Linting and Unit Test results'
+    condition: succeededOrFailed()
+    displayName: 'Publish unit test results'
+  
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'coverage.xml'
+      reportDirectory: 'htmlcov'
+    displayName: 'Publish Coverage Results'
+  
