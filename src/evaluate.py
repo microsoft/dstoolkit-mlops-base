@@ -94,7 +94,7 @@ def parse_args(args_list=None):
     parser.add_argument('--model-path', type=str, help='The input from previous steps')
     parser.add_argument('--model-name', type=str, help='The name of the model file', default='oj_sales_model.pkl')
     parser.add_argument('--model-metric-name', type=str, help='The name of the evaluation metric used in Train step')
-    parser.add_argument('--maximize', default=None, type=eval, 
+    parser.add_argument('--maximize', default=None, type=eval,
                         help='The evaluation metric should be maximized: true or false')
 
     args_parsed = parser.parse_args(args_list)
