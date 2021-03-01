@@ -5,7 +5,7 @@ import os
 import sys
 
 from azureml.core import Workspace
-from azureml.core.authentication import AzureCliAuthentication, ServicePrincipalAuthentication
+from azureml.core.authentication import ServicePrincipalAuthentication
 
 
 def retrieve_workspace():

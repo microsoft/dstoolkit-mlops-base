@@ -1,16 +1,14 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import yaml
 import inspect
 
-from azureml.core import Webservice
+from azureml.core import Webservice, Environment
 from azureml.core.model import Model, InferenceConfig
 from azureml.core.compute import AksCompute
 from azureml.exceptions import WebserviceException
 
 from .config import build_compute_config
-from .environment import get_environment
 
 
 COMPUTE_TYPES = ['AciWebservice', 'AksWebservice']
@@ -21,11 +19,11 @@ DEFAULT_PARAMS = {
 }
 
 
-def build_deployment_params(ws, script_dir, script_file, environment_file, compute_config_file, 
-                            aks_target_name=None, environment_name="deployment_env"):
+def build_deployment_params(ws, script_dir, script_file, environment_path, compute_config_file,
+                            aks_target_name=None):
 
     # Inference environment
-    env_deploy = get_environment(ws, environment_name, environment_file)
+    env_deploy = Environment.load_from_directory(path=environment_path)
 
     # Inference configuration
     inference_config = InferenceConfig(
@@ -99,8 +97,8 @@ def build_update_params(service, deployment_params):
     params = {
         **{
             # Take params of the configuration object that are defined as arguments in the update function
-            k:v for k,v in inspect.getmembers(deployment_params['deployment_config']) 
-                if k in update_function_args and v is not None
+            k: v for k, v in inspect.getmembers(deployment_params['deployment_config'])
+            if k in update_function_args and v is not None
         },
         'inference_config': deployment_params['inference_config']
     }
