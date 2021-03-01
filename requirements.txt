@@ -1,0 +1,7 @@
+# This file may be used to create an environment using:
+# $ conda create --name <env> --file <this file>
+# platform: win-64
+scikit-learn==0.22.1
+pandas==1.0.0
+azureml-core==1.20
+azureml-opendatasets==1.20

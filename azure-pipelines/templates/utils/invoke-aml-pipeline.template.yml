@@ -16,11 +16,15 @@ parameters:
   type: string
 - name: experimentName
   type: string
+- name: dependsOn
+  type: string
+  default: []
 
 jobs:
 
   - job: pipeline_id
     displayName: 'Get AML Pipeline ID'
+    dependsOn: ${{parameters.dependsOn}}
     steps:
       - task: AzureCLI@1
         name: get_pipeline_id

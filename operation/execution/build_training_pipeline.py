@@ -1,112 +1,86 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import os, sys
+import os
 import argparse
-from azureml.core import Experiment, Environment
 
-from azureml.pipeline.core import Pipeline, PipelineData
-from azureml.pipeline.core.graph import PipelineParameter
+from azureml.core import Datastore, Environment
+from azureml.pipeline.core import PipelineData
 from azureml.pipeline.steps import PythonScriptStep
 from azureml.core.runconfig import RunConfiguration
 
-from azureml.automl.core.forecasting_parameters import ForecastingParameters
-from utils import config, workspace, compute, environment
+from utils import config, workspace, compute, pipeline
 
 
-def parse_args(args=None):
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--model-name", dest='model_name',type=str, default="mymodel.pkl")
-    
-    args_parsed = parser.parse_args(args)
-    return args_parsed
+def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, build_id=None):
 
-def main(model_name):
-    #get argurment from environment. These variable should be in yml file
-    pipeline_name = config.get_env_var("TRAINING_PIPELINE")
-    dataset_name = config.get_env_var("AML_DATASET")
-    compute_name = config.get_env_var("TRAINING_COMPUTE")
-    # TEMPORARY FIX. Will change later
-    # pipeline_name = "retraining-pipeline-ojsales"
-    # dataset_name = "oj_sale_ds"
-    # compute_name = "cpucompute"
+    # Retrieve workspace
+    ws = workspace.retrieve_workspace()
 
-
-    #TODO: should we have defaults for all of these variables? decide which ones should/shouldn't
-    output_dir = os.environ.get("OUTPUT_DIR", "outputs/models")
-    build_id = os.environ.get("BUILD_ID", 1)
-    enviroment_name = os.environ.get("AML_TRAINING_ENV_NAME", "./configuration/environments/environment_training")
-
-    #retrieve workspace
-    ws =  workspace.retrieve_workspace()
-
-    # Get compute target
+    # Training setup
     compute_target = compute.get_compute_target(ws, compute_name)
-
-    #get environment
-    env = Environment.load_from_directory(path=training_env_file))
-
-    #create run config
+    env = Environment.load_from_directory(path=environment_path)
     run_config = RunConfiguration()
     run_config.environment = env
 
-    # create a PipelineData 
-    output_dir = PipelineData(
-        "output_dir", datastore=ws.get_default_datastore()
+    # Create a PipelineData to pass data between steps
+    pipeline_data = PipelineData(
+        'pipeline_data', datastore=Datastore.get(ws, os.getenv('DATASTORE_NAME', 'workspaceblobstore'))
     )
 
-    regres_train_step = PythonScriptStep(
-        name = "Train Model",
-        script_name = "train.py",
-        compute_target = compute_target,
-        source_directory = "src",
-        outputs=[output_dir],
-        arguments = [
-            '--dataset_name', 
-            dataset_name,
-            '--output_dir',
-            output_dir,
-            '--model_name',
-            model_name
+    # Create steps
+    train_step = PythonScriptStep(
+        name="Train Model",
+        source_directory="src",
+        script_name="train.py",
+        compute_target=compute_target,
+        outputs=[pipeline_data],
+        arguments=[
+            '--dataset-name', dataset_name,
+            '--model-name', model_name,
+            '--output-dir', pipeline_data
         ],
-        runconfig = run_config,
-        allow_reuse = True
+        runconfig=run_config,
+        allow_reuse=True
     )
 
     evaluate_step = PythonScriptStep(
-        name = "Evaluate Model",
-        script_name = "evaluate.py",
-        compute_target = compute_target,
-        source_directory = "src",
-        arguments = [
-            '--model_name',
-            model_name
+        name="Evaluate Model",
+        source_directory="src",
+        script_name="evaluate.py",
+        compute_target=compute_target,
+        inputs=[pipeline_data],
+        arguments=[
+            '--model-dir', pipeline_data,
+            '--model-name', model_name
         ],
-        runconfig = run_config,
-        allow_reuse = True
+        runconfig=run_config,
+        allow_reuse=True
     )
-    
+
     register_step = PythonScriptStep(
-        name = "Register Model",
-        script_name = "register.py",
-        compute_target = compute_target,
-        source_directory = "src",
-        inputs = [output_dir],
-        arguments = [
-            '--model_name',
-            model_name,
-            '--model_path',
-            output_dir
+        name="Register Model",
+        source_directory="src",
+        script_name="register.py",
+        compute_target=compute_target,
+        inputs=[pipeline_data],
+        arguments=[
+            '--model-dir', pipeline_data,
+            '--model-name', model_name
         ],
-        runconfig = run_config,
-        allow_reuse = True
+        runconfig=run_config,
+        allow_reuse=True
     )
-    
-    evaluate_step.run_after(regres_train_step)
+
+    # Set the sequence of steps in a pipeline
+    evaluate_step.run_after(train_step)
     register_step.run_after(evaluate_step)
-    published_pipeline = pipeline.publish_pipeline(ws, 
+
+    # Publish training pipeline
+    published_pipeline = pipeline.publish_pipeline(
+        ws,
         name=pipeline_name,
-        steps=[regres_train_step, evaluate_step, register_step],
+        steps=[train_step, evaluate_step, register_step],
         description="Model training/retraining pipeline",
         version=build_id
     )
@@ -114,7 +88,21 @@ def main(model_name):
     print(f"Published pipeline: {published_pipeline.name}")
     print(f"for build {published_pipeline.version}")
 
+
+# def parse_args(args_list=None):
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("--model-name", type=str, default="sales_regression.pkl")
+#     args_parsed = parser.parse_args(args_list)
+#     return args_parsed
+
+
 if __name__ == "__main__":
-    parse = parse_args()
-    model_name = parse.model_name
-    main(model_name)
+
+    # Get argurment from environment. These variable should be in yml file
+    model_name = config.get_env_var("AML_MODEL_NAME")
+    pipeline_name = config.get_env_var("TRAINING_PIPELINE")
+    dataset_name = config.get_env_var("AML_DATASET")
+    compute_name = config.get_env_var("TRAINING_COMPUTE")
+    environment_path = config.get_env_var("AML_TRAINING_ENV_PATH")
+
+    main(dataset_name, model_name, pipeline_name, compute_name, environment_path)

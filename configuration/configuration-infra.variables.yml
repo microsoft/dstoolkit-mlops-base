@@ -10,7 +10,7 @@ variables:
   DEV_LOCATION: westeurope
   DEV_NAMESPACE: mlopsdev001
   DEV_SERVICECONNECTION_RG: conn-mlops-sub-infra
-  DEV_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev
+  DEV_SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev-001
   DEV_AMLWORKSPACE: aml$(DEV_NAMESPACE)
   DEV_STORAGEACCOUNT: sa$(DEV_NAMESPACE)
   DEV_KEYVAULT: kv$(DEV_NAMESPACE)
@@ -22,7 +22,7 @@ variables:
   PRD_LOCATION: westeurope
   PRD_NAMESPACE: mlopsprod001
   PRD_SERVICECONNECTION_RG: conn-mlops-sub-infra
-  PRD_SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod
+  PRD_SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod-001
   PRD_AMLWORKSPACE: aml$(PRD_NAMESPACE)
   PRD_STORAGEACCOUNT: sa$(PRD_NAMESPACE)
   PRD_KEYVAULT: kv$(PRD_NAMESPACE)

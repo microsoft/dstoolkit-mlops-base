@@ -18,6 +18,9 @@ parameters:
 - name: scriptExtraDependencies
   type: string
   default: ''
+- name: displayName
+  type: string
+  default: 'Run Python Code'
 
 steps:
 
@@ -41,7 +44,7 @@ steps:
           }" > .azureml/config.json
 
     - task: AzureCLI@1
-      displayName: 'Run Python Code'
+      displayName: ${{parameters.displayName}}
       inputs:
         azureSubscription: ${{parameters.serviceConnection}}
         scriptLocation: inlineScript
