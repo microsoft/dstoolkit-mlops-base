@@ -24,7 +24,7 @@ def main(model_name, service_name, compute_config_file, aks_target_name=None):
         ws,
         script_dir=script_dir,
         script_file=script_file,
-        environment_file=conda_dependencies_file,
+        environment_path=conda_dependencies_file,
         compute_config_file=compute_config_file,
         aks_target_name=aks_target_name
     )

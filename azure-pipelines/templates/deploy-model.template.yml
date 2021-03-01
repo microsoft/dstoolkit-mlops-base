@@ -38,7 +38,7 @@ jobs:
       amlWorkspace: $(DEV_AMLWORKSPACE)
       scriptPath: operation/execution/model_deployment.py
       scriptArguments: |
-        --model-name $(AML_MODEL) \
+        --model-name $(AML_MODEL_NAME) \
         --config-path configuration/compute/${{parameters.environment}}-realtimeinference-${{parameters.deploymentType}}.yml \
         --service-name ${{parameters.webserviceName}} \
         --aks-target-name $(AKS_COMPUTE)
