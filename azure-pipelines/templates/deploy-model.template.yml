@@ -15,7 +15,7 @@ parameters:
 jobs:
 
 - job: check_aks
-  displayName: 'Check AKS'
+  displayName: 'AKS Check'
   steps:
     - bash: |
         if [ "${{parameters.deploymentType}}" != "aks" ]; then
@@ -39,7 +39,7 @@ jobs:
       scriptPath: operation/execution/model_deployment.py
       scriptArguments: |
         --model-name $(AML_MODEL_NAME) \
-        --config-path configuration/compute/${{parameters.environment}}-realtimeinference-${{parameters.deploymentType}}.yml \
+        --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
         --service-name ${{parameters.webserviceName}} \
         --aks-target-name $(AKS_COMPUTE)
       scriptExtraDependencies: pyyaml

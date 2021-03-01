@@ -71,9 +71,6 @@ def create_compute_target(ws: Workspace, compute_name: str, config_file_path: st
         compute_module='azureml.core.compute'
     )
 
-    if compute_type != 'AmlCompute': #TODO: add support for more?
-        raise ValueError('Only AmlCompute is supported as compute target type')
-
     print(f'Creating compute {compute_type} with name: {compute_name}')
     compute_target = ComputeTarget.create(ws, compute_name, compute_config)
     compute_target.wait_for_completion(show_output=True)
