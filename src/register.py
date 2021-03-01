@@ -54,13 +54,13 @@ def run_registration(model_path, model_name, model_description):
         sys.exit(-1)
 
 
-def parse_args(args=None):
+def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--model-path', type=str, help='The input from previous steps')
-    parser.add_argument('--model-name',  type=str, help='The name of the model file', default='oj_sales_model.pkl')
+    parser.add_argument('--model-name', type=str, help='The name of the model file', default='oj_sales_model.pkl')
     parser.add_argument('--model-description', type=str, help='The description of the model')
 
-    args_parsed = parser.parse_args(args)
+    args_parsed = parser.parse_args(args_list)
     return args_parsed
 
 

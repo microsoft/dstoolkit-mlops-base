@@ -2,10 +2,9 @@
 # Licensed under the MIT License.
 
 import os
-import utils
 import argparse
-import joblib
 
+import joblib
 import pandas as pd
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
@@ -15,6 +14,8 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error
 from azureml.core import Run, Dataset
 from azureml.core.run import _OfflineRun
+
+import utils
 
 
 def train_test_split_randomly(df):
@@ -73,6 +74,7 @@ def get_model_metrics(model, model_metric_name, X_test, y_test):
 def main(dataset_name, output_dir, model_name, model_metric_name):
     run = Run.get_context()
     ws = utils.retrieve_workspace()
+
     # Get dataset
     dataset = Dataset.get_by_name(ws, name=dataset_name)
     print("Getting dataset")
@@ -110,14 +112,14 @@ def main(dataset_name, output_dir, model_name, model_metric_name):
         joblib.dump(model, file_path)
 
 
-def parse_args(args=None):
+def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset-name', type=str, default='oj_sales_ds')
     parser.add_argument('--output-dir', type=str, default='./outputs')
     parser.add_argument('--model-name', type=str, default='oj_sales_model.pkl')
     parser.add_argument('--model-metric-name', type=str, default='mse',
                         help='The name of the evaluation metric used in Train step')
-    args_parsed = parser.parse_args(args)
+    args_parsed = parser.parse_args(args_list)
 
     return args_parsed
 

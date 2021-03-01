@@ -104,10 +104,10 @@ def main():
     print(f"for build {published_pipeline.version}")
 
 
-def parse_args(args=None):
+def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-name", type=str, default="sales_regression.pkl")
-    args_parsed = parser.parse_args(args)
+    args_parsed = parser.parse_args(args_list)
     return args_parsed
 
 

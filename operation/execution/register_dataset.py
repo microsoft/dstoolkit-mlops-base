@@ -18,12 +18,12 @@ def main(dataset_name, datastore_name, data_path):
     )
 
 
-def parse_args(args=None):
+def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', type=str)
     parser.add_argument('--datastore', type=str)
     parser.add_argument('--path', type=str)
-    return parser.parse_args(args)
+    return parser.parse_args(args_list)
 
 
 if __name__ == "__main__":

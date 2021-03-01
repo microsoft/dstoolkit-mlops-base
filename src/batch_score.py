@@ -12,16 +12,16 @@ from azureml.core import Dataset, Model
 from utils import retrieve_workspace
 
 
-def preprocessing(X):
+def preprocessing(data):
     """
     Create Week_number from WeekStarting
     Drop two unnecessary columns: WeekStarting, Revenue
     """
-    X['WeekStarting'] = pd.to_datetime(X['WeekStarting'])
-    X['week_number'] = X['WeekStarting'].apply(lambda x: x.strftime("%U"))
+    data['WeekStarting'] = pd.to_datetime(data['WeekStarting'])
+    data['week_number'] = data['WeekStarting'].apply(lambda x: x.strftime("%U"))
     # Drop 'WeekStarting','Revenue' columns if it exist
-    X = X.drop(['WeekStarting', 'Revenue', 'Quantity'], axis=1, errors='ignore')
-    return X
+    data = data.drop(['WeekStarting', 'Revenue', 'Quantity'], axis=1, errors='ignore')
+    return data
 
 
 def main():
@@ -47,9 +47,9 @@ def main():
         try:
             model_container = Model(ws, name=args.model_name)
             model_path = model_container.download()
-        except Exception as e:
+        except Exception as ex:
             print('Error while trying to download model')
-            print(e)
+            print(ex)
             sys.exit(-1)
 
     with open(model_path, 'rb') as file_model:

@@ -38,13 +38,13 @@ def main(model_name, service_name, compute_config_file, aks_target_name=None):
     service.wait_for_deployment(show_output=True)
 
 
-def parse_args(args=None):
+def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument("--model-name", type=str, required=True)
     parser.add_argument("--config-path", type=str, required=True)
     parser.add_argument('--service-name', type=str, default="webservice")
     parser.add_argument("--aks-target-name", type=str, default=None)
-    return parser.parse_args(args)
+    return parser.parse_args(args_list)
 
 
 if __name__ == "__main__":

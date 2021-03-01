@@ -12,49 +12,7 @@ from azureml.core.run import _OfflineRun
 from utils import get_model
 
 
-def parse_args(args=None):
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument(
-        '--model-path',
-        dest='model_path',
-        type=str,
-        default=None,
-        help='The input from previous steps',
-    )
-
-    parser.add_argument(
-        '--model-name',
-        dest='model_name',
-        type=str,
-        help='The name of the model file',
-        default='oj_sales_model.pkl',
-    )
-
-    parser.add_argument(
-        '--model-metric-name',
-        dest='model_metric_name',
-        type=str,
-        help='The name of the evaluation metric used in Train step'
-    )
-
-    parser.add_argument(
-        '--maximize',
-        dest='maximize',
-        default=None,
-        type=eval,
-        help=('The evaluation metric should be maximized: true or false')
-    )
-
-    args_parsed = parser.parse_args(args)
-    return args_parsed
-
-
-def run_evaluation(
-                    model_path,
-                    model_name,
-                    model_metric_name,
-                    maximize):
+def run_evaluation(model_path, model_name, model_metric_name, maximize):
     """Evaluate the model.
 
     Args:
@@ -131,15 +89,24 @@ def run_evaluation(
         sys.exit(-1)
 
 
+def parse_args(args_list=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--model-path', type=str, help='The input from previous steps')
+    parser.add_argument('--model-name', type=str, help='The name of the model file', default='oj_sales_model.pkl')
+    parser.add_argument('--model-metric-name', type=str, help='The name of the evaluation metric used in Train step')
+    parser.add_argument('--maximize', default=None, type=eval, 
+                        help='The evaluation metric should be maximized: true or false')
+
+    args_parsed = parser.parse_args(args_list)
+    return args_parsed
+
+
 if __name__ == '__main__':
     args = parse_args()
-    model_path = args.model_path
-    model_name = args.model_name
-    model_metric_name = args.model_metric_name
-    maximize = args.maximize
+
     run_evaluation(
-                    model_path,
-                    model_name,
-                    model_metric_name,
-                    maximize
+        model_path=args.model_path,
+        model_name=args.model_name,
+        model_metric_name=args.model_metric_name,
+        maximize=args.maximize
     )
