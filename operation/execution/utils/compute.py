@@ -1,9 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import os
-import yaml
-
 from azureml.core import Workspace
 from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.exceptions import ComputeTargetException
@@ -18,10 +15,10 @@ DEFAULT_PARAMS = {
 }
 
 
-def get_compute_target(ws: Workspace, compute_name: str, config_file_path: str=None):
+def get_compute_target(ws: Workspace, compute_name: str, config_file_path: str = None):
     """Get or create a compute target.
 
-    Get compute targe from name if it exists. 
+    Get compute targe from name if it exists.
     If not create one with the configuration defined in config_file_path file
 
     Args:
@@ -44,7 +41,7 @@ def get_compute_target(ws: Workspace, compute_name: str, config_file_path: str=N
     except ComputeTargetException:
         compute_target = create_compute_target(ws, compute_name, config_file_path)
 
-    # Wait for completion anyway because compute target might 
+    # Wait for completion anyway because compute target might
     # have just been created from another place and be still preparing
     compute_target.wait_for_completion(show_output=True)
 
@@ -70,9 +67,6 @@ def create_compute_target(ws: Workspace, compute_name: str, config_file_path: st
         default_params=DEFAULT_PARAMS,
         compute_module='azureml.core.compute'
     )
-
-    if compute_type != 'AmlCompute': #TODO: add support for more?
-        raise ValueError('Only AmlCompute is supported as compute target type')
 
     print(f'Creating compute {compute_type} with name: {compute_name}')
     compute_target = ComputeTarget.create(ws, compute_name, compute_config)

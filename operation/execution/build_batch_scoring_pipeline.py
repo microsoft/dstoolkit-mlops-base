@@ -1,18 +1,17 @@
-import os, sys
-import argparse
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
 
-from azureml.core import Experiment, Environment, Datastore
+from azureml.core import Environment, Datastore
 from azureml.core.runconfig import RunConfiguration
-from azureml.pipeline.core import Pipeline, PipelineData
-from azureml.pipeline.core.graph import PipelineParameter
 from azureml.pipeline.steps import PythonScriptStep
 from azureml.data.data_reference import DataReference
 from msrest.exceptions import HttpOperationError
 
-from utils import config, workspace, dataset, compute, pipeline
+from utils import config, workspace, compute, pipeline
+
 
 def main():
-    # get argurment from environment. These variable should be in yml file
+    # Get argurment from environment. These variable should be in yml file
     model_name = config.get_env_var("AML_MODEL_NAME")
     pipeline_name = config.get_env_var("BATCHINFERENCE_PIPELINE")
     compute_name = config.get_env_var("BATCHINFERENCE_COMPUTE")
@@ -21,10 +20,10 @@ def main():
     build_id = config.get_env_var("BATCH_SCORING_PIPELINE_BUILD_ID")
     scoring_env_file = config.get_env_var("AML_BATCH_SCORING_ENV_PATH")
 
-    #retrieve workspace
-    ws =  workspace.retrieve_workspace()
+    # Retrieve workspace
+    ws = workspace.retrieve_workspace()
 
-    #define output datastore account
+    # Define output datastore account
     default_datastore = ws.get_default_datastore()
     datastore_output_name = default_datastore.name
     account_name = default_datastore.account_name
@@ -33,51 +32,52 @@ def main():
     # Get compute target
     compute_target = compute.get_compute_target(ws, compute_name)
 
-    #get environment
-    env = Environment.load_from_directory(path = scoring_env_file)
+    # Get environment
+    env = Environment.load_from_directory(path=scoring_env_file)
 
-    #create run config
+    # Create run config
     run_config = RunConfiguration()
     run_config.environment = env
 
-    #retrieve datastore and setup output folder
-    batchscore_input = default_datastore.as_mount()
+    # Retrieve datastore and setup output folder
+    # batchscore_input = default_datastore.as_mount()
     try:
         batchscore_ds = Datastore.get(ws, datastore_output_name)
         print("Found Blob Datastore with name: %s" % datastore_output_name)
     except HttpOperationError:
-        batchscore_ds = Datastore.register_azure_blob_container(ws, 
-                            datastore_name=datastore_output_name, 
-                            container_name=output_container_name, 
-                            account_name=account_name,
-                            account_key = account_key,
-                            create_if_not_exists=True)
-
-    batchscore_dir = DataReference(
-        batchscore_ds, 
-        data_reference_name='output_dir', 
-        path_on_datastore=output_dir_name, 
-        mode='mount', 
-        overwrite=True
+        batchscore_ds = Datastore.register_azure_blob_container(
+            ws,
+            datastore_name=datastore_output_name,
+            container_name=output_container_name,
+            account_name=account_name,
+            account_key=account_key,
+            create_if_not_exists=True
         )
 
-    scoring_step = PythonScriptStep(
-        name = "Batch Scoring",
-        script_name = "batch_score.py",
-        compute_target = compute_target,
-        source_directory = "src",
-        inputs = [batchscore_dir],
-        arguments = [
-            '--output_dir',
-            batchscore_dir,
-            '--model_name',
-            model_name
-        ],
-        runconfig = run_config,
-        allow_reuse = True
+    batchscore_dir = DataReference(
+        batchscore_ds,
+        data_reference_name='output_dir',
+        path_on_datastore=output_dir_name,
+        mode='mount',
+        overwrite=True
     )
-    
-    published_pipeline = pipeline.publish_pipeline(ws, 
+
+    scoring_step = PythonScriptStep(
+        name="Batch Scoring",
+        script_name="batch_score.py",
+        compute_target=compute_target,
+        source_directory="src",
+        inputs=[batchscore_dir],
+        arguments=[
+            '--output_dir', batchscore_dir,
+            '--model_name', model_name
+        ],
+        runconfig=run_config,
+        allow_reuse=True
+    )
+
+    published_pipeline = pipeline.publish_pipeline(
+        ws,
         name=pipeline_name,
         steps=[scoring_step],
         description="Model batch scoring pipeline",
@@ -86,7 +86,7 @@ def main():
 
     print(f"Published pipeline: {published_pipeline.name}")
     print(f"for build {published_pipeline.version}")
-    
+
+
 if __name__ == "__main__":
     main()
-    

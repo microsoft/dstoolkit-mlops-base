@@ -3,9 +3,9 @@
 
 import os
 import json
-import joblib
 from pathlib import Path
 
+import joblib
 import pandas as pd
 
 
@@ -14,23 +14,25 @@ import pandas as pd
 
 model = None
 
-def preprocessing(X):
+
+def preprocessing(data):
     """
     Create Week_number from WeekStarting
     Drop two unnecessary columns: WeekStarting, Revenue
     """
-    X['WeekStarting'] = pd.to_datetime(X['WeekStarting'])
-    X['week_number'] = X['WeekStarting'].apply(lambda x: x.strftime("%U"))
+    data['WeekStarting'] = pd.to_datetime(data['WeekStarting'])
+    data['week_number'] = data['WeekStarting'].apply(lambda x: x.strftime("%U"))
     # Drop 'WeekStarting','Revenue' columns if it exist
-    X = X.drop(['WeekStarting','Revenue','Quantity'], axis = 1, errors ='ignore')
-    return X
+    data = data.drop(['WeekStarting', 'Revenue', 'Quantity'], axis=1, errors='ignore')
+    return data
+
 
 def init():
     global model
-    
+
     models_root_path = Path(os.getenv('AZUREML_MODEL_DIR'))
     models_files = [f for f in models_root_path.glob('**/*') if f.is_file()]
-    if len(models_files) > 1: #TODO: support for more than one?
+    if len(models_files) > 1:  # TODO: support for more than one?
         raise RuntimeError(f'Found more than one model:\n\t{models_files}')
 
     model_path = models_files[0]
@@ -46,7 +48,7 @@ def run(data):
         result = model.predict(data_input)
         # You can return any data type, as long as it is JSON serializable.
         return result.tolist()
-    except Exception as e:
-        result = str(e)
+    except Exception as ex:
+        result = str(ex)
         # return error message back to the client
         return json.dumps({"error": result})

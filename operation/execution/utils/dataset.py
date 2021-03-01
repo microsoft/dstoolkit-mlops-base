@@ -11,18 +11,21 @@ def register_dataset(ws, datastore, data_path, dataset_name):
     if isinstance(datastore, str):
         datastore = Datastore(ws, datastore)
 
-    dataset = Dataset.Tabular.from_delimited_files(path=(datastore, data_path), separator=",", support_multi_line=True)
-    dataset = dataset.register(workspace = ws,
-                                name = dataset_name,
-                                create_new_version=True)
+    dataset = Dataset.Tabular.from_delimited_files(
+        path=(datastore, data_path),
+        separator=",",
+        support_multi_line=True
+    )
+
+    dataset = dataset.register(ws, name=dataset_name, create_new_version=True)
     print(f"Register dataset {dataset_name}")
 
     return dataset
 
 
-def get_dataset(ws, datastore, data_path:str, dataset_name: str=''):
+def get_dataset(ws, datastore, data_path: str, dataset_name: str):
     """
-    This function uses to get the input dataset by name. If the dataset is not found, 
+    This function uses to get the input dataset by name. If the dataset is not found,
     load the TabularDataset to pandas DataFrame
     """
     df = None
@@ -35,15 +38,21 @@ def get_dataset(ws, datastore, data_path:str, dataset_name: str=''):
         dataset = Dataset.get_by_name(ws, dataset_name)
         df = dataset.to_pandas_dataframe()
     except Exception as e:
-        print('Error while retrieving from datastore',e)
+        print('Error while retrieving from datastore', e)
 
     else:
-        dataset = Dataset.Tabular.from_delimited_files(path=(datastore, data_path), separator=",", support_multi_line = True)
-        dataset = dataset.register(workspace = ws,
-                                    name = dataset_name,
-                                    create_new_version=True)
+        dataset = Dataset.Tabular.from_delimited_files(
+            path=(datastore, data_path),
+            separator=",",
+            support_multi_line=True
+        )
+        dataset = dataset.register(
+            workspace=ws,
+            name=dataset_name,
+            create_new_version=True
+        )
         df = dataset.to_pandas_dataframe()
-    
+
     if df is None:
         print('Launch error here')
         sys.exit(-1)
@@ -62,15 +71,15 @@ def get_dataset(ws, datastore, data_path:str, dataset_name: str=''):
 #         dataset_file_name (str): The CSV file name of raw input data
 #         dataset_short_description (str): The short description of a dataset
 #         datastore_target_path (str): The path to a data file in Azure datastore
-#         overwrite (boolean): The dataset overwriting option 
+#         overwrite (boolean): The dataset overwriting option
 
 #     Returns:
 #         None
 
 #     """
 
-#     #TODO: What if you already have a dataset in the datastore and just want to register it ? 
-#     # Consider having  a function "upload_data_to_datastore", a function "register dataset", 
+#     #TODO: What if you already have a dataset in the datastore and just want to register it ?
+#     # Consider having  a function "upload_data_to_datastore", a function "register dataset",
 #     # and (if required) upload_and_register, which used the prior 2 functions
 
 #     # Check to see if dataset exists
