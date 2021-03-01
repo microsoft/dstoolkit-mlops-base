@@ -26,11 +26,10 @@ pool:
 
 stages:
 
-#TODO tests
-# - stage: tests
-#   displayName: 'Run Code Tests'
-#   jobs:
-#   - template: templates/run-code-tests.template.yml
+- stage: tests
+  displayName: 'Run Code Tests'
+  jobs:
+  - template: templates/run-code-tests.template.yml
 
 
 ############################
