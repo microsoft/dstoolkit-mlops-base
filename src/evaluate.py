@@ -12,11 +12,11 @@ from azureml.core.run import _OfflineRun
 from utils import get_model
 
 
-def run_evaluation(model_path, model_name, model_metric_name, maximize):
+def run_evaluation(model_dir, model_name, model_metric_name, maximize):
     """Evaluate the model.
 
     Args:
-        model_path (str): The path to the model file
+        model_dir (str): The path to the model file
         model_name (str): The name of the model file
         model_metric_name (str): The file name used to save a trained ML model  # NOQA: E501
         maximize: The indicator if a metric should be maximized or minimized
@@ -38,7 +38,7 @@ def run_evaluation(model_path, model_name, model_metric_name, maximize):
         model = get_model(
             ws,
             model_name=model_name,
-            model_path=os.path.join(model_path, model_name)
+            model_path=os.path.join(model_dir, model_name)
         )
     else:
         print('evaluation script is not supported in local runs')
@@ -91,7 +91,7 @@ def run_evaluation(model_path, model_name, model_metric_name, maximize):
 
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model-path', type=str, help='The input from previous steps')
+    parser.add_argument('--model-dir', type=str, help='The input from previous steps')
     parser.add_argument('--model-name', type=str, help='The name of the model file', default='oj_sales_model.pkl')
     parser.add_argument('--model-metric-name', type=str, help='The name of the evaluation metric used in Train step')
     parser.add_argument('--maximize', default=None, type=eval,
@@ -105,7 +105,7 @@ if __name__ == '__main__':
     args = parse_args()
 
     run_evaluation(
-        model_path=args.model_path,
+        model_dir=args.model_dir,
         model_name=args.model_name,
         model_metric_name=args.model_metric_name,
         maximize=args.maximize
