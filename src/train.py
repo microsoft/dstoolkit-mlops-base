@@ -27,8 +27,8 @@ def main(dataset_name, model_name, output_dir):
     model = train(X_train, y_train)
 
     print("Evaluating model...")
-    metrics = get_model_metrics(model, model_metric_name, X_test, y_test)
-    
+    metrics = get_model_metrics(model, X_test, y_test)
+
     # Save metrics in run
     if not isinstance(run, _OfflineRun):
         for k, v in metrics.items():
