@@ -18,6 +18,55 @@ from azureml.core.run import _OfflineRun
 import utils
 
 
+def main(dataset_name, model_name, output_dir, model_metric_name):
+    run = Run.get_context()
+    ws = utils.retrieve_workspace()
+
+    # Get dataset
+    dataset = Dataset.get_by_name(ws, name=dataset_name)
+    data = dataset.to_pandas_dataframe()
+
+    print("Preprocessing data...")
+    data = preprocessing(data)
+
+    print("Splitting data into a training and a testing set...")
+    X_train, X_test, y_train, y_test = train_test_split_randomly(data)
+
+    print("Training model...")
+    model = train(X_train, y_train)
+
+    print("Evaluating model...")
+    metrics = get_model_metrics(model, model_metric_name, X_test, y_test)
+
+    # Save metrics in run
+    if not isinstance(run, _OfflineRun):
+        for k, v in metrics.items():
+            run.log(k, v)
+            if run.parent is not None:
+                run.parent.log(k, v)
+
+    print(f"Saving model in folder {output_dir}...")
+    os.makedirs(output_dir, exist_ok=True)
+    model_path = os.path.join(output_dir, model_name)
+    with open(model_path, 'wb') as f:
+        joblib.dump(model, f)
+
+    print('Finished.')
+
+
+def preprocessing(data):
+    """
+    Create Week_number from WeekStarting
+    Drop two unnecessary columns: WeekStarting, Revenue
+    """
+    data['WeekStarting'] = pd.to_datetime(data['WeekStarting'])
+    data['week_number'] = data['WeekStarting'].apply(lambda x: x.strftime("%U"))
+    # Drop 'WeekStarting','Revenue' columns if it exist
+    data = data.drop(['WeekStarting', 'Revenue'], axis=1, errors='ignore')
+    print(data.head(5))
+    return data
+
+
 def train_test_split_randomly(df):
     """
     Split dataframe into random train and test subset
@@ -26,19 +75,6 @@ def train_test_split_randomly(df):
     y = df.Quantity
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
     return X_train, X_test, y_train, y_test
-
-
-def preprocessing(X):
-    """
-    Create Week_number from WeekStarting
-    Drop two unnecessary columns: WeekStarting, Revenue
-    """
-    X['WeekStarting'] = pd.to_datetime(X['WeekStarting'])
-    X['week_number'] = X['WeekStarting'].apply(lambda x: x.strftime("%U"))
-    # Drop 'WeekStarting','Revenue' columns if it exist
-    X = X.drop(['WeekStarting', 'Revenue'], axis=1, errors='ignore')
-    print(X.head(5))
-    return X
 
 
 def train(X_train, y_train):
@@ -59,7 +95,7 @@ def train(X_train, y_train):
     return model
 
 
-def get_model_metrics(model, model_metric_name, X_test, y_test):
+def get_model_metrics(model, X_test, y_test, model_metric_name):
     """"
     Get model metrics
     """
@@ -69,47 +105,6 @@ def get_model_metrics(model, model_metric_name, X_test, y_test):
     mse = mean_squared_error(pred, y_test)
     metrics[model_metric_name] = mse
     return metrics
-
-
-def main(dataset_name, output_dir, model_name, model_metric_name):
-    run = Run.get_context()
-    ws = utils.retrieve_workspace()
-
-    # Get dataset
-    dataset = Dataset.get_by_name(ws, name=dataset_name)
-    print("Getting dataset")
-    data = dataset.to_pandas_dataframe()
-    print("Preprocessing data")
-    data = preprocessing(data)
-    print("Split data into a training and a testing set")
-    X_train, X_test, y_train, y_test = train_test_split_randomly(data)
-
-    model = train(X_train, y_train)
-    metrics = get_model_metrics(model, model_metric_name, X_test, y_test)
-
-    if not isinstance(run, _OfflineRun):
-        if run.parent is not None:
-            for (k, v) in metrics.items():
-                run.tag(k, v)
-                run.parent.tag(k, v)
-                run.log(k, v)
-                run.parent.log(k, v)
-        else:
-            for (k, v) in metrics.items():
-                run.tag(k, v)
-                run.log(k, v)
-
-    # Save model in output folder
-    # create folder if not exists
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
-    model_path = os.path.join(output_dir, model_name)
-    print("Save model in output folder")
-    print(model_path)
-
-    with open(model_path, 'wb') as file_path:
-        joblib.dump(model, file_path)
 
 
 def parse_args(args_list=None):
@@ -129,7 +124,7 @@ if __name__ == '__main__':
 
     main(
         dataset_name=args.dataset_name,
-        output_dir=args.output_dir,
         model_name=args.model_name,
+        output_dir=args.output_dir,
         model_metric_name=args.model_metric_name
     )

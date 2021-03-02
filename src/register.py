@@ -6,16 +6,13 @@ import sys
 import argparse
 
 from azureml.core import Run, Model
-from azureml.core.run import _OfflineRun
-
-# from utils import append_traceability_logs
 
 
-def run_registration(model_path, model_name, model_description):
+def main(model_dir, model_name, model_description):
     """Register the model.
 
     Args:
-        model_path (str): The path to the model file
+        model_dir (str): The path to the model file
         model_name (str): The name of the model file
         model_description (str): The description of the model
 
@@ -24,38 +21,24 @@ def run_registration(model_path, model_name, model_description):
 
     """
 
-    try:
-        run = Run.get_context()
-    except Exception:
-        print('cannot get a run')
+    run = Run.get_context()
+    ws = run.experiment.workspace
 
-    if not isinstance(run, _OfflineRun):
-        ws = run.experiment.workspace
-        parent_tags = run.parent.get_tags()
-        print("parent tags: {}".format(parent_tags))
-    else:
-        print('registration step is not supported for local runs')
-        sys.exit(-1)
-
-    try:
-        # Register model
-        model_path = os.path.join(model_path, model_name)
-        model = Model.register(
-            workspace=ws,
-            model_path=model_path,
-            model_name=model_name,
-            tags=parent_tags,
-            description=model_description
-        )
-        print('registered a new model {}'.format(model.name))
-    except Exception:
-        print('cannot register a model')
-        sys.exit(-1)
+    # Register model
+    model_path = os.path.join(model_dir, model_name)
+    model = Model.register(
+        workspace=ws,
+        model_path=model_path,
+        model_name=model_name,
+        tags=run.parent.get_tags(),
+        description=model_description
+    )
+    print(f'Registered new model {model.name} version {model.version}')
 
 
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model-path', type=str, help='The input from previous steps')
+    parser.add_argument('--model-dir', type=str, help='The input from previous steps')
     parser.add_argument('--model-name', type=str, help='The name of the model file', default='oj_sales_model.pkl')
     parser.add_argument('--model-description', type=str, help='The description of the model')
 
@@ -66,8 +49,8 @@ def parse_args(args_list=None):
 if __name__ == '__main__':
     args = parse_args()
 
-    run_registration(
-        model_path=args.model_path,
+    main(
+        model_dir=args.model_dir,
         model_name=args.model_name,
         model_description=args.model_description
     )
