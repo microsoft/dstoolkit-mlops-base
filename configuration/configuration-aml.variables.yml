@@ -3,7 +3,7 @@
 
 # Definition of AML-related environment variables
 
-variables: #TODO
+variables:
 
   SDK_VERSION: 1.20
   

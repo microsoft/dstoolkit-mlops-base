@@ -4,12 +4,45 @@
 import os
 import sys
 import argparse
-import joblib
 
+import joblib
 import pandas as pd
 from azureml.core import Dataset, Model
 
 from utils import retrieve_workspace
+
+
+def main(dataset_name, model_name, output_dir, output_file):
+    ws = retrieve_workspace()
+
+    # Get data for inference
+    dataset = Dataset.get_by_name(ws, dataset_name)
+    data = dataset.to_pandas_dataframe()
+
+    # Get model
+    try:
+        model_path = Model.get_model_path(model_name=model_name)
+    except Exception:
+        print('Model not found in cache. Trying to download locally')
+        model_container = Model(ws, name=model_name)
+        model_path = model_container.download()
+
+    print("Loading model...")
+    with open(model_path, 'rb') as f:
+        model = joblib.load(f)
+
+    print("Preprocessing data...")
+    data = preprocessing(data)
+
+    print("Generating predictions data...")
+    data['forecast'] = model.predict(data)
+
+    print(f"Saving predictions in folder {output_dir}...")
+    os.makedirs(output_dir, exist_ok=True)
+    file_forecast = os.path.join(output_dir, output_file)
+    data.to_csv(file_forecast, index=False)
+
+    print("Finished.")
 
 
 def preprocessing(data):
@@ -24,48 +57,22 @@ def preprocessing(data):
     return data
 
 
-def main():
-
+def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset-name', type=str, default='oj_sales_ds')
-    parser.add_argument('--output-dir', type=str, default='./')
-    parser.add_argument('--forecast-name', type=str, default='forecast.csv')
-    parser.add_argument('--model-name', type=str, default='oj_sales_model.pkl')
-    args, _ = parser.parse_known_args()
-
-    ws = retrieve_workspace()
-    dataset = Dataset.get_by_name(ws, args.dataset_name)
-    data = dataset.to_pandas_dataframe()
-    model_path = None
-
-    try:
-        model_path = Model.get_model_path(model_name=args.model_name)
-    except Exception:
-        print('Model not found in cache. Trying to download locally')
-
-    if model_path is None:
-        try:
-            model_container = Model(ws, name=args.model_name)
-            model_path = model_container.download()
-        except Exception as ex:
-            print('Error while trying to download model')
-            print(ex)
-            sys.exit(-1)
-
-    with open(model_path, 'rb') as file_model:
-        model = joblib.load(file_model)
-
-    data = preprocessing(data)
-    data['forecast'] = model.predict(data)
-
-    # with open(args.output_dir + args.forecast_name,'w') as file_forecast:
-    file_forecast = args.output_dir + args.forecast_name
-
-    if not os.path.exists(args.output_dir):
-        os.makedirs(args.output_dir)
-
-    data.to_csv(file_forecast, index=False)
+    parser.add_argument('--dataset-name', type=str, default='<your-dataset-name>')
+    parser.add_argument('--model-name', type=str, default='<your-model-name>')
+    parser.add_argument('--output-dir', type=str, default='./outputs')
+    parser.add_argument('--output-file', type=str, default='predictions.csv')
+    args_parsed = parser.parse_args(args_list)
+    return args_parsed
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    args = parse_args()
+
+    main(
+        dataset_name=args.dataset_name,
+        model_name=args.model_name,
+        output_dir=args.output_dir, 
+        output_file=args.output_file
+    )
