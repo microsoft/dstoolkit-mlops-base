@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import os
-import sys
 import argparse
 
 from azureml.core import Run, Model
@@ -24,13 +23,17 @@ def main(model_dir, model_name, model_description):
     run = Run.get_context()
     ws = run.experiment.workspace
 
+    parent_run = run.parent
+    model_tags = {**parent_run.get_tags(), **parent_run.get_metrics()}
+    print(f'Registering model with tags: {model_tags}')
+
     # Register model
     model_path = os.path.join(model_dir, model_name)
     model = Model.register(
         workspace=ws,
         model_path=model_path,
         model_name=model_name,
-        tags=run.parent.get_tags(),
+        tags=model_tags,
         description=model_description
     )
     print(f'Registered new model {model.name} version {model.version}')

@@ -6,8 +6,7 @@ import sys
 
 import joblib
 import pandas as pd
-from azureml.core import Run, Dataset, Workspace
-from azureml.core.model import Model as AMLModel
+from azureml.core import Run, Dataset, Workspace, Model
 from azureml.core.authentication import ServicePrincipalAuthentication
 from azureml.core.run import _OfflineRun
 
@@ -120,14 +119,14 @@ def get_model(ws, model_name, model_version=None, model_path=None):
     model = None
 
     try:
-        model = AMLModel(ws, name=model_name, version=model_version)
+        model = Model(ws, name=model_name, version=model_version)
         print(f'Found the model by name {model_name} and version {model_version}')
         return model
     except Exception:
         print((f'Cannot load a model from AML workspace by model name {model_name} and model_version {model_version}. '
                'Trying to load it by name only.'))
     try:
-        models = AMLModel.list(ws, name=model_name, latest=True)
+        models = Model.list(ws, name=model_name, latest=True)
         if len(models) == 1:
             print(f'Found the model by name {model_name}')
             model = models[0]

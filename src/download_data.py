@@ -34,5 +34,5 @@ if __name__ == "__main__":
     args = parse_args()
 
     files = main(data_path=args.data_path, maxfiles=args.maxfiles)
-    
+
     print(f'{len(files)} files downloaded into {args.data_path}')
