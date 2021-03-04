@@ -6,20 +6,10 @@
 trigger:
 - none
 
-# trigger:
-#   branches:
-#     include:
-#     - develop
-#   paths:
-#     include:
-#     - azure-pipelines/1-training-build/*
-#     - operation/execution/training_pipeline.py
-#     - src/
-# TODO: define proper triggers and paths 
-
 variables:
 - template: ../configuration/configuration-aml.variables.yml
 - template: ../configuration/configuration-infra.variables.yml
+- template: templates/choose-environment.variables.yml 
 
 pool:
   vmImage: ubuntu-latest
@@ -40,13 +30,13 @@ stages:
 # In real scenarios, a different template pipeline would be required for updating batch inference data.
 - stage: update_data
   displayName: 'Update Data for Batch Inference'
-  # dependsOn: tests
+  dependsOn: tests
   jobs:
   - template: templates/update-data.template.yml
     parameters:
-      serviceConnection: $(DEV_SERVICECONNECTION_WS)
-      resourceGroup: $(DEV_RESOURCE_GROUP)
-      amlWorkspace: $(DEV_AMLWORKSPACE)
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
 
 
 ###########################
@@ -63,9 +53,9 @@ stages:
       steps:
       - template: templates/utils/run-aml-python-code.template.yml
         parameters:
-          serviceConnection: $(DEV_SERVICECONNECTION_WS)
-          resourceGroup: $(DEV_RESOURCE_GROUP)
-          amlWorkspace: $(DEV_AMLWORKSPACE)
+          serviceConnection: $(SERVICECONNECTION_WS)
+          resourceGroup: $(RESOURCE_GROUP)
+          amlWorkspace: $(AMLWORKSPACE)
           scriptPath: operation/execution/build_batch_scoring_pipeline.py
           scriptExtraDependencies: pyyaml
           scriptArguments: --model-name $(AML_MODEL)
@@ -74,8 +64,8 @@ stages:
       parameters:
         dependsOn: batch_inference_build
         jobDisplayName: 'Invoke Batch Inference AML Pipeline'
-        serviceConnection: $(DEV_SERVICECONNECTION_WS)
-        resourceGroup: $(DEV_RESOURCE_GROUP)
-        amlWorkspace: $(DEV_AMLWORKSPACE)
+        serviceConnection: $(SERVICECONNECTION_WS)
+        resourceGroup: $(RESOURCE_GROUP)
+        amlWorkspace: $(AMLWORKSPACE)
         pipelineName: $(BATCHINFERENCE_PIPELINE)
         experimentName: $(BATCHINFERENCE_EXPERIMENT)

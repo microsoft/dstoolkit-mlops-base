@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import os
-import sys
 import argparse
 
 import joblib
@@ -73,6 +72,6 @@ if __name__ == '__main__':
     main(
         dataset_name=args.dataset_name,
         model_name=args.model_name,
-        output_dir=args.output_dir, 
+        output_dir=args.output_dir,
         output_file=args.output_file
     )

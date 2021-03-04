@@ -6,20 +6,10 @@
 trigger:
 - none
 
-# trigger:
-#   branches:
-#     include:
-#     - develop
-#   paths:
-#     include:
-#     - azure-pipelines/1-training-build/*
-#     - operation/execution/training_pipeline.py
-#     - src/
-# TODO: define proper triggers and paths
-
 variables:
 - template: ../configuration/configuration-aml.variables.yml
 - template: ../configuration/configuration-infra.variables.yml
+- template: templates/choose-environment.variables.yml 
 
 pool:
   vmImage: ubuntu-latest
@@ -38,12 +28,13 @@ stages:
 
 - stage: update_data
   displayName: 'Update Data for Training/Retraining'
+  dependsOn: tests
   jobs:
   - template: templates/update-data.template.yml
     parameters:
-      serviceConnection: $(DEV_SERVICECONNECTION_WS)
-      resourceGroup: $(DEV_RESOURCE_GROUP)
-      amlWorkspace: $(DEV_AMLWORKSPACE)
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
 
 
 ####################
@@ -60,9 +51,9 @@ stages:
       steps:
       - template: templates/utils/run-aml-python-code.template.yml
         parameters:
-          serviceConnection: $(DEV_SERVICECONNECTION_WS)
-          resourceGroup: $(DEV_RESOURCE_GROUP)
-          amlWorkspace: $(DEV_AMLWORKSPACE)
+          serviceConnection: $(SERVICECONNECTION_WS)
+          resourceGroup: $(RESOURCE_GROUP)
+          amlWorkspace: $(AMLWORKSPACE)
           scriptPath: operation/execution/build_training_pipeline.py
           scriptExtraDependencies: pyyaml
           scriptArguments: --model-name $(AML_MODEL)
@@ -71,9 +62,9 @@ stages:
       parameters:
         dependsOn: training_build
         jobDisplayName: 'Invoke Training AML Pipeline'
-        serviceConnection: $(DEV_SERVICECONNECTION_WS)
-        resourceGroup: $(DEV_RESOURCE_GROUP)
-        amlWorkspace: $(DEV_AMLWORKSPACE)
+        serviceConnection: $(SERVICECONNECTION_WS)
+        resourceGroup: $(RESOURCE_GROUP)
+        amlWorkspace: $(AMLWORKSPACE)
         pipelineName: $(TRAINING_PIPELINE)
         experimentName: $(TRAINING_EXPERIMENT)
 
@@ -88,7 +79,7 @@ stages:
   jobs:
   - template: templates/deploy-model.template.yml
     parameters:
-      environment: DEV
+      environment: $(ENVIRONMENT)
       deploymentType: aci
       webserviceName: $(AML_WEBSERVICE)-aci
   
@@ -107,6 +98,6 @@ stages:
   jobs:
   - template: templates/deploy-model.template.yml
     parameters:
-      environment: DEV
+      environment: $(ENVIRONMENT)
       deploymentType: aks
       webserviceName: $(AML_WEBSERVICE)

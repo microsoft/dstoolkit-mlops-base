@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import os
-import argparse
+# import argparse
 
 from azureml.core import Datastore, Environment
 from azureml.pipeline.core import PipelineData
@@ -12,7 +12,7 @@ from azureml.core.runconfig import RunConfiguration
 from utils import config, workspace, compute, pipeline
 
 
-def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, 
+def main(dataset_name, model_name, pipeline_name, compute_name, environment_path,
          model_metric_name, maximize, build_id=None):
 
     # Retrieve workspace
@@ -113,12 +113,12 @@ if __name__ == "__main__":
     maximize = config.get_env_var("MAXIMIZE")
 
     main(
-        dataset_name=dataset_name, 
-        model_name=model_name, 
-        pipeline_name=pipeline_name, 
-        compute_name=compute_name, 
+        dataset_name=dataset_name,
+        model_name=model_name,
+        pipeline_name=pipeline_name,
+        compute_name=compute_name,
         environment_path=environment_path,
         model_metric_name=model_metric_name,
         maximize=maximize,
-        build_id = build_id
+        build_id=build_id
     )
