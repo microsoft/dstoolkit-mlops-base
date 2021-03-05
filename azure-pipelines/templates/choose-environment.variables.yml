@@ -1,0 +1,76 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Definition of variables to choose which environment to use
+
+variables:
+
+  # Choose environment to use based on branch
+
+  - name: ENVIRONMENT
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      # 'main' branch: PRD environment
+      value: PRD
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:  
+      # 'develop' or feature branches: DEV environment
+      value: DEV
+
+  - name: RESOURCE_GROUP
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_RESOURCE_GROUP)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(DEV_RESOURCE_GROUP)
+
+  - name: LOCATION
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_LOCATION)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_LOCATION)
+
+  - name: NAMESPACE
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_NAMESPACE)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_NAMESPACE)
+
+  - name: SERVICECONNECTION_RG
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_SERVICECONNECTION_RG)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_SERVICECONNECTION_RG)
+
+  - name: SERVICECONNECTION_WS
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_SERVICECONNECTION_WS)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_SERVICECONNECTION_WS)
+
+  - name: AMLWORKSPACE
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_AMLWORKSPACE)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_AMLWORKSPACE)
+
+  - name: STORAGEACCOUNT
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_STORAGEACCOUNT)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_STORAGEACCOUNT)
+
+  - name: KEYVAULT
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_KEYVAULT)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_KEYVAULT)
+
+  - name: APPINSIGHTS
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_APPINSIGHTS)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}: 
+      value: $(DEV_APPINSIGHTS)
+
+  - name: CONTAINERREGISTRY
+    ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(PRD_CONTAINERREGISTRY)
+    ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:
+      value: $(DEV_CONTAINERREGISTRY)
