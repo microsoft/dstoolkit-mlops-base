@@ -60,7 +60,8 @@ def train_test_split_randomly(df):
     return X_train, X_test, y_train, y_test
 
 
-def train(X_train, y_train):    # Do your training here
+def train(X_train, y_train):
+    # Do your training here
     model = None
     return model
 
@@ -74,8 +75,8 @@ def get_model_metrics(model, X_test, y_test):
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--dataset-name', type=str, default='<your-dataset-name>')
-    parser.add_argument('--output-dir', type=str, default='./outputs')
     parser.add_argument('--model-name', type=str, default='<your-model-name>')
+    parser.add_argument('--output-dir', type=str, default='./outputs')
     args_parsed = parser.parse_args(args_list)
     return args_parsed
 
