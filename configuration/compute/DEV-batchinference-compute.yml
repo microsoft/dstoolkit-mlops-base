@@ -6,4 +6,8 @@ COMPUTE_CONFIG:
   vm_priority: lowpriority
   min_nodes: 0
   max_nodes: 1
-  idle_seconds_before_scaledown: 60
+  # idle_seconds_before_scaledown: <seconds>
+  # vnet_resourcegroup_name: <vnet resource group name>
+  # vnet_name: <vnet name>
+  # subnet_name: <subnet name>
+  # ...

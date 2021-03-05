@@ -5,3 +5,7 @@ COMPUTE_CONFIG:
   vm_size: STANDARD_DS2_V2
   agent_count: 3
   cluster_purpose: DevTest
+  # vnet_resourcegroup_name: <vnet resource group name>
+  # vnet_name: <vnet name>
+  # subnet_name: <subnet name>
+  # ...
