@@ -4,7 +4,10 @@
 import os
 import argparse
 
+import joblib
 # ...
+from azureml.core import Run, Dataset
+from azureml.core.run import _OfflineRun
 
 import utils
 
@@ -16,7 +19,7 @@ def main(dataset_name, model_name, output_dir):
     # Get dataset
     dataset = Dataset.get_by_name(ws, name=dataset_name)
     data = dataset.to_pandas_dataframe()
-    
+
     print("Preprocessing data...")
     data = preprocessing(data)
 
@@ -50,7 +53,7 @@ def preprocessing(data):
     return data
 
 
-def train_test_split_randomly(data):
+def train_test_split_randomly(df):
     # Do your train-test split here
     y_train, X_train = data.iloc[:, 0], data.iloc[:, 1:]
     y_test, X_test = data.iloc[:, 0], data.iloc[:, 1:]

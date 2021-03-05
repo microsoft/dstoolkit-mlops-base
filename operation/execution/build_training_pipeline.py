@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import os
-import argparse
+# import argparse
 
 from azureml.core import Datastore, Environment
 from azureml.pipeline.core import PipelineData
@@ -105,4 +105,10 @@ if __name__ == "__main__":
     compute_name = config.get_env_var("TRAINING_COMPUTE")
     environment_path = config.get_env_var("AML_TRAINING_ENV_PATH")
 
-    main(dataset_name, model_name, pipeline_name, compute_name, environment_path)
+    main(
+        dataset_name=dataset_name,
+        model_name=model_name,
+        pipeline_name=pipeline_name,
+        compute_name=compute_name,
+        environment_path=environment_path
+    )
