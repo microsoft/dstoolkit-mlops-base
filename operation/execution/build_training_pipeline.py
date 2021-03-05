@@ -12,8 +12,7 @@ from azureml.core.runconfig import RunConfiguration
 from utils import config, workspace, compute, pipeline
 
 
-def main(dataset_name, model_name, pipeline_name, compute_name, environment_path,
-         model_metric_name, maximize, build_id=None):
+def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, build_id=None):
 
     # Retrieve workspace
     ws = workspace.retrieve_workspace()
@@ -39,8 +38,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
         arguments=[
             '--dataset-name', dataset_name,
             '--model-name', model_name,
-            '--output-dir', pipeline_data,
-            '--model-metric-name', model_metric_name,
+            '--output-dir', pipeline_data
         ],
         runconfig=run_config,
         allow_reuse=True
@@ -54,9 +52,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
         inputs=[pipeline_data],
         arguments=[
             '--model-dir', pipeline_data,
-            '--model-name', model_name,
-            '--model-metric-name', model_metric_name,
-            '--maximize', maximize
+            '--model-name', model_name
         ],
         runconfig=run_config,
         allow_reuse=True
@@ -108,17 +104,11 @@ if __name__ == "__main__":
     dataset_name = config.get_env_var("AML_DATASET")
     compute_name = config.get_env_var("TRAINING_COMPUTE")
     environment_path = config.get_env_var("AML_TRAINING_ENV_PATH")
-    build_id = config.get_env_var("TRAINING_PIPELINE_BUILD_ID")
-    model_metric_name = config.get_env_var("MODEL_METRIC_NAME")
-    maximize = config.get_env_var("MAXIMIZE")
 
     main(
         dataset_name=dataset_name,
         model_name=model_name,
         pipeline_name=pipeline_name,
         compute_name=compute_name,
-        environment_path=environment_path,
-        model_metric_name=model_metric_name,
-        maximize=maximize,
-        build_id=build_id
+        environment_path=environment_path
     )

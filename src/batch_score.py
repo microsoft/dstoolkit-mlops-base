@@ -34,25 +34,18 @@ def main(dataset_name, model_name, output_dir, output_file):
     data = preprocessing(data)
 
     print("Generating predictions data...")
-    data['forecast'] = model.predict(data)
+    data['predictions'] = model.predict(data)
 
     print(f"Saving predictions in folder {output_dir}...")
     os.makedirs(output_dir, exist_ok=True)
-    file_forecast = os.path.join(output_dir, output_file)
-    data.to_csv(file_forecast, index=False)
+    output_path = os.path.join(output_dir, output_file)
+    data.to_csv(output_path, index=False)
 
     print("Finished.")
 
 
 def preprocessing(data):
-    """
-    Create Week_number from WeekStarting
-    Drop two unnecessary columns: WeekStarting, Revenue
-    """
-    data['WeekStarting'] = pd.to_datetime(data['WeekStarting'])
-    data['week_number'] = data['WeekStarting'].apply(lambda x: x.strftime("%U"))
-    # Drop 'WeekStarting','Revenue' columns if it exist
-    data = data.drop(['WeekStarting', 'Revenue', 'Quantity'], axis=1, errors='ignore')
+    # Do your preprocessing here
     return data
 
 

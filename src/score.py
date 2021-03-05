@@ -8,21 +8,11 @@ from pathlib import Path
 import joblib
 import pandas as pd
 
-# from inference_schema.schema_decorators import input_schema, output_schema
-# from inference_schema.parameter_types.numpy_parameter_type import NumpyParameterType
-
 model = None
 
 
 def preprocessing(data):
-    """
-    Create Week_number from WeekStarting
-    Drop two unnecessary columns: WeekStarting, Revenue
-    """
-    data['WeekStarting'] = pd.to_datetime(data['WeekStarting'])
-    data['week_number'] = data['WeekStarting'].apply(lambda x: x.strftime("%U"))
-    # Drop 'WeekStarting','Revenue' columns if it exist
-    data = data.drop(['WeekStarting', 'Revenue', 'Quantity'], axis=1, errors='ignore')
+    # Do your preprocessing here
     return data
 
 

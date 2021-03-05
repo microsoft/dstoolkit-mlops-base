@@ -42,8 +42,8 @@ def main(model_dir, model_name, model_description):
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--model-dir', type=str, help='The input from previous steps')
-    parser.add_argument('--model-name', type=str, help='The name of the model file', default='oj_sales_model.pkl')
-    parser.add_argument('--model-description', type=str, help='The description of the model')
+    parser.add_argument('--model-name', type=str, default='<your-model-name>')
+    parser.add_argument('--model-description', type=str)
 
     args_parsed = parser.parse_args(args_list)
     return args_parsed
