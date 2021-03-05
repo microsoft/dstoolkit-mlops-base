@@ -4,4 +4,3 @@ COMPUTE_CONFIG:
 # See: https://docs.microsoft.com/python/api/azureml-core/azureml.core.compute.aks.aksprovisioningconfiguration
   vm_size: STANDARD_DS2_V2
   agent_count: 3
-  cluster_purpose: DevTest
