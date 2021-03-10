@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import os
-# import argparse
+import argparse
 
 from azureml.core import Datastore, Environment
 from azureml.pipeline.core import PipelineData
@@ -41,7 +41,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
             '--output-dir', pipeline_data
         ],
         runconfig=run_config,
-        allow_reuse=True
+        allow_reuse=False
     )
 
     evaluate_step = PythonScriptStep(
@@ -55,7 +55,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
             '--model-name', model_name
         ],
         runconfig=run_config,
-        allow_reuse=True
+        allow_reuse=False
     )
 
     register_step = PythonScriptStep(
@@ -69,7 +69,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
             '--model-name', model_name
         ],
         runconfig=run_config,
-        allow_reuse=True
+        allow_reuse=False
     )
 
     # Set the sequence of steps in a pipeline
@@ -82,27 +82,27 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
         name=pipeline_name,
         steps=[train_step, evaluate_step, register_step],
         description="Model training/retraining pipeline",
-        version=build_id
+        version=pipeline_version
     )
 
-    print(f"Published pipeline: {published_pipeline.name}")
-    print(f"for build {published_pipeline.version}")
+    print(f"Published pipeline {published_pipeline.name} version {published_pipeline.version}")
 
 
-# def parse_args(args_list=None):
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("--model-name", type=str, default="sales_regression.pkl")
-#     args_parsed = parser.parse_args(args_list)
-#     return args_parsed
+def parse_args(args_list=None):
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", type=str)
+    args_parsed = parser.parse_args(args_list)
+    return args_parsed
 
 
 if __name__ == "__main__":
+    args = parse_args()
 
-    # Get argurment from environment. These variable should be in yml file
+    # Get rest of argurments from environment. These variables should be in yml file
     model_name = config.get_env_var("AML_MODEL_NAME")
-    pipeline_name = config.get_env_var("TRAINING_PIPELINE")
+    pipeline_name = config.get_env_var("AML_TRAINING_PIPELINE")
     dataset_name = config.get_env_var("AML_DATASET")
-    compute_name = config.get_env_var("TRAINING_COMPUTE")
+    compute_name = config.get_env_var("AML_TRAINING_COMPUTE")
     environment_path = config.get_env_var("AML_TRAINING_ENV_PATH")
 
     main(

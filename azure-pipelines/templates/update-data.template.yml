@@ -21,45 +21,39 @@ jobs:
   displayName: 'Store New Snapshot of Data in Datastore'
   steps:
 
+    - task: AzureCLI@1
+      name: datavars
+      displayName: 'Setup Data Paths'
+      inputs:
+        azureSubscription: ${{parameters.serviceConnection}}
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Define datastore (get default)
+          az extension add -n azure-cli-ml
+          workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
+          datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
+          # Define target path
+          target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")"
+          echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
+          echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
+        failOnStandardError: true
+
     - template: utils/run-aml-python-code.template.yml
       parameters:
         serviceConnection: ${{parameters.serviceConnection}}
         resourceGroup: ${{parameters.resourceGroup}}
         amlWorkspace: ${{parameters.amlWorkspace}}
-        scriptPath: src/download_data.py
-        scriptArguments: --data-path ${{parameters.dataPath}}
-        scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION)
-        displayName: 'Download Sample Data'
-
-    - task: AzureCLI@1
-      name: datastore_upload
-      displayName: 'Upload Files to AML Datastore'
-      inputs:
-        azureSubscription: ${{parameters.serviceConnection}}
-        scriptLocation: inlineScript
-        inlineScript: |
-          workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
-          target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")"
-          # Install ML extension
-          az extension add -n azure-cli-ml
-          # Get default datastore
-          datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
-          # Upload files
-          az ml datastore upload --name $datastore \
-                                 --src-path ${{parameters.dataPath}} \
-                                 --target-path $target_path \
-                                 --overwrite true \
-                                 $workspace_params
-          echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
-          echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
-        failOnStandardError: true
+        scriptPath: src/snapshot_data.py
+        scriptArguments: --datastore $(datavars.datastore) --path $(datavars.datapath)
+        scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION) joblib pandas
+        displayName: 'Create Data Snapshot' 
 
 - job: register_dataset
   displayName: 'Register Dataset'
   dependsOn: data_snapshot
   variables: 
-    datastore: $[ dependencies.data_snapshot.outputs['datastore_upload.datastore'] ]
-    datapath: $[ dependencies.data_snapshot.outputs['datastore_upload.datapath'] ]
+    datastore: $[ dependencies.data_snapshot.outputs['datavars.datastore'] ]
+    datapath: $[ dependencies.data_snapshot.outputs['datavars.datapath'] ]
   steps:
 
   - template: utils/run-aml-python-code.template.yml

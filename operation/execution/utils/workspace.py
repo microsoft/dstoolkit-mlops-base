@@ -29,9 +29,9 @@ def retrieve_workspace():
     try:
         print('Trying to load worspace from subscription')
         ws = Workspace.get(
-            name=os.environ['AML_WORKSPACE_NAME'],
-            subscription_id=os.environ['SUBSCRIPTION_ID'],
-            resource_group=os.environ['RESOURCE_GROUP']
+            name=os.environ['AMLWORKSPACE'],
+            resource_group=os.environ['RESOURCE_GROUP'],
+            subscription_id=os.environ['SUBSCRIPTION_ID']
         )
         return ws
     except Exception as e:
@@ -46,7 +46,7 @@ def retrieve_workspace():
             service_principal_password=os.environ['AML_PRINCIPAL_PASS']
             )
         ws = Workspace.get(
-            name=os.environ['AML_WORKSPACE_NAME'],
+            name=os.environ['AMLWORKSPACE'],
             auth=sp,
             subscription_id=os.environ['SUBSCRIPTION_ID']
         )

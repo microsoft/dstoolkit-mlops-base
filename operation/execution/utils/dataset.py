@@ -29,10 +29,6 @@ def get_dataset(ws, datastore, data_path: str, dataset_name: str):
     load the TabularDataset to pandas DataFrame
     """
     df = None
-    try:
-        dataset = Dataset.get_by_name(ws, dataset_name)
-    except Exception as e:
-        print('Error while retrieving from datastore', e)
 
     try:
         dataset = Dataset.get_by_name(ws, dataset_name)

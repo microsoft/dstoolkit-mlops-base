@@ -29,7 +29,7 @@ jobs:
       amlWorkspace: ${{parameters.amlWorkspace}}
       scriptPath: operation/execution/create_compute.py
       scriptArguments: |
-        --name $(TRAINING_COMPUTE) \
+        --name $(AML_TRAINING_COMPUTE) \
         --config-path configuration/compute/${{parameters.environment}}-training-compute.yml
       scriptExtraDependencies: pyyaml
 
