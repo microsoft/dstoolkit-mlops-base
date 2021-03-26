@@ -80,12 +80,12 @@ stages:
   - template: templates/deploy-model.template.yml
     parameters:
       environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
       deploymentType: aci
       webserviceName: $(AML_WEBSERVICE)-aci
-  
-  # - job: delete_aci
-  #   displayName: 'Delete ACI Webservice'
-  #TODO
+      deleteAfterwards: true
 
 
 #####################
@@ -99,5 +99,8 @@ stages:
   - template: templates/deploy-model.template.yml
     parameters:
       environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
       deploymentType: aks
       webserviceName: $(AML_WEBSERVICE)

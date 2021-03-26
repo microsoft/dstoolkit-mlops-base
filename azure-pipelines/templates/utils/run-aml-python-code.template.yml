@@ -25,9 +25,9 @@ parameters:
 steps:
 
     - task: UsePythonVersion@0
-      displayName: 'Use Python 3.7'
+      displayName: 'Use Python $(PYTHON_VERSION)'
       inputs:
-        versionSpec: 3.7
+        versionSpec: $(PYTHON_VERSION)
 
     - task: AzureCLI@1
       displayName: 'Generate AML Workspace Config File'
