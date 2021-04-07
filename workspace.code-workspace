@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"ms-python.python",
+			"visualstudioexptteam.vscodeintellicode",
+			"ms-python.vscode-pylance",
+			"ms-azuretools.vscode-docker",
+			"ms-vscode-remote.remote-containers"
+		]
+	}
+}
