@@ -76,11 +76,6 @@ For more details on the coding guidelines and explanation on the folder structur
 ├── README.md
 └── setup.py
 ```
-# Use-Cases
-
-| Name | Level  | link |
-|------| ------ |------|
-| Sales Forecasting |  Basic | https://dev.azure.com/DAISolutions/MLOperationalization/_git/MLOpsBasic?path=%2F&version=GBuc-001-salesforecasting&_a=contents
 
 # FAQ
 Frequent questions can be found in [how-to](docs/how-to/FAQ.md)
