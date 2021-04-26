@@ -13,7 +13,7 @@ parameters:
   type: string
 - name: dataPath
   type: string
-  default: oj_sales_data
+  default: $(AML_DATASET)
 
 jobs:
 

@@ -7,14 +7,10 @@ from pathlib import Path
 
 import joblib
 import pandas as pd
+from azureml.contrib.services.aml_response import AMLResponse
 
 
 model = None
-
-
-def preprocessing(data):
-    # Do your preprocessing here
-    return data
 
 
 def init():
@@ -35,10 +31,17 @@ def run(data):
         data_input = json.loads(data)
         data_input = pd.DataFrame.from_dict(data_input["data"])
         data_input = preprocessing(data_input)
-        result = model.predict(data_input)
-        # You can return any data type, as long as it is JSON serializable.
-        return result.tolist()
+        result = predict(model, data_input)
+        return result
     except Exception as ex:
-        result = str(ex)
-        # return error message back to the client
-        return json.dumps({"error": result})
+        return AMLResponse(f'Error: {str(ex)}', 400)
+
+
+def preprocessing(data):
+    # Do your preprocessing here
+    return data
+
+
+def predict(model, data):
+    # Generate your prediction here
+    return []

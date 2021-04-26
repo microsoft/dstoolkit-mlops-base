@@ -12,7 +12,7 @@ from azureml.core.runconfig import RunConfiguration
 from utils import config, workspace, compute, pipeline
 
 
-def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, build_id=None):
+def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, pipeline_version=None):
 
     # Retrieve workspace
     ws = workspace.retrieve_workspace()
@@ -98,17 +98,12 @@ def parse_args(args_list=None):
 if __name__ == "__main__":
     args = parse_args()
 
-    # Get rest of argurments from environment. These variables should be in yml file
-    model_name = config.get_env_var("AML_MODEL_NAME")
-    pipeline_name = config.get_env_var("AML_TRAINING_PIPELINE")
-    dataset_name = config.get_env_var("AML_DATASET")
-    compute_name = config.get_env_var("AML_TRAINING_COMPUTE")
-    environment_path = config.get_env_var("AML_TRAINING_ENV_PATH")
-
+    # Get argurments from environment (these variables are defined in the yml file)
     main(
-        dataset_name=dataset_name,
-        model_name=model_name,
-        pipeline_name=pipeline_name,
-        compute_name=compute_name,
-        environment_path=environment_path
+        model_name=config.get_env_var("AML_MODEL_NAME"),
+        dataset_name=config.get_env_var("AML_DATASET"),
+        pipeline_name=config.get_env_var("AML_TRAINING_PIPELINE"),
+        compute_name=config.get_env_var("AML_TRAINING_COMPUTE"),
+        environment_path=config.get_env_var("AML_TRAINING_ENV_PATH"),
+        pipeline_version=args.version
     )

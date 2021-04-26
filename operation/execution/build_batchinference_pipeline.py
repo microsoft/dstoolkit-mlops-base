@@ -12,7 +12,7 @@ from msrest.exceptions import HttpOperationError
 from utils import config, workspace, compute, pipeline
 
 
-def main(model_name, pipeline_name, compute_name, environment_path,
+def main(model_name, dataset_name, pipeline_name, compute_name, environment_path,
          output_dir_name, output_container_name, pipeline_version=None):
 
     # Retrieve workspace
@@ -64,8 +64,9 @@ def main(model_name, pipeline_name, compute_name, environment_path,
         source_directory="src",
         inputs=[batchscore_dir],
         arguments=[
-            '--output_dir', batchscore_dir,
-            '--model_name', model_name
+            '--model-name', model_name,
+            '--dataset-name', dataset_name,
+            '--output-dir', batchscore_dir
         ],
         runconfig=run_config,
         allow_reuse=True
@@ -92,20 +93,14 @@ def parse_args(args_list=None):
 if __name__ == "__main__":
     args = parse_args()
 
-    # Get rest of argurments from environment. These variables should be in yml file
-    model_name = config.get_env_var("AML_MODEL_NAME")
-    pipeline_name = config.get_env_var("AML_BATCHINFERENCE_PIPELINE")
-    compute_name = config.get_env_var("AML_BATCHINFERENCE_COMPUTE")
-    environment_path = config.get_env_var("AML_BATCHINFERENCE_ENV_PATH")
-    output_dir_name = config.get_env_var("BATCHINFERENCE_OUTPUT_DIR")
-    output_container_name = config.get_env_var("BATCHINFERENCE_OUTPUT_CONTAINER")
-
+    # Get argurments from environment (these variables are defined in the yml file)
     main(
-        model_name=model_name,
-        pipeline_name=pipeline_name,
-        compute_name=compute_name,
-        environment_path=environment_path,
-        output_dir_name=output_dir_name,
-        output_container_name=output_container_name,
+        model_name=config.get_env_var("AML_MODEL_NAME"),
+        dataset_name=config.get_env_var("AML_DATASET"),
+        pipeline_name=config.get_env_var("AML_BATCHINFERENCE_PIPELINE"),
+        compute_name=config.get_env_var("AML_BATCHINFERENCE_COMPUTE"),
+        environment_path=config.get_env_var("AML_BATCHINFERENCE_ENV_PATH"),
+        output_dir_name=config.get_env_var("BATCHINFERENCE_OUTPUT_DIR"),
+        output_container_name=config.get_env_var("BATCHINFERENCE_OUTPUT_CONTAINER"),
         pipeline_version=args.version
     )

@@ -5,7 +5,6 @@ import os
 import argparse
 
 import joblib
-import pandas as pd
 from azureml.core import Dataset, Model
 
 from utils import retrieve_workspace
@@ -34,7 +33,7 @@ def main(dataset_name, model_name, output_dir, output_file):
     data = preprocessing(data)
 
     print("Generating predictions data...")
-    data['predictions'] = model.predict(data)
+    data['predictions'] = predict(model, data)
 
     print(f"Saving predictions in folder {output_dir}...")
     os.makedirs(output_dir, exist_ok=True)
@@ -47,6 +46,11 @@ def main(dataset_name, model_name, output_dir, output_file):
 def preprocessing(data):
     # Do your preprocessing here
     return data
+
+
+def predict(model, data):
+    # Generate your prediction here
+    return [0] * len(data)
 
 
 def parse_args(args_list=None):
@@ -63,8 +67,8 @@ if __name__ == '__main__':
     args = parse_args()
 
     main(
-        dataset_name=args.dataset_name,
         model_name=args.model_name,
+        dataset_name=args.dataset_name,
         output_dir=args.output_dir,
         output_file=args.output_file
     )

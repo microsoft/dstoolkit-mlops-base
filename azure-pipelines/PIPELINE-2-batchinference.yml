@@ -56,9 +56,9 @@ stages:
           serviceConnection: $(SERVICECONNECTION_WS)
           resourceGroup: $(RESOURCE_GROUP)
           amlWorkspace: $(AMLWORKSPACE)
-          scriptPath: operation/execution/build_batch_scoring_pipeline.py
+          scriptPath: operation/execution/build_batchinference_pipeline.py
           scriptExtraDependencies: pyyaml
-          scriptArguments: --version  $(Build.BuildId)
+          scriptArguments: --version $(Build.BuildId)
 
     - template: templates/utils/invoke-aml-pipeline.template.yml
       parameters:
@@ -67,5 +67,5 @@ stages:
         serviceConnection: $(SERVICECONNECTION_WS)
         resourceGroup: $(RESOURCE_GROUP)
         amlWorkspace: $(AMLWORKSPACE)
-        pipelineName: $(BATCHINFERENCE_PIPELINE)
-        experimentName: $(BATCHINFERENCE_EXPERIMENT)
+        pipelineName: $(AML_BATCHINFERENCE_PIPELINE)
+        experimentName: $(AML_BATCHINFERENCE_EXPERIMENT)

@@ -53,7 +53,7 @@ def preprocessing(data):
     return data
 
 
-def train_test_split_randomly(df):
+def train_test_split_randomly(data):
     # Do your train-test split here
     y_train, X_train = data.iloc[:, 0], data.iloc[:, 1:]
     y_test, X_test = data.iloc[:, 0], data.iloc[:, 1:]

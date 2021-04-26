@@ -45,10 +45,11 @@ jobs:
       serviceConnection: ${{parameters.serviceConnection}}
       resourceGroup: ${{parameters.resourceGroup}}
       amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/model_deployment.py
+      scriptPath: operation/execution/deploy_model.py
       scriptArguments: |
         --model-name $(AML_MODEL_NAME) \
         --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
+        --env-path $(AML_REALTIMEINFERENCE_ENV_PATH) \
         --service-name ${{parameters.webserviceName}} \
         --aks-target-name $(AKS_COMPUTE)
       scriptExtraDependencies: pyyaml

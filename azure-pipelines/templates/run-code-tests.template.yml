@@ -29,7 +29,9 @@ jobs:
     displayName: 'Run code quality tests (Pylint)'
 
   - script: |
-      pytest -v operation/tests/unit/ --doctest-modules --junitxml=unit-testresults.xml --cov=src --cov-append --cov-report=xml:coverage.xml --cov-report=html:htmlcov
+      if [ $(ls operation/tests/unit/ | grep -e test_.*.py) ]; then
+        pytest -v operation/tests/unit/ --doctest-modules --junitxml=unit-testresults.xml --cov=src --cov-append --cov-report=xml:coverage.xml --cov-report=html:htmlcov
+      fi
     displayName: 'Run all unit tests'
 
   - task: PublishTestResults@2

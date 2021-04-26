@@ -43,7 +43,7 @@ jobs:
       amlWorkspace: ${{parameters.amlWorkspace}}
       scriptPath: operation/execution/create_compute.py
       scriptArguments: |
-        --name $(BATCHINFERENCE_COMPUTE) \
+        --name $(AML_BATCHINFERENCE_COMPUTE) \
         --config-path configuration/compute/${{parameters.environment}}-batchinference-compute.yml
       scriptExtraDependencies: pyyaml
 

@@ -40,6 +40,7 @@ jobs:
 - deployment: ml_env_deployment
   displayName: 'ML Environment Deployment'
   environment: ${{parameters.environment}}
+  dependsOn: iac_build
   strategy:
     runOnce:
       deploy:

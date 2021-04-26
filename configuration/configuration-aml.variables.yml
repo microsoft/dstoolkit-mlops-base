@@ -6,25 +6,26 @@
 variables:
 
   PYTHON_VERSION: 3.7
-  SDK_VERSION: 1.20
+  SDK_VERSION: 1.27
 
-  AML_DATASET: ""
-  AML_MODEL_NAME: ""
+  AML_DATASET: mydataset
+  AML_MODEL_NAME: mymodel
 
   # Training
-  AML_TRAINING_EXPERIMENT: ""
-  AML_TRAINING_PIPELINE: ""
+  AML_TRAINING_EXPERIMENT: mytrainingexperiment
+  AML_TRAINING_PIPELINE: mytrainingpipeline
   AML_TRAINING_COMPUTE: cpucompute
   AML_TRAINING_ENV_PATH: configuration/environments/environment_training
 
   # Batch inference
-  AML_BATCHINFERENCE_EXPERIMENT: ""
-  AML_BATCHINFERENCE_PIPELINE: ""
+  AML_BATCHINFERENCE_EXPERIMENT: myinferenceexperiment
+  AML_BATCHINFERENCE_PIPELINE: myinferencepipeline
   AML_BATCHINFERENCE_COMPUTE: $(AML_TRAINING_COMPUTE)
   AML_BATCHINFERENCE_ENV_PATH: configuration/environments/environment_inference
-  BATCHINFERENCE_OUTPUT_DIR: ""
-  BATCHINFERENCE_OUTPUT_CONTAINER: ""
+  BATCHINFERENCE_OUTPUT_DIR: myoutputdir
+  BATCHINFERENCE_OUTPUT_CONTAINER: myoutputcontainer
 
   # Real-time inference
+  AML_REALTIMEINFERENCE_ENV_PATH: $(AML_BATCHINFERENCE_ENV_PATH)
   AKS_COMPUTE: aks-compute
   AML_WEBSERVICE: webservice
