@@ -8,8 +8,12 @@ trigger:
 
 variables:
 - template: ../configuration/configuration-aml.variables.yml
-- template: ../configuration/configuration-infra.variables.yml
-- template: templates/choose-environment.variables.yml 
+- ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    # 'main' branch: PRD environment
+    - template: ../configuration/configuration-infra-PRD.variables.yml
+- ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:  
+    # 'develop' or feature branches: DEV environment
+    - template: ../configuration/configuration-infra-DEV.variables.yml
 
 pool:
   vmImage: ubuntu-latest

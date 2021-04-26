@@ -7,8 +7,8 @@ trigger:
 - none
 
 variables:
-- template: ../configuration/configuration-infra.variables.yml 
-- template: ../configuration/configuration-aml.variables.yml 
+- template: ../configuration/configuration-aml.variables.yml
+- template: ../configuration/configuration-infra-DEV.variables.yml # DEV as default env
 
 pool:
   vmImage: ubuntu-latest
@@ -22,35 +22,39 @@ stages:
 # Deploy DEV Environment
 - stage: deployinfra_dev
   displayName: 'Deploy DEV Environment'
+  variables:
+  - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
   - template: templates/deploy-env-infra.template.yml
     parameters:
-      environment: DEV
-      serviceConnection: $(DEV_SERVICECONNECTION_RG)
-      resourceGroup: $(DEV_RESOURCE_GROUP)
-      location: $(DEV_LOCATION)
-      storageAccount: $(DEV_STORAGEACCOUNT)
-      keyVault: $(DEV_KEYVAULT)
-      appInsights: $(DEV_APPINSIGHTS)
-      containerRegistry: $(DEV_CONTAINERREGISTRY)
-      amlWorkspace: $(DEV_AMLWORKSPACE)
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      location: $(LOCATION)
+      storageAccount: $(STORAGEACCOUNT)
+      keyVault: $(KEYVAULT)
+      appInsights: $(APPINSIGHTS)
+      containerRegistry: $(CONTAINERREGISTRY)
+      amlWorkspace: $(AMLWORKSPACE)
 
 # Deploy PRD Environment
 - stage: deployinfra_prd
   displayName: 'Deploy PRD Environment'
   condition: eq(variables['build.sourceBranch'], 'refs/heads/main')
+  variables:
+  - template: ../configuration/configuration-infra-PRD.variables.yml
   jobs:
   - template: templates/deploy-env-infra.template.yml
     parameters:
-      environment: PRD
-      serviceConnection: $(PRD_SERVICECONNECTION_RG)
-      resourceGroup: $(PRD_RESOURCE_GROUP)
-      location: $(PRD_LOCATION)
-      storageAccount: $(PRD_STORAGEACCOUNT)
-      keyVault: $(PRD_KEYVAULT)
-      appInsights: $(PRD_APPINSIGHTS)
-      containerRegistry: $(PRD_CONTAINERREGISTRY)
-      amlWorkspace: $(PRD_AMLWORKSPACE)
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      location: $(LOCATION)
+      storageAccount: $(STORAGEACCOUNT)
+      keyVault: $(KEYVAULT)
+      appInsights: $(APPINSIGHTS)
+      containerRegistry: $(CONTAINERREGISTRY)
+      amlWorkspace: $(AMLWORKSPACE)
 
 
 #####################
@@ -61,26 +65,30 @@ stages:
 - stage: computesetup_dev
   displayName: 'Compute Setup DEV Environment'
   dependsOn: deployinfra_dev
+  variables:
+  - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
   - template: templates/setup-compute.template.yml
     parameters:
-      environment: DEV
-      serviceConnection: $(DEV_SERVICECONNECTION_RG)
-      resourceGroup: $(DEV_RESOURCE_GROUP)
-      amlWorkspace: $(DEV_AMLWORKSPACE)
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
 
 # Compute Setup PRD Environment
 - stage: computesetup_prd
   displayName: 'Compute Setup PRD Environment'
   dependsOn: deployinfra_prd
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+  variables:
+  - template: ../configuration/configuration-infra-PRD.variables.yml
   jobs:
   - template: templates/setup-compute.template.yml
     parameters:
-      environment: PRD
-      serviceConnection: $(PRD_SERVICECONNECTION_RG)
-      resourceGroup: $(PRD_RESOURCE_GROUP)
-      amlWorkspace: $(PRD_AMLWORKSPACE)
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
 
 
 ########################
@@ -91,21 +99,25 @@ stages:
 - stage: dataprep_dev
   displayName: 'Data Preparation DEV Environment'
   dependsOn: deployinfra_dev
+  variables:
+  - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
   - template: templates/update-data.template.yml
     parameters:
-      serviceConnection: $(DEV_SERVICECONNECTION_RG)
-      resourceGroup: $(DEV_RESOURCE_GROUP)
-      amlWorkspace: $(DEV_AMLWORKSPACE)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
 
 # Data Prep PRD Environment
 - stage: dataprep_prd
   displayName: 'Data Preparation PRD Environment'
   dependsOn: deployinfra_prd
   condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+  variables:
+  - template: ../configuration/configuration-infra-PRD.variables.yml
   jobs:
   - template: templates/update-data.template.yml
     parameters:
-      serviceConnection: $(PRD_SERVICECONNECTION_RG)
-      resourceGroup: $(PRD_RESOURCE_GROUP)
-      amlWorkspace: $(PRD_AMLWORKSPACE)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
