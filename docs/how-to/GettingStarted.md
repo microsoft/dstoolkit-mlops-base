@@ -6,11 +6,11 @@ To setup your own MLOPs project in you azure subscription, follow these steps:
 
 2. Provide the following Environment variables in ADO:
 
-- **configuration/configuration-aml.variables.yml**: contains the definition of AML-related environment variables
+- **[AML-related variables](../../configuration/configuration-aml.variables.yml)**: contains the definition of AML-related environment variables
 
 ```
-SDK_VERSION: the version of Azure ML SDK
-AML_DATASET: training dataset name
+SDK_VERSION: the version of Azure ML SDK. Default value is 3.7
+AML_DATASET: training dataset name. Default value is 1.27
 AML_MODEL_NAME: model name (use in model register)
 
 # Training
@@ -28,10 +28,9 @@ AKS_COMPUTE: inference target name
 AML_WEBSERVICE: webservice name
 ```
 
-- **configuration/configuration-infra.variables.yml**: contains the definition of infra-related environment variables
+- **[infra-related variables in DEV](../../configuration/configuration-infra-DEV.variables.yml)**: contains the definition of infra-related variables in DEV
 
 ```
-# DEV Environment
 DEV_RESOURCE_GROUP: Name of the resourceGroup to create in DEV environment
 DEV_LOCATION: Location for the resourceGroup in DEV environment
 DEV_NAMESPACE: Namespace in DEV environment (use to identify and refer to the name of resources used in DEV).
@@ -42,8 +41,11 @@ DEV_STORAGEACCOUNT: Name of the storage account. Default name is sa$(DEV_NAMESPA
 DEV_KEYVAULT: Name of the key vault. Default name is kv$(DEV_NAMESPACE)
 DEV_APPINSIGHTS: Name of the app insight. Default name is ai$(DEV_NAMESPACE)
 DEV_CONTAINERREGISTRY: Name of the container registry. Default name is cr$(DEV_NAMESPACE)
+```
 
-# PRD Environment
+- **[infra-related variables in PROD](../../configuration/configuration-infra-PROD.variables.yml)**: contains the definition of infra-related variables in PROD
+
+```
 PRD_RESOURCE_GROUP: Name of the resourceGroup to create in PROD environment
 PRD_LOCATION: Location for the resourceGroup in PROD environment
 PRD_NAMESPACE: Namespace in PROD environment (use to identify and refer to the name of resources used in PROD).
