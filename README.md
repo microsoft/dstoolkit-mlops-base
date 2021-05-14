@@ -26,7 +26,7 @@ Follow the step below to setup the project in your subscription.
 
 If you have managed to run the entire example, well done ! You can now adapt the same code to your own use case with the exact same infrastructure and CI/CD pipeline. To do so, follow these steps:
 
-1. Add your variables (model and dataset name, azure environment, ...) in [configuration.yaml](./operation/configuration/configuration.yaml) in the _configuration folder_ in _operation_
+1. Add your variables (model and dataset name, azure environment, ...) in [configuration.yaml](./operation/configuration) in the _configuration folder_ in _operation_
 
 2. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
 
