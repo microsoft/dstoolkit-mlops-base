@@ -26,11 +26,14 @@ Follow the step below to setup the project in your subscription.
 
 If you have managed to run the entire example, well done ! You can now adapt the same code to your own use case with the exact same infrastructure and CI/CD pipeline. To do so, follow these steps:
 
-1. Add your variables (model and dataset name, azure environment, ...) in [configuration.yaml](./operation/configuration/configuration.yaml) in the _configuration folder_ in _operation_
+1. Add your AML-related variables (model, dataset name, experiment name, pipeline name ...) in [configuration-aml.variable](./configuration/configuration-aml.variables.yml) in the _configuration folder_
 
-2. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
+2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, 
+the template provides two yml files for DEV and PROD environment. 
 
-3. Add your operation scripts that handle the core scripts (e.g sending the training script to a compute target, registering a model, creating an azure ml pipeline,etc) to **operation/execution**. We provide some examples to easily setup your experiments and Azure Machine Learning Pipeline
+3. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
+
+4. Add your operation scripts that handle the core scripts (e.g sending the training script to a compute target, registering a model, creating an azure ml pipeline,etc) to **operation/execution**. We provide some examples to easily setup your experiments and Azure Machine Learning Pipeline
 
 The project folders are structured in a way to rapidly move from a notebook experimentation to refactored code ready for deployment as following: ![design folder](docs/media/folder_design.PNG)
 
@@ -52,19 +55,18 @@ For more details on the coding guidelines and explanation on the folder structur
 
 ```
 ├───azure-pipelines     # folder containing all the azure devops pipelines
+│   ├───templates   # any yml template files
+│   ├───configuration   # any configuration files
+│   │   ├───compute
+│   │   ├───environments
 ├── docs
 │   ├── code            # documenting everything in the code directory (could be sphinx project for example)
 │   ├── data            # documenting datasets, data profiles, behaviors, column definitions, etc
+│   ├── how-to          # documents on how to use this template and how to setup the environment
 │   ├── media           # storing images, videos, etc, needed for docs.
-│   ├── references      # for collecting and documenting external resources relevant to the project
-│   └── how-to          # documents on how to use this template and how to setup the environment
-│
+│   └── references      # for collecting and documenting external resources relevant to the project
 ├───notebooks           # experimentation folder with notebooks, code and other. The files don't need to be committed
-├───operation           # all the code and configuration to execute the source scripts
-│   ├───configuration   # any configuration files
-│   │   ├───environment_data (optional)
-│   │   ├───environment_train (optional)
-│   │   └───environment_inference (optional)
+├───operation           # all the code to execute the source scripts
 │   ├───execution       # azure ml scripts to run source script on remote
 │   ├───monitoring      # anything related to monitoring, model performance, data drifts, model scoring, etc
 │   └───tests           # for testing your code, data, and outputs
@@ -74,7 +76,7 @@ For more details on the coding guidelines and explanation on the folder structur
 |── src
 ├── .gitignore
 ├── README.md
-└── setup.py
+└── requirement.txt
 ```
 
 # FAQ
