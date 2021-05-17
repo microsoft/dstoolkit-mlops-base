@@ -28,10 +28,10 @@ AKS_COMPUTE: inference target name
 AML_WEBSERVICE: webservice name
 ```
 
-- **infra-related variables**: contains the definition of infra-related variables in DEV. By default, the template provides 2 environments: **[DEV](../../configuration/configuration-infra-DEV.variables.yml)** and **[PROD](../../configuration/configuration-infra-PRD.variables.yml)**
+- **infra-related variables**: contains the definition of infra-related variables in DEV. By default, the template provides 2 environments: **[DEV](../../configuration/configuration-infra-DEV.variables.yml)** and **[PRD](../../configuration/configuration-infra-PRD.variables.yml)**
 
 ```
-ENVIRONMENT: Name of environment. We use uppercase DEV, TEST, PROD to refer to environments
+ENVIRONMENT: Name of environment. We use uppercase DEV, TEST, PRD to refer to environments
 RESOURCE_GROUP: Name of the resourceGroup to create in this environment
 LOCATION: Location for the resourceGroup in this environment
 NAMESPACE: Namespace in this environment (use to identify and refer to the name of resources used in this environment).
