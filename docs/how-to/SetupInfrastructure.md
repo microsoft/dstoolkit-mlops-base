@@ -4,11 +4,11 @@ This page explains how to setup an Azure architecture for your machine learning 
 
 **[ARM-Templates](../../azure-pipelines/templates/)** contains json files to deploy specific Azure Resources (Azure ML, App Insights, etc)
 
-**[Pipeline full infrastructure](/../../azure-pipelines/PIPELINE-0-setup.yml)**: deploys the entire infrastructure. Here, you can decide how many environments (DEV,TEST,QAT,PROD) you want to have. By default, the files provide DEV and PROD, and TEST is commented out.
+**[Pipeline full infrastructure](/../../azure-pipelines/PIPELINE-0-setup.yml)**: deploys the entire infrastructure. Here, you can decide how many environments (DEV,TEST,QAT,PRD) you want to have. By default, the files provide DEV and PRD, and TEST is commented out.
   
 **Infra Variables configuration**:
 - **[DEV instrastructure](../../configuration/configuration-infra-DEV.variables.yml)**: this file contains all the names you want to assign to your azure resources and location in DEV. 
-- **[PROD instrastructure](../../configuration/configuration-infra-PROD.variables.yml)**: this file contains all the names you want to assign to your azure resources and location in PROD. 
+- **[PRD instrastructure](../../configuration/configuration-infra-PROD.variables.yml)**: this file contains all the names you want to assign to your azure resources and location in PRD. 
 
 For more detail, please refer to *[GettingStarted](GettingStarted.md)*
 
