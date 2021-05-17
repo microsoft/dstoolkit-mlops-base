@@ -120,9 +120,9 @@ Some general guidelines:
 
 1. Core scripts should receive parameters/config variables only via code arguments and must not contain any hardcoded variables in the code, as for instance dataset names, model names, input/output path, etc. If you want to provide constant variables in those scripts, write default values in the argument parser.
 
-2. Variable values must be stored in **_operation/configuration.yml_**. These files will be used by the execution scripts (azureml python sdk or azure-cli) to extract the variables and run the core scripts
+2. Variable values must be stored in **_configuration/configuration-*.yml_**. These files will be used by the execution scripts (azureml python sdk or azure-cli) to extract the variables and run the core scripts
 
-3. There are 2 distinct configuration files for environment creation: (1) for local dev/experimentation which can be stored in the project root folder (as requirement.txt, environment.yml), and (2) in **_operation/configuration_** in whatever format accepted by azureml (**_yml_**, **_json_**, etc). (1)
+3. There are 2 distinct configuration files for environment creation: (1) for local dev/experimentation which can be stored in the project root folder (as requirement.txt, environment.yml), and (2) in **_configuration/environments/_** in whatever format accepted by azureml (**_yml_**, **_json_**, etc). (1)
 is required to install the project environment on a different laptop, devops agent, etc and (2) contains only the necessary packages to be installed on remote compute targets or AKS that are hosting the core scripts
 
 4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
@@ -132,20 +132,22 @@ Environment variables must be provided:
 1. Mandatory
 
 ```
-tenant id: service principal tenant id. Default name in code: AML_TENANT_ID
-principal id: service principal appId. Default name in code: AML_PRINCIPAL_ID
-principal pass: service principal password. Default name in code: AML_PRINCIPAL_PASS
-workspace name: workspace name of your test and/or prod (depending on your approach). Default name in code: AML_WORKSPACE_NAME
-subscription id: azure subscription id containing your workspace. Default name in code: SUBSCRIPTION_ID
+ENVIRONMENT: Name of environment. We use uppercase DEV, TEST, PROD to refer to environments
+RESOURCE_GROUP: Name of the resourceGroup to create in this environment
+LOCATION: Location for the resourceGroup in this environment
+NAMESPACE: Namespace in this environment (use to identify and refer to the name of resources used in this environment).
+SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
+SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for this environment
 ```
 
 2. Optional
 
 ```
-compute target name: if your are using different computes in your environments.
-inference target: can be and ACI, AKS, VM for your inference.
-AppInsight Instrumentation key: app insight key to use python logger.
-datastore/dataset name: if you are using different data source during your CI/CD pipeline (though PROD data must be available for the data scientist)
+AMLWORKSPACE: Name of the azure machine learning workspace in this environment. Default name is aml$(NAMESPACE)
+STORAGEACCOUNT: Name of the storage account. Default name is sa$(NAMESPACE)
+KEYVAULT: Name of the key vault. Default name is kv$(NAMESPACE)
+APPINSIGHTS: Name of the app insight. Default name is ai$(NAMESPACE)
+CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE)
 ```
 
 We do not provide any concrete implementation of MLOps but only the folder structure and some examples, as the naming convention and logical flow highly depend on the use case. Nevertheless, ou may want to have a look at the utils.py modules which handle the credentials.
