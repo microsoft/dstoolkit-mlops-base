@@ -28,32 +28,18 @@ AKS_COMPUTE: inference target name
 AML_WEBSERVICE: webservice name
 ```
 
-- **[infra-related variables in DEV](../../configuration/configuration-infra-DEV.variables.yml)**: contains the definition of infra-related variables in DEV
+- **infra-related variables**: contains the definition of infra-related variables in DEV. By default, the template provides 2 environments: **[DEV](../../configuration/configuration-infra-DEV.variables.yml)** and **[PROD](../../configuration/configuration-infra-PRD.variables.yml)**
 
 ```
-DEV_RESOURCE_GROUP: Name of the resourceGroup to create in DEV environment
-DEV_LOCATION: Location for the resourceGroup in DEV environment
-DEV_NAMESPACE: Namespace in DEV environment (use to identify and refer to the name of resources used in DEV).
-DEV_SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
-DEV_SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for DEV environment
-DEV_AMLWORKSPACE: Name of the azure machine learning workspace in DEV. Default name is aml$(DEV_NAMESPACE)
-DEV_STORAGEACCOUNT: Name of the storage account. Default name is sa$(DEV_NAMESPACE)
-DEV_KEYVAULT: Name of the key vault. Default name is kv$(DEV_NAMESPACE)
-DEV_APPINSIGHTS: Name of the app insight. Default name is ai$(DEV_NAMESPACE)
-DEV_CONTAINERREGISTRY: Name of the container registry. Default name is cr$(DEV_NAMESPACE)
-```
-
-- **[infra-related variables in PROD](../../configuration/configuration-infra-PROD.variables.yml)**: contains the definition of infra-related variables in PROD
-
-```
-PRD_RESOURCE_GROUP: Name of the resourceGroup to create in PROD environment
-PRD_LOCATION: Location for the resourceGroup in PROD environment
-PRD_NAMESPACE: Namespace in PROD environment (use to identify and refer to the name of resources used in PROD).
-PRD_SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
-PRD_SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for PROD environment
-PRD_AMLWORKSPACE: Name of the azure machine learning workspace in PROD. Default name is aml$(PRD_NAMESPACE)
-PRD_STORAGEACCOUNT: Name of the storage account. Default name is sa$(PRD_NAMESPACE)
-PRD_KEYVAULT: Name of the key vault. Default name is kv$(PRD_NAMESPACE)
-PRD_APPINSIGHTS: Name of the app insight. Default name is ai$(PRD_NAMESPACE)
-PRD_CONTAINERREGISTRY: Name of the container registry. Default name is cr$(PRD_NAMESPACE)
+ENVIRONMENT: Name of environment. We use uppercase DEV, TEST, PROD to refer to environments
+RESOURCE_GROUP: Name of the resourceGroup to create in this environment
+LOCATION: Location for the resourceGroup in this environment
+NAMESPACE: Namespace in this environment (use to identify and refer to the name of resources used in this environment).
+SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
+SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for this environment
+AMLWORKSPACE: Name of the azure machine learning workspace in this environment. Default name is aml$(NAMESPACE)
+STORAGEACCOUNT: Name of the storage account. Default name is sa$(NAMESPACE)
+KEYVAULT: Name of the key vault. Default name is kv$(NAMESPACE)
+APPINSIGHTS: Name of the app insight. Default name is ai$(NAMESPACE)
+CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE)
 ```
