@@ -28,7 +28,7 @@ If you have managed to run the entire example, well done ! You can now adapt the
 
 1. Add your AML-related variables (model, dataset name, experiment name, pipeline name ...) in [configuration-aml.variable](./configuration/configuration-aml.variables.yml) in the _configuration folder_
 
-2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, 
+2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra*.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, 
 the template provides two yml files for DEV and PROD environment. 
 
 3. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
@@ -43,11 +43,11 @@ For more details on the coding guidelines and explanation on the folder structur
 
 1. Core scripts should receive parameters/config variables only via code arguments and must not contain any hardcoded variables in the code (like dataset names, model names, input/output path, ...). If you want to provide constant variables in those scripts, write default values in the argument parser.
 
-2. Variable values must be stored in **_operation/configuration.yml_**. These files will be used by the execution scripts (azureml python sdk or azure-cli) to extract the variables and run the core scripts.
+2. Variable values must be stored in **_configuration/configuration.yml_**. These files will be used by the execution scripts (azureml python sdk or azure-cli) to extract the variables and run the core scripts.
 
 3. Two distinct configuration files for environment creation:
    - (A) for local dev/experimentation: may be stored in the project root folder (requirement.txt or environment.yml). It is required to install the project environment on a different laptop, devops agent, etc.
-   - (B) for remote compute: stored in **_operation/configuration_** contains only the necessary packages to be installed on remote compute targets or AKS.
+   - (B) for remote compute: stored in **_onfiguration/environments_** contains only the necessary packages to be installed on remote compute targets or AKS.
 
 4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
 
@@ -58,7 +58,7 @@ For more details on the coding guidelines and explanation on the folder structur
 │   ├───templates   # any yml template files
 │   ├───configuration   # any configuration files
 │   │   ├───compute
-│   │   ├───environments
+│   │   └───environments
 ├── docs
 │   ├── code            # documenting everything in the code directory (could be sphinx project for example)
 │   ├── data            # documenting datasets, data profiles, behaviors, column definitions, etc
