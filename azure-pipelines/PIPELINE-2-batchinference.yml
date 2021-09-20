@@ -1,0 +1,75 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that publishes AML Pipeline for model training
+
+trigger:
+- none
+
+variables:
+- template: ../configuration/configuration-aml.variables.yml
+- ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    # 'main' branch: PRD environment
+    - template: ../configuration/configuration-infra-PRD.variables.yml
+- ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:  
+    # 'develop' or feature branches: DEV environment
+    - template: ../configuration/configuration-infra-DEV.variables.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+- stage: tests
+  displayName: 'Run Code Tests'
+  jobs:
+  - template: templates/run-code-tests.template.yml
+
+
+#########################
+##  UPDATE BATCH DATA  ##
+#########################
+
+# Reusing data from training for demonstration purposes only.
+# In real scenarios, a different template pipeline would be required for updating batch inference data.
+- stage: update_data
+  displayName: 'Update Data for Batch Inference'
+  dependsOn: tests
+  jobs:
+  - template: templates/update-data.template.yml
+    parameters:
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+
+
+###########################
+##  RUN BATCH INFERENCE  ##
+###########################
+
+- stage: batch_inference
+  displayName: 'Run Batch Inference'
+  dependsOn: update_data
+  jobs:
+
+    - job: batch_inference_build
+      displayName: 'Publish Batch Inference AML Pipeline'
+      steps:
+      - template: templates/utils/run-aml-python-code.template.yml
+        parameters:
+          serviceConnection: $(SERVICECONNECTION_WS)
+          resourceGroup: $(RESOURCE_GROUP)
+          amlWorkspace: $(AMLWORKSPACE)
+          scriptPath: operation/execution/build_batchinference_pipeline.py
+          scriptExtraDependencies: pyyaml
+          scriptArguments: --version $(Build.BuildId)
+
+    - template: templates/utils/invoke-aml-pipeline.template.yml
+      parameters:
+        dependsOn: batch_inference_build
+        jobDisplayName: 'Invoke Batch Inference AML Pipeline'
+        serviceConnection: $(SERVICECONNECTION_WS)
+        resourceGroup: $(RESOURCE_GROUP)
+        amlWorkspace: $(AMLWORKSPACE)
+        pipelineName: $(AML_BATCHINFERENCE_PIPELINE)
+        experimentName: $(AML_BATCHINFERENCE_EXPERIMENT)

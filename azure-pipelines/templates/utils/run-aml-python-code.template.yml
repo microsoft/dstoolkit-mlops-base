@@ -1,0 +1,54 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for running code that requires authentication to an AML workspace 
+
+parameters:
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: amlWorkspace
+  type: string
+- name: scriptPath
+  type: string
+- name: scriptArguments
+  type: string
+  default: ''
+- name: scriptExtraDependencies
+  type: string
+  default: ''
+- name: displayName
+  type: string
+  default: 'Run Python Code'
+
+steps:
+
+    - task: UsePythonVersion@0
+      displayName: 'Use Python $(PYTHON_VERSION)'
+      inputs:
+        versionSpec: $(PYTHON_VERSION)
+
+    - task: AzureCLI@1
+      displayName: 'Generate AML Workspace Config File'
+      inputs:
+        azureSubscription: ${{parameters.serviceConnection}}
+        scriptLocation: inlineScript
+        inlineScript: |
+          mkdir -p .azureml
+          subscription_id=$(az account show --query id -o tsv)
+          echo "{
+            \"subscription_id\": \"$subscription_id\",
+            \"resource_group\": \"${{parameters.resourceGroup}}\",
+            \"workspace_name\": \"${{parameters.amlWorkspace}}\"
+          }" > .azureml/config.json
+
+    - task: AzureCLI@1
+      displayName: ${{parameters.displayName}}
+      inputs:
+        azureSubscription: ${{parameters.serviceConnection}}
+        scriptLocation: inlineScript
+        inlineScript: |
+          dependencies="azureml-sdk==$(SDK_VERSION) ${{parameters.scriptExtraDependencies}}"
+          python -m pip install --upgrade pip && python -m pip install $dependencies
+          python ${{parameters.scriptPath}} ${{parameters.scriptArguments}}

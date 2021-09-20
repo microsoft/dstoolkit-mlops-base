@@ -1,0 +1,65 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for updating dataset before retraining
+# The dataset in this example is updated for illustration purposes only, the data downloaded is the same
+
+parameters:
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: amlWorkspace
+  type: string
+- name: dataPath
+  type: string
+  default: $(AML_DATASET)
+
+jobs:
+
+- job: data_snapshot
+  displayName: 'Store New Snapshot of Data in Datastore'
+  steps:
+
+    - task: AzureCLI@1
+      name: datavars
+      displayName: 'Setup Data Paths'
+      inputs:
+        azureSubscription: ${{parameters.serviceConnection}}
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Define datastore (get default)
+          az extension add -n azure-cli-ml
+          workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
+          datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
+          # Define target path
+          target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")"
+          echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
+          echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
+        failOnStandardError: true
+
+    - template: utils/run-aml-python-code.template.yml
+      parameters:
+        serviceConnection: ${{parameters.serviceConnection}}
+        resourceGroup: ${{parameters.resourceGroup}}
+        amlWorkspace: ${{parameters.amlWorkspace}}
+        scriptPath: src/snapshot_data.py
+        scriptArguments: --datastore $(datavars.datastore) --path $(datavars.datapath)
+        scriptExtraDependencies: azureml-opendatasets==$(SDK_VERSION) joblib pandas
+        displayName: 'Create Data Snapshot' 
+
+- job: register_dataset
+  displayName: 'Register Dataset'
+  dependsOn: data_snapshot
+  variables: 
+    datastore: $[ dependencies.data_snapshot.outputs['datavars.datastore'] ]
+    datapath: $[ dependencies.data_snapshot.outputs['datavars.datapath'] ]
+  steps:
+
+  - template: utils/run-aml-python-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/register_dataset.py
+      scriptArguments: --name $(AML_DATASET) --datastore $(DATASTORE) --path $(DATAPATH)

@@ -1,0 +1,13 @@
+COMPUTE_TYPE: AmlCompute
+COMPUTE_CONFIG:
+# Parameters as passed to AmlComputeProvisioningConfiguration constructor
+# See: https://docs.microsoft.com/python/api/azureml-core/azureml.core.compute.amlcompute.amlcomputeprovisioningconfiguration
+  vm_size: STANDARD_DS2_V2
+  vm_priority: dedicated
+  min_nodes: 0
+  max_nodes: 2
+  # idle_seconds_before_scaledown: <seconds>
+  # vnet_resourcegroup_name: <vnet resource group name>
+  # vnet_name: <vnet name>
+  # subnet_name: <subnet name>
+  # ...

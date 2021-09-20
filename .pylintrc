@@ -1,0 +1,27 @@
+[MESSAGES CONTROL]
+disable=C0114, # Missing module docstring
+        C0115, # Missing class docstring
+        C0116, # Missing function docstring
+        R0801, # Similar lines
+        W0511 # TODO's
+
+[BASIC]
+good-names=i, j,
+           k, v,
+           f,
+           ex,
+           Run,
+           _,
+           df,
+           ws, sp,
+           X, y, X_train, X_test
+
+[FORMAT]
+max-line-length=120
+max-module-lines=1000
+
+[SIMILARITIES]
+ignore-comments=yes
+ignore-docstrings=yes
+ignore-imports=yes
+min-similarity-lines=4

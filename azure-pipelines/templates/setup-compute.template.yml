@@ -1,0 +1,68 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for compute setup in specified Workspace
+
+parameters:
+- name: environment
+  type: string
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: amlWorkspace
+  type: string
+
+jobs:
+
+########################
+##  COMPUTE CLUSTERS  ##
+########################
+
+- job: aml_compute_training
+  displayName: 'Deploy AML Training Compute'
+  steps:
+  - template: utils/run-aml-python-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/create_compute.py
+      scriptArguments: |
+        --name $(AML_TRAINING_COMPUTE) \
+        --config-path configuration/compute/${{parameters.environment}}-training-compute.yml
+      scriptExtraDependencies: pyyaml
+
+- job: aml_compute_batchinference
+  displayName: 'Deploy AML Batch Inference Compute'
+  steps:
+  - template: utils/run-aml-python-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/create_compute.py
+      scriptArguments: |
+        --name $(AML_BATCHINFERENCE_COMPUTE) \
+        --config-path configuration/compute/${{parameters.environment}}-batchinference-compute.yml
+      scriptExtraDependencies: pyyaml
+
+
+################################
+##  AZURE KUBERNETES SERVICE  ##
+################################
+
+- job: aml_compute_aks
+  displayName: 'Deploy AML AKS Compute'
+  condition: variables['AKS_COMPUTE'] # run if it's defined
+  steps:
+  - template: utils/run-aml-python-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/create_compute.py
+      scriptArguments: |
+        --name $(AKS_COMPUTE) \
+        --config-path configuration/compute/${{parameters.environment}}-realtimeinference-compute-aks.yml
+      scriptExtraDependencies: pyyaml

@@ -1,0 +1,110 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that publishes AML Pipeline for model training
+
+trigger:
+- none
+
+variables:
+- template: ../configuration/configuration-aml.variables.yml
+- ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
+    # 'main' branch: PRD environment
+    - template: ../configuration/configuration-infra-PRD.variables.yml
+- ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:  
+    # 'develop' or feature branches: DEV environment
+    - template: ../configuration/configuration-infra-DEV.variables.yml
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+- stage: tests
+  displayName: 'Run Code Tests'
+  jobs:
+  - template: templates/run-code-tests.template.yml
+
+
+############################
+##  UPDATE TRAINING DATA  ##
+############################
+
+- stage: update_data
+  displayName: 'Update Data for Training/Retraining'
+  dependsOn: tests
+  jobs:
+  - template: templates/update-data.template.yml
+    parameters:
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+
+
+####################
+##  RUN TRAINING  ##
+####################
+
+- stage: training
+  displayName: 'Model Training/Retraining'
+  dependsOn: update_data
+  jobs:
+
+    - job: training_build
+      displayName: 'Publish Training AML Pipeline'
+      steps:
+      - template: templates/utils/run-aml-python-code.template.yml
+        parameters:
+          serviceConnection: $(SERVICECONNECTION_WS)
+          resourceGroup: $(RESOURCE_GROUP)
+          amlWorkspace: $(AMLWORKSPACE)
+          scriptPath: operation/execution/build_training_pipeline.py
+          scriptExtraDependencies: pyyaml
+          scriptArguments: --version  $(Build.BuildId)
+
+    - template: templates/utils/invoke-aml-pipeline.template.yml
+      parameters:
+        dependsOn: training_build
+        jobDisplayName: 'Invoke Training AML Pipeline'
+        serviceConnection: $(SERVICECONNECTION_WS)
+        resourceGroup: $(RESOURCE_GROUP)
+        amlWorkspace: $(AMLWORKSPACE)
+        pipelineName: $(AML_TRAINING_PIPELINE)
+        experimentName: $(AML_TRAINING_EXPERIMENT)
+
+
+#########################################
+##  DEPLOY IN ACI (dev/test purposes)  ##
+#########################################
+
+- stage: deploy_model_aci
+  displayName: 'Deploy Model to ACI'
+  dependsOn: training
+  jobs:
+  - template: templates/deploy-model.template.yml
+    parameters:
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+      deploymentType: aci
+      webserviceName: $(AML_WEBSERVICE)-aci
+      deleteAfterwards: true
+
+
+#####################
+##  DEPLOY IN AKS  ##
+#####################
+
+- stage: deploy_model_aks
+  displayName: 'Deploy Model to AKS'
+  dependsOn: deploy_model_aci
+  jobs:
+  - template: templates/deploy-model.template.yml
+    parameters:
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_WS)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+      deploymentType: aks
+      webserviceName: $(AML_WEBSERVICE)

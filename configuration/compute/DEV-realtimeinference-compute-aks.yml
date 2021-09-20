@@ -1,0 +1,11 @@
+COMPUTE_TYPE: AksCompute
+COMPUTE_CONFIG:
+# Parameters as passed to AksProvisioningConfiguration constructor
+# See: https://docs.microsoft.com/python/api/azureml-core/azureml.core.compute.aks.aksprovisioningconfiguration
+  vm_size: STANDARD_DS2_V2
+  agent_count: 3
+  cluster_purpose: DevTest
+  # vnet_resourcegroup_name: <vnet resource group name>
+  # vnet_name: <vnet name>
+  # subnet_name: <subnet name>
+  # ...

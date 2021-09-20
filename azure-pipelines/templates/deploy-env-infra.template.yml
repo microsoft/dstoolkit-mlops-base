@@ -1,0 +1,101 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for ML Environment Deployment (AML Workspace + associated resources)
+
+parameters:
+- name: environment
+  type: string
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: location
+  type: string
+- name: storageAccount
+  type: string
+- name: keyVault
+  type: string
+- name: appInsights
+  type: string
+- name: containerRegistry
+  type: string
+- name: amlWorkspace
+  type: string
+
+
+jobs:
+
+- job: iac_build
+  displayName: 'IaC Build'
+  steps:
+  - task: CopyFiles@2
+    displayName: 'Copy ARM templates'
+    inputs:
+      sourceFolder: 'azure-pipelines/templates/arm-templates'
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+  - publish: '$(Build.ArtifactStagingDirectory)'
+    artifact: infratemplates
+
+- deployment: ml_env_deployment
+  displayName: 'ML Environment Deployment'
+  environment: ${{parameters.environment}}
+  dependsOn: iac_build
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: infratemplates
+        
+        # Deploy Storage Account
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Deploy Storage Account'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            resourceGroupName: ${{parameters.resourceGroup}}
+            location: ${{parameters.location}}
+            csmFile: '$(Pipeline.Workspace)/infratemplates/storage.template.json'
+            csmParametersFile: '$(Pipeline.Workspace)/infratemplates/storage.parameters.json'
+            overrideParameters: '-name ${{parameters.storageAccount}} -location ${{parameters.location}}'
+
+        # Deploy Key Vault
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Deploy Key Vault'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            resourceGroupName: ${{parameters.resourceGroup}}
+            location: ${{parameters.location}}
+            csmFile: '$(Pipeline.Workspace)/infratemplates/keyvault.template.json'
+            csmParametersFile: '$(Pipeline.Workspace)/infratemplates/keyvault.parameters.json'
+            overrideParameters: '-name ${{parameters.keyVault}} -location ${{parameters.location}}'
+
+        # Deploy Application Insights
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Deploy Application Insights'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            resourceGroupName: ${{parameters.resourceGroup}}
+            location: ${{parameters.location}}
+            csmFile: '$(Pipeline.Workspace)/infratemplates/appinsights.template.json'
+            overrideParameters: '-name ${{parameters.appInsights}} -location ${{parameters.location}}'
+
+        # Deploy Container Registry
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Deploy Container Registry'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            resourceGroupName: ${{parameters.resourceGroup}}
+            location: ${{parameters.location}}
+            csmFile: '$(Pipeline.Workspace)/infratemplates/containerregistry.template.json'
+            overrideParameters: '-name ${{parameters.containerRegistry}} -location ${{parameters.location}}'
+
+        # Deploy Azure Machine Learning Workspace
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Deploy AML Workspace'
+          inputs:
+            azureSubscription: ${{parameters.serviceConnection}}
+            resourceGroupName: ${{parameters.resourceGroup}}
+            location: ${{parameters.location}}
+            csmFile: '$(Pipeline.Workspace)/infratemplates/mlworkspace.template.json'
+            overrideParameters: '-workspaceName ${{parameters.amlWorkspace}} -keyVaultName ${{parameters.keyVault}} -appInsightsName ${{parameters.appInsights}} -containerRegistryName ${{parameters.containerRegistry}} -storageAccountName ${{parameters.storageAccount}}'

@@ -1,0 +1,88 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for deploying models
+
+parameters:
+- name: environment
+  type: string
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: amlWorkspace
+  type: string
+- name: deploymentType
+  type: string
+- name: webserviceName
+  type: string
+- name: deleteAfterwards
+  type: string
+  default: false
+
+
+jobs:
+
+- ${{ if eq(parameters.deploymentType, 'aks') }}:
+  - job: check_aks
+    displayName: 'AKS Check'
+    steps:
+      - bash: |
+          if [ "$(AKS_COMPUTE)" == "" ]; then
+            >&2 echo "Error: variable AKS_COMPUTE must be set for AKS deployments"
+          fi
+        displayName: 'Check AKS_COMPUTE variable'
+        failOnStderr: true
+
+- job: deploy_model
+  displayName: 'Deploy Model'
+  ${{ if eq(parameters.deploymentType, 'aks') }}:
+    dependsOn: check_aks
+  timeoutInMinutes: 0
+  steps:
+  - template: utils/run-aml-python-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/deploy_model.py
+      scriptArguments: |
+        --model-name $(AML_MODEL_NAME) \
+        --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
+        --env-path $(AML_REALTIMEINFERENCE_ENV_PATH) \
+        --service-name ${{parameters.webserviceName}} \
+        --aks-target-name $(AKS_COMPUTE)
+      scriptExtraDependencies: pyyaml
+
+- job: smoke_test
+  displayName: 'Test Webservice'
+  dependsOn: deploy_model
+  steps:
+  - template: utils/run-aml-python-code.template.yml
+    parameters:
+      serviceConnection: ${{parameters.serviceConnection}}
+      resourceGroup: ${{parameters.resourceGroup}}
+      amlWorkspace: ${{parameters.amlWorkspace}}
+      scriptPath: operation/execution/smoke_test_webservice.py
+      scriptArguments: --webservice-name ${{parameters.webserviceName}}
+      scriptExtraDependencies: pyyaml requests
+
+- ${{ if eq(parameters.deleteAfterwards, 'true') }}:
+  - job: delete_webservice
+    displayName: 'Delete Webservice'
+    dependsOn: smoke_test
+    steps:
+    - task: AzureCLI@1
+      name: delete_webservice
+      displayName: 'Delete Webservice'
+      inputs:
+        azureSubscription: ${{parameters.serviceConnection}}
+        scriptLocation: inlineScript
+        inlineScript: |
+          # Install ML extension
+          az extension add -n azure-cli-ml
+          # Delete webservice
+          az ml service delete --name ${{parameters.webserviceName}} \
+                              --workspace-name ${{parameters.amlWorkspace}} \
+                              --resource-group ${{parameters.resourceGroup}}
+        failOnStandardError: true

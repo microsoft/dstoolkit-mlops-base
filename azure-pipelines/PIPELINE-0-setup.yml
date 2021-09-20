@@ -1,0 +1,123 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Pipeline that deploys the infrastructure and sets up compute & data in the AML workspace
+
+trigger:
+- none
+
+variables:
+- template: ../configuration/configuration-aml.variables.yml
+- template: ../configuration/configuration-infra-DEV.variables.yml # DEV as default env
+
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+
+####################
+##  DEPLOY INFRA  ##
+####################
+
+# Deploy DEV Environment
+- stage: deployinfra_dev
+  displayName: 'Deploy DEV Environment'
+  variables:
+  - template: ../configuration/configuration-infra-DEV.variables.yml
+  jobs:
+  - template: templates/deploy-env-infra.template.yml
+    parameters:
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      location: $(LOCATION)
+      storageAccount: $(STORAGEACCOUNT)
+      keyVault: $(KEYVAULT)
+      appInsights: $(APPINSIGHTS)
+      containerRegistry: $(CONTAINERREGISTRY)
+      amlWorkspace: $(AMLWORKSPACE)
+
+# Deploy PRD Environment
+- stage: deployinfra_prd
+  displayName: 'Deploy PRD Environment'
+  condition: eq(variables['build.sourceBranch'], 'refs/heads/main')
+  variables:
+  - template: ../configuration/configuration-infra-PRD.variables.yml
+  jobs:
+  - template: templates/deploy-env-infra.template.yml
+    parameters:
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      location: $(LOCATION)
+      storageAccount: $(STORAGEACCOUNT)
+      keyVault: $(KEYVAULT)
+      appInsights: $(APPINSIGHTS)
+      containerRegistry: $(CONTAINERREGISTRY)
+      amlWorkspace: $(AMLWORKSPACE)
+
+
+#####################
+##  COMPUTE SETUP  ##
+#####################
+
+# Compute Setup DEV Environment
+- stage: computesetup_dev
+  displayName: 'Compute Setup DEV Environment'
+  dependsOn: deployinfra_dev
+  variables:
+  - template: ../configuration/configuration-infra-DEV.variables.yml
+  jobs:
+  - template: templates/setup-compute.template.yml
+    parameters:
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+
+# Compute Setup PRD Environment
+- stage: computesetup_prd
+  displayName: 'Compute Setup PRD Environment'
+  dependsOn: deployinfra_prd
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+  variables:
+  - template: ../configuration/configuration-infra-PRD.variables.yml
+  jobs:
+  - template: templates/setup-compute.template.yml
+    parameters:
+      environment: $(ENVIRONMENT)
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+
+
+########################
+##  DATA PREPARATION  ##
+########################
+
+# Data Prep DEV Environment
+- stage: dataprep_dev
+  displayName: 'Data Preparation DEV Environment'
+  dependsOn: deployinfra_dev
+  variables:
+  - template: ../configuration/configuration-infra-DEV.variables.yml
+  jobs:
+  - template: templates/update-data.template.yml
+    parameters:
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
+
+# Data Prep PRD Environment
+- stage: dataprep_prd
+  displayName: 'Data Preparation PRD Environment'
+  dependsOn: deployinfra_prd
+  condition: and(succeeded(), eq(variables['build.sourceBranch'], 'refs/heads/main'))
+  variables:
+  - template: ../configuration/configuration-infra-PRD.variables.yml
+  jobs:
+  - template: templates/update-data.template.yml
+    parameters:
+      serviceConnection: $(SERVICECONNECTION_RG)
+      resourceGroup: $(RESOURCE_GROUP)
+      amlWorkspace: $(AMLWORKSPACE)
