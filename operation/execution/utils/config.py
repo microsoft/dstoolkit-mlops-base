@@ -8,7 +8,7 @@ import importlib
 from pathlib import Path
 
 
-def get_env_var(name):  # TODO read variables from files in local executions
+def get_env_var(name):
     """Get value from environment variable.
        Raises informative message if not set.
 
@@ -33,7 +33,7 @@ def get_env_var(name):  # TODO read variables from files in local executions
     return var
 
 
-def retrieve_config():  # TODO: is this being used?
+def retrieve_config():
     """Retrieve configuration data.
 
     Args:
@@ -44,8 +44,7 @@ def retrieve_config():  # TODO: is this being used?
 
     """
     config = {}
-    # go 2 layer up
-    util_path = Path(__file__).parents[3]
+    util_path = Path(__file__).parents[3]  # go 2 layer up
     config_path = util_path / 'configuration' / 'configuration-aml.variables.yml'
     config = read_config_file(config_path)
     return config['variables']
