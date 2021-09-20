@@ -1,8 +1,10 @@
-# About this repository
+![banner](docs/media/banner.jpg)
+
+# MLOps Solution Accelerator
 
 This repository contains the basic repository structure for machine learning projects based on Azure technologies (Azure ML and Azure DevOps). The folder names and files are chosen based on personal experience. You can find the principles and ideas behind the structure, which we recommend to follow when customizing your own project and MLOps process. Also, we expect users to be familiar with azure machine learning concepts and how to use the technology.
 
-# Prerequisites
+## Prerequisites
 
 In order to successfully complete your solution, you will need to have access to and or provisioned the following:
 
@@ -10,7 +12,7 @@ In order to successfully complete your solution, you will need to have access to
 - Access to an Azure Devops subscription
 - Service Principal
 
-# Getting Started
+## Getting Started
 
 Follow the step below to setup the project in your subscription.
 
@@ -37,7 +39,7 @@ the template provides two yml files for DEV and PROD environment.
 
 The project folders are structured in a way to rapidly move from a notebook experimentation to refactored code ready for deployment as following: ![design folder](docs/media/folder_design.PNG)
 
-# General Coding Guidelines
+## General Coding Guidelines
 
 For more details on the coding guidelines and explanation on the folder structure, please go to [data/docs/how-to](docs/how-to/TemplateDocumentation.md).
 
@@ -51,7 +53,7 @@ For more details on the coding guidelines and explanation on the folder structur
 
 4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
 
-# Default Directory Structure
+## Default Directory Structure
 
 ```
 ├───azure-pipelines     # folder containing all the azure devops pipelines
@@ -79,18 +81,29 @@ For more details on the coding guidelines and explanation on the folder structur
 └── requirement.txt
 ```
 
-# FAQ
+## FAQ
 Frequent questions can be found in [how-to](docs/how-to/FAQ.md)
-# LICENCE
 
-Copyright (c) Microsoft Corporation
+## Contributing
 
-All rights reserved.
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
+the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
-MIT License
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide
+a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
+provided by the bot. You will only need to do this once across all repos using our CLA.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
+For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
+contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+## Trademarks
 
-THE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
+trademarks or logos is subject to and must follow 
+[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
+Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
+Any use of third-party trademarks or logos are subject to those third-party's policies.
+
+
