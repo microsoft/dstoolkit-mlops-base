@@ -72,7 +72,7 @@ def main(model_name, dataset_name, pipeline_name, compute_name, environment_path
         allow_reuse=True
     )
 
-    published_pipeline = pipeline.publish_pipeline(
+    published_endpoint, published_pipeline = pipeline.publish_pipeline(
         ws,
         name=pipeline_name,
         steps=[scoring_step],
@@ -81,6 +81,7 @@ def main(model_name, dataset_name, pipeline_name, compute_name, environment_path
     )
 
     print(f"Published pipeline {published_pipeline.name} version {published_pipeline.version}")
+    print(f"in pipeline endpoint {published_endpoint.name} with ID {published_endpoint.id}\n")
 
 
 def parse_args(args_list=None):
