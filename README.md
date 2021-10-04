@@ -49,7 +49,7 @@ For more details on the coding guidelines and explanation on the folder structur
 
 3. Two distinct configuration files for environment creation:
    - (A) for local dev/experimentation: may be stored in the project root folder (requirement.txt or environment.yml). It is required to install the project environment on a different laptop, devops agent, etc.
-   - (B) for remote compute: stored in **_onfiguration/environments_** contains only the necessary packages to be installed on remote compute targets or AKS.
+   - (B) for remote compute: stored in **_configuration/environments_** contains only the necessary packages to be installed on remote compute targets or AKS.
 
 4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
 
@@ -58,9 +58,9 @@ For more details on the coding guidelines and explanation on the folder structur
 ```
 ├───azure-pipelines     # folder containing all the azure devops pipelines
 │   ├───templates   # any yml template files
-│   ├───configuration   # any configuration files
-│   │   ├───compute
-│   │   └───environments
+│   └───configuration   # any configuration files
+│       ├───compute
+│       └───environments
 ├── docs
 │   ├── code            # documenting everything in the code directory (could be sphinx project for example)
 │   ├── data            # documenting datasets, data profiles, behaviors, column definitions, etc
