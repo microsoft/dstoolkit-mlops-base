@@ -1,7 +1,5 @@
 # General Documentation
 
-[[_TOC_]]
-
 ## Data Science Lifecycle Base Repo
 
 The base project structure was inspired by the following [dslp repo](https://github.com/dslp/dslp-repo-template). We readapted it to support minimal MLOps principles.
