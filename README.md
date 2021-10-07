@@ -30,14 +30,23 @@ If you have managed to run the entire example, well done ! You can now adapt the
 
 1. Add your AML-related variables (model, dataset name, experiment name, pipeline name ...) in [configuration-aml.variable](./configuration/configuration-aml.variables.yml) in the _configuration folder_
 
-2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra*.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, 
-the template provides two yml files for DEV and PROD environment. 
+2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra*.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, the template provides two yml files for DEV and PROD environment.
 
 3. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
 
 4. Add your operation scripts that handle the core scripts (e.g sending the training script to a compute target, registering a model, creating an azure ml pipeline,etc) to **operation/execution**. We provide some examples to easily setup your experiments and Azure Machine Learning Pipeline
 
 The project folders are structured in a way to rapidly move from a notebook experimentation to refactored code ready for deployment as following: ![design folder](docs/media/folder_design.PNG)
+
+## Core MLOps Principles
+
+1. **Continuous Integration**: testing ML systems comes down to testing feature engineering scripts, validating data schema, testing the model and validating the ML infrastructure (access permission, model registries, inference service,...).
+
+2. **Continuous Delivery**: CD in the context of ML is the capacity to automatically deliver artefacts to different environment (i.e DEV/STAGE/PROD). ML artefacts consist of a feature engineering pipeline, a model, and an automated retraining pipeline depending on the use-case.
+
+3. **Continuous Monitoring**: it is mandatory to provide a consistent feedback loop from model prediction results in production. The only real model test is in production where the model is fed live data. Hence, not having a monitoring system in place to enable ML practitioners to review model predictions may have catastrophic consequences.
+
+4. **Continuous Training**: to attain a high level of ML autonomy, the ML systems ought to be able to automatically detect data drifts or be triggered based on business rule to retrain models in production. This principle however can only be applied if a monitoring system is running to ensure that the retraining is activated in pre-defined conditions.
 
 ## General Coding Guidelines
 
