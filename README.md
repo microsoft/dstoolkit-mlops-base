@@ -64,7 +64,7 @@ For more details on the coding guidelines and explanation on the folder structur
 
 ## Default Directory Structure
 
-```
+```bash
 ├───azure-pipelines     # folder containing all the azure devops pipelines
 │   ├───templates   # any yml template files
 │   └───configuration   # any configuration files
@@ -91,6 +91,7 @@ For more details on the coding guidelines and explanation on the folder structur
 ```
 
 ## FAQ
+
 Frequent questions can be found in [how-to](docs/how-to/FAQ.md)
 
 ## Contributing
@@ -109,10 +110,4 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
-
-
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general). Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies.
