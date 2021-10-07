@@ -12,7 +12,6 @@ from azureml.contrib.services.aml_response import AMLResponse
 
 model = None
 
-
 def init():
     global model
 

@@ -7,8 +7,12 @@ trigger:
 - none
 
 pr:
+  path:
+    include:
+    - configuration/compute/*
+    - configuration/configuration-infra-*
     exclude:
-    - '*.md'
+    - '*'
 
 variables:
 - template: ../configuration/configuration-aml.variables.yml
