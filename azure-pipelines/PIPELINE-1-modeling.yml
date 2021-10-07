@@ -6,10 +6,8 @@
 trigger:
 - none
 
-pr:
-    exclude:
-    - '*.md'
-    
+
+
 variables:
 - template: ../configuration/configuration-aml.variables.yml
 - ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
