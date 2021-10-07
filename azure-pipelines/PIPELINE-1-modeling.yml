@@ -6,7 +6,10 @@
 trigger:
 - none
 
-
+pr:
+  path:
+    exclude:
+    - '*.md'
 
 variables:
 - template: ../configuration/configuration-aml.variables.yml
