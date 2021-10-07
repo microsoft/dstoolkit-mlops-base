@@ -30,8 +30,7 @@ If you have managed to run the entire example, well done ! You can now adapt the
 
 1. Add your AML-related variables (model, dataset name, experiment name, pipeline name ...) in [configuration-aml.variable](./configuration/configuration-aml.variables.yml) in the _configuration folder_
 
-2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra*.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, 
-the template provides two yml files for DEV and PROD environment. 
+2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra*.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, the template provides two yml files for DEV and PROD environment.
 
 3. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
 
@@ -55,7 +54,7 @@ For more details on the coding guidelines and explanation on the folder structur
 
 ## Default Directory Structure
 
-```
+```bash
 ├───azure-pipelines     # folder containing all the azure devops pipelines
 │   ├───templates   # any yml template files
 │   ├───configuration   # any configuration files
@@ -82,6 +81,7 @@ For more details on the coding guidelines and explanation on the folder structur
 ```
 
 ## FAQ
+
 Frequent questions can be found in [how-to](docs/how-to/FAQ.md)
 
 ## Contributing
@@ -100,10 +100,4 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 
 ## Trademarks
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
-
-
+This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow [Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general). Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies.
