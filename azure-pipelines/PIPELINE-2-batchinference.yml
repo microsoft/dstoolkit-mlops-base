@@ -7,6 +7,10 @@ trigger:
 - none
 
 pr:
+  branches:
+    include:
+    - main
+    - develop
   paths:
     exclude:
     - '*.md'
