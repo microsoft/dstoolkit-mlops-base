@@ -6,6 +6,10 @@
 trigger:
 - none
 
+pr:
+    exclude:
+    - '*.md'
+
 variables:
 - template: ../configuration/configuration-aml.variables.yml
 - template: ../configuration/configuration-infra-DEV.variables.yml # DEV as default env
