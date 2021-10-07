@@ -6,6 +6,7 @@ import argparse
 from azureml.core import Run, Model
 from azureml.exceptions import WebserviceException
 
+import utils
 
 def main(model_name):
     """Evaluate the model.
@@ -19,7 +20,7 @@ def main(model_name):
     """
 
     run = Run.get_context()  # Will fail if offline run, evaluation is only supported in AML runs
-    ws = run.experiment.workspace
+    ws = utils.retrieve_workspace()
 
     try:
         # Retrieve latest model registered with same model_name

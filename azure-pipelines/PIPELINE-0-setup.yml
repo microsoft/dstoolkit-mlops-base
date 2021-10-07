@@ -7,7 +7,7 @@ trigger:
 - none
 
 pr:
-  path:
+  paths:
     include:
     - configuration/compute/*
     - configuration/configuration-infra-*
