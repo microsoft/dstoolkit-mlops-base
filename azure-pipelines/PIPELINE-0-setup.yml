@@ -6,6 +6,18 @@
 trigger:
 - none
 
+pr:
+  branches:
+    include:
+    - main
+    - develop
+  paths:
+    include:
+    - configuration/compute/*
+    - configuration/configuration-infra-*
+    exclude:
+    - '*'
+
 variables:
 - template: ../configuration/configuration-aml.variables.yml
 - template: ../configuration/configuration-infra-DEV.variables.yml # DEV as default env

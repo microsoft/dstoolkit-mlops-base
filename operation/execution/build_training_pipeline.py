@@ -77,7 +77,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
     register_step.run_after(evaluate_step)
 
     # Publish training pipeline
-    published_pipeline = pipeline.publish_pipeline(
+    published_endpoint, published_pipeline = pipeline.publish_pipeline(
         ws,
         name=pipeline_name,
         steps=[train_step, evaluate_step, register_step],
@@ -86,6 +86,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
     )
 
     print(f"Published pipeline {published_pipeline.name} version {published_pipeline.version}")
+    print(f"in pipeline endpoint {published_endpoint.name} with ID {published_endpoint.id}\n")
 
 
 def parse_args(args_list=None):
