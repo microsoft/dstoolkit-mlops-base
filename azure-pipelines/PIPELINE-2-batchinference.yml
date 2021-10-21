@@ -52,17 +52,15 @@ stages:
   dependsOn: update_data
   jobs:
 
-    - job: batch_inference_build
-      displayName: 'Publish Batch Inference AML Pipeline'
-      steps:
-      - template: templates/utils/run-aml-python-code.template.yml
-        parameters:
-          serviceConnection: $(SERVICECONNECTION_WS)
-          resourceGroup: $(RESOURCE_GROUP)
-          amlWorkspace: $(AMLWORKSPACE)
-          scriptPath: operation/execution/build_batchinference_pipeline.py
-          scriptExtraDependencies: pyyaml
-          scriptArguments: --version $(Build.BuildId)
+    - template: templates/utils/deploy-aml-pipeline.template.yml
+      parameters:
+        environment: $(ENVIRONMENT)
+        jobName: batch_inference_build
+        jobDisplayName: 'Deploy Batch Inference AML Pipeline'
+        serviceConnection: $(SERVICECONNECTION_WS)
+        resourceGroup: $(RESOURCE_GROUP)
+        amlWorkspace: $(AMLWORKSPACE)
+        deploymentScript: operation/execution/build_batchinference_pipeline.py
 
     - template: templates/utils/invoke-aml-pipeline.template.yml
       parameters:
