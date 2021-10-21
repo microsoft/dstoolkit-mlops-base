@@ -50,7 +50,7 @@ The project folders are structured in a way to rapidly move from a notebook expe
 
 ## General Coding Guidelines
 
-For more details on the coding guidelines and explanation on the folder structure, please go to [data/docs/how-to](docs/how-to/TemplateDocumentation.md).
+For more details on the coding guidelines and explanation on the folder structure, please go to [docs/how-to](docs/how-to/TemplateDocumentation.md).
 
 1. Core scripts should receive parameters/config variables only via code arguments and must not contain any hardcoded variables in the code (like dataset names, model names, input/output path, ...). If you want to provide constant variables in those scripts, write default values in the argument parser.
 
