@@ -50,17 +50,15 @@ stages:
   dependsOn: update_data
   jobs:
 
-    - job: training_build
-      displayName: 'Publish Training AML Pipeline'
-      steps:
-      - template: templates/utils/run-aml-python-code.template.yml
-        parameters:
-          serviceConnection: $(SERVICECONNECTION_WS)
-          resourceGroup: $(RESOURCE_GROUP)
-          amlWorkspace: $(AMLWORKSPACE)
-          scriptPath: operation/execution/build_training_pipeline.py
-          scriptExtraDependencies: pyyaml
-          scriptArguments: --version  $(Build.BuildId)
+    - template: templates/utils/deploy-aml-pipeline.template.yml
+      parameters:
+        environment: $(ENVIRONMENT)
+        jobName: training_build
+        jobDisplayName: 'Deploy Training AML Pipeline'
+        serviceConnection: $(SERVICECONNECTION_WS)
+        resourceGroup: $(RESOURCE_GROUP)
+        amlWorkspace: $(AMLWORKSPACE)
+        deploymentScript: operation/execution/build_training_pipeline.py
 
     - template: templates/utils/invoke-aml-pipeline.template.yml
       parameters:

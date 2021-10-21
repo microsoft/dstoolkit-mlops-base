@@ -15,13 +15,13 @@ variables:
   AML_TRAINING_EXPERIMENT: mytrainingexperiment
   AML_TRAINING_PIPELINE: mytrainingpipeline
   AML_TRAINING_COMPUTE: cpucompute
-  AML_TRAINING_ENV_PATH: configuration/environments/environment_training
+  AML_TRAINING_ENV_PATH: configuration/environments/environment_training/
 
   # Batch inference
   AML_BATCHINFERENCE_EXPERIMENT: myinferenceexperiment
   AML_BATCHINFERENCE_PIPELINE: myinferencepipeline
   AML_BATCHINFERENCE_COMPUTE: $(AML_TRAINING_COMPUTE)
-  AML_BATCHINFERENCE_ENV_PATH: configuration/environments/environment_inference
+  AML_BATCHINFERENCE_ENV_PATH: configuration/environments/environment_inference/
   BATCHINFERENCE_OUTPUT_DIR: myoutputdir
   BATCHINFERENCE_OUTPUT_CONTAINER: myoutputcontainer
 
