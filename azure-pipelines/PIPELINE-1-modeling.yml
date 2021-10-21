@@ -50,7 +50,7 @@ stages:
   dependsOn: update_data
   jobs:
 
-    - template: templates/utils/deploy-aml-pipeline.template.yml
+    - template: templates/utils/deploy-aml-endpoint.template.yml
       parameters:
         environment: $(ENVIRONMENT)
         jobName: training_build
@@ -59,6 +59,7 @@ stages:
         resourceGroup: $(RESOURCE_GROUP)
         amlWorkspace: $(AMLWORKSPACE)
         deploymentScript: operation/execution/build_training_pipeline.py
+        scriptArguments: --version $(Build.BuildId)
 
     - template: templates/utils/invoke-aml-pipeline.template.yml
       parameters:

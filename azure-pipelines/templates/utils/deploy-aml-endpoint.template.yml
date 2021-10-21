@@ -1,14 +1,10 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-# Azure Pipeline Template for deploying Azure Machine Learning pipelines
+# Azure Pipeline Template for deploying Azure Machine Learning endpoints: real-time (webservices) or batch (pipelines)
 
 parameters:
 - name: environment
-  type: string
-- name: jobName
-  type: string
-- name: jobDisplayName
   type: string
 - name: serviceConnection
   type: string
@@ -18,12 +14,23 @@ parameters:
   type: string
 - name: deploymentScript
   type: string
-
+- name: scriptArguments
+  type: string
+- name: jobName
+  type: string
+  default: 'deploy'
+- name: jobDisplayName
+  type: string
+  default: 'Deploy Endpoint'
+- name: dependsOn
+  type: object
+  default: []
 
 jobs:
 
 - job: build_code
   displayName: 'Build code to deploy'
+  dependsOn: ${{parameters.dependsOn}}
   steps:
 
     - task: PublishPipelineArtifact@0
@@ -54,5 +61,5 @@ jobs:
               resourceGroup: ${{parameters.resourceGroup}}
               amlWorkspace: ${{parameters.amlWorkspace}}
               scriptPath: $(System.ArtifactsDirectory)/deploymentcode/${{parameters.deploymentScript}}
-              scriptArguments: --version  $(Build.BuildId)
+              scriptArguments: ${{parameters.scriptArguments}}
               scriptExtraDependencies: pyyaml

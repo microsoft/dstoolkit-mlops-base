@@ -34,25 +34,23 @@ jobs:
         displayName: 'Check AKS_COMPUTE variable'
         failOnStderr: true
 
-- job: deploy_model
-  displayName: 'Deploy Model'
-  ${{ if eq(parameters.deploymentType, 'aks') }}:
-    dependsOn: check_aks
-  timeoutInMinutes: 0
-  steps:
-  - template: utils/run-aml-python-code.template.yml
-    parameters:
-      serviceConnection: ${{parameters.serviceConnection}}
-      resourceGroup: ${{parameters.resourceGroup}}
-      amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/deploy_model.py
-      scriptArguments: |
-        --model-name $(AML_MODEL_NAME) \
-        --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
-        --env-path $(AML_REALTIMEINFERENCE_ENV_PATH) \
-        --service-name ${{parameters.webserviceName}} \
-        --aks-target-name $(AKS_COMPUTE)
-      scriptExtraDependencies: pyyaml
+- template: utils/deploy-aml-endpoint.template.yml
+  parameters:
+    environment: $(ENVIRONMENT)
+    jobName: deploy_model
+    jobDisplayName: 'Deploy Model'
+    ${{ if eq(parameters.deploymentType, 'aks') }}:
+      dependsOn: check_aks
+    serviceConnection: ${{parameters.serviceConnection}}
+    resourceGroup: ${{parameters.resourceGroup}}
+    amlWorkspace: ${{parameters.amlWorkspace}}
+    deploymentScript: operation/execution/deploy_model.py
+    scriptArguments: |
+      --model-name $(AML_MODEL_NAME) \
+      --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
+      --env-path $(AML_REALTIMEINFERENCE_ENV_PATH) \
+      --service-name ${{parameters.webserviceName}} \
+      --aks-target-name $(AKS_COMPUTE)
 
 - job: smoke_test
   displayName: 'Test Webservice'
@@ -83,6 +81,6 @@ jobs:
           az extension add -n azure-cli-ml
           # Delete webservice
           az ml service delete --name ${{parameters.webserviceName}} \
-                              --workspace-name ${{parameters.amlWorkspace}} \
-                              --resource-group ${{parameters.resourceGroup}}
+                               --workspace-name ${{parameters.amlWorkspace}} \
+                               --resource-group ${{parameters.resourceGroup}}
         failOnStandardError: true
