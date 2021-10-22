@@ -18,6 +18,9 @@ def main(model_name, dataset_name, pipeline_name, compute_name, environment_path
     # Retrieve workspace
     ws = workspace.retrieve_workspace()
 
+    # Get repo root path, every other path will be relative to this
+    base_path = config.get_root_path()
+
     # Define output datastore account
     default_datastore = ws.get_default_datastore()
     datastore_output_name = default_datastore.name
@@ -28,6 +31,7 @@ def main(model_name, dataset_name, pipeline_name, compute_name, environment_path
     compute_target = compute.get_compute_target(ws, compute_name)
 
     # Get environment
+    environment_path = base_path / environment_path
     env = Environment.load_from_directory(path=environment_path)
 
     # Create run config
@@ -57,11 +61,12 @@ def main(model_name, dataset_name, pipeline_name, compute_name, environment_path
         overwrite=True
     )
 
+    src_path = base_path / "src"
     scoring_step = PythonScriptStep(
         name="Batch Scoring",
+        source_directory=src_path,
         script_name="batch_score.py",
         compute_target=compute_target,
-        source_directory="src",
         inputs=[batchscore_dir],
         arguments=[
             '--model-name', model_name,
@@ -69,7 +74,7 @@ def main(model_name, dataset_name, pipeline_name, compute_name, environment_path
             '--output-dir', batchscore_dir
         ],
         runconfig=run_config,
-        allow_reuse=True
+        allow_reuse=False
     )
 
     published_endpoint, published_pipeline = pipeline.publish_pipeline(

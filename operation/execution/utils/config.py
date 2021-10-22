@@ -33,6 +33,10 @@ def get_env_var(name):
     return var
 
 
+def get_root_path():
+    return Path(__file__).parents[3]  # go 2 layer up
+
+
 def retrieve_config():
     """Retrieve configuration data.
 
@@ -44,8 +48,7 @@ def retrieve_config():
 
     """
     config = {}
-    util_path = Path(__file__).parents[3]  # go 2 layer up
-    config_path = util_path / 'configuration' / 'configuration-aml.variables.yml'
+    config_path = get_root_path() / 'configuration' / 'configuration-aml.variables.yml'
     config = read_config_file(config_path)
     return config['variables']
 

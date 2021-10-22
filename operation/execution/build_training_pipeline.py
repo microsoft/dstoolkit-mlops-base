@@ -17,8 +17,12 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
     # Retrieve workspace
     ws = workspace.retrieve_workspace()
 
+    # Get repo root path, every other path will be relative to this
+    base_path = config.get_root_path()
+
     # Training setup
     compute_target = compute.get_compute_target(ws, compute_name)
+    environment_path = base_path / environment_path
     env = Environment.load_from_directory(path=environment_path)
     run_config = RunConfiguration()
     run_config.environment = env
@@ -29,9 +33,12 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
     )
 
     # Create steps
+
+    src_path = base_path / "src"
+
     train_step = PythonScriptStep(
         name="Train Model",
-        source_directory="src",
+        source_directory=src_path,
         script_name="train.py",
         compute_target=compute_target,
         outputs=[pipeline_data],
@@ -46,7 +53,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
 
     evaluate_step = PythonScriptStep(
         name="Evaluate Model",
-        source_directory="src",
+        source_directory=src_path,
         script_name="evaluate.py",
         compute_target=compute_target,
         inputs=[pipeline_data],
@@ -60,7 +67,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
 
     register_step = PythonScriptStep(
         name="Register Model",
-        source_directory="src",
+        source_directory=src_path,
         script_name="register.py",
         compute_target=compute_target,
         inputs=[pipeline_data],

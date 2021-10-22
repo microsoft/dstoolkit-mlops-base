@@ -13,10 +13,16 @@ def main(model_name, service_name, compute_config_file, environment_path, aks_ta
     ws = workspace.retrieve_workspace()
     model = Model(ws, name=model_name)  # TODO: support for more than 1 model?
 
+    # Get repo root path, every other path will be relative to this
+    base_path = config.get_root_path()
+
     # Deployment configuration
+    compute_config_file = base_path / compute_config_file
+    environment_path = base_path / environment_path
+    src_path = base_path / "src"
     deployment_params = deployment.build_deployment_params(
         ws,
-        script_dir='src',
+        script_dir=src_path,
         script_file='score.py',
         environment_path=environment_path,
         compute_config_file=compute_config_file,

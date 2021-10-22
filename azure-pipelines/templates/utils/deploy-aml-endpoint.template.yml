@@ -1,0 +1,65 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+# Azure Pipeline Template for deploying Azure Machine Learning endpoints: real-time (webservices) or batch (pipelines)
+
+parameters:
+- name: environment
+  type: string
+- name: serviceConnection
+  type: string
+- name: resourceGroup
+  type: string
+- name: amlWorkspace
+  type: string
+- name: deploymentScript
+  type: string
+- name: scriptArguments
+  type: string
+- name: jobName
+  type: string
+  default: 'deploy'
+- name: jobDisplayName
+  type: string
+  default: 'Deploy Endpoint'
+- name: dependsOn
+  type: object
+  default: []
+
+jobs:
+
+- job: build_code
+  displayName: 'Build code to deploy'
+  dependsOn: ${{parameters.dependsOn}}
+  steps:
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'DeploymentCode'
+        targetPath: '$(Build.SourcesDirectory)'
+
+- deployment: ${{parameters.jobName}}
+  displayName: ${{parameters.jobDisplayName}}
+  dependsOn: build_code
+  pool:
+    vmImage: 'ubuntu-latest'
+  environment: ${{parameters.environment}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download deployment code'
+            inputs:
+              artifact: 'DeploymentCode'
+              path: $(System.ArtifactsDirectory)/deploymentcode/
+
+          - template: run-aml-python-code.template.yml
+            parameters:
+              serviceConnection: ${{parameters.serviceConnection}}
+              resourceGroup: ${{parameters.resourceGroup}}
+              amlWorkspace: ${{parameters.amlWorkspace}}
+              scriptPath: $(System.ArtifactsDirectory)/deploymentcode/${{parameters.deploymentScript}}
+              scriptArguments: ${{parameters.scriptArguments}}
+              scriptExtraDependencies: pyyaml
