@@ -5,5 +5,6 @@ dependencies:
 - pip:
   - azureml-core==1.35.0
   - azureml-defaults==1.35.0
+  - pandas
   - joblib
 name: basic_env
