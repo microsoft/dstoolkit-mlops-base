@@ -1,6 +1,6 @@
 {
-    "name": "MyNewEnv-Scoring",
-    "version": "38",
+    "name": "environment_inference",
+    "version": "oct21",
     "environmentVariables": {
         "EXAMPLE_ENV_VAR": "EXAMPLE_VALUE"
     },
@@ -12,10 +12,10 @@
     },
     "docker": {
         "enabled": false,
-        "baseImage": "mcr.microsoft.com/azureml/intelmpi2018.3-ubuntu16.04:20200821.v1",
+        "baseImage": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04:20210922.v1",
         "baseDockerfile": null,
         "sharedVolumes": true,
-        "shmSize": null,
+        "shmSize": "2g",
         "arguments": [],
         "baseImageRegistry": {
             "address": null,
