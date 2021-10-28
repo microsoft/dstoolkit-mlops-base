@@ -27,18 +27,6 @@ def retrieve_workspace():
         print(e)
 
     try:
-        print('Trying to load worspace from subscription')
-        ws = Workspace.get(
-            name=os.environ['AMLWORKSPACE'],
-            resource_group=os.environ['RESOURCE_GROUP'],
-            subscription_id=os.environ['SUBSCRIPTION_ID']
-        )
-        return ws
-    except Exception as e:
-        print('Workspace not found.')
-        print(e)
-
-    try:
         print('Trying Service Principal')
         sp = ServicePrincipalAuthentication(
             tenant_id=os.environ['AML_TENANT_ID'],
