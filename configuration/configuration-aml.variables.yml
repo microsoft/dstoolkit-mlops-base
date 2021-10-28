@@ -5,8 +5,8 @@
 
 variables:
 
-  PYTHON_VERSION: 3.7
-  SDK_VERSION: 1.27
+  PYTHON_VERSION: 3.8
+  SDK_VERSION: 1.35
 
   AML_DATASET: mydataset
   AML_MODEL_NAME: mymodel
