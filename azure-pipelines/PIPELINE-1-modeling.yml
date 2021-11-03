@@ -13,7 +13,10 @@ pr:
     - develop
   paths:
     exclude:
-    - '*.md'
+    - README.md
+    - CONTRIBUTING.md
+    - SECURITY.md
+    - docs
 
 variables:
 - template: ../configuration/configuration-aml.variables.yml
