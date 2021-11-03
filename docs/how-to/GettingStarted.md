@@ -10,7 +10,7 @@ To setup your own MLOPs project in you azure subscription, follow these steps:
 
 ```
 PYTHON_VERSION: the version of python. Default value is 3.8
-SDK_VERSION: Default value is 1.35
+SDK_VERSION: the version of Azure ML SDK. Default value is 1.35
 AML_DATASET: training dataset name.
 AML_MODEL_NAME: model name (use in model register)
 
