@@ -9,8 +9,8 @@ To setup your own MLOPs project in you azure subscription, follow these steps:
 - **[AML-related variables](../../configuration/configuration-aml.variables.yml)**: contains the definition of AML-related environment variables
 
 ```
-PYTHON_VERSION: the version of python. Default value is 3.7
-SDK_VERSION: Default value is 1.27
+PYTHON_VERSION: the version of python. Default value is 3.8
+SDK_VERSION: Default value is 1.35
 AML_DATASET: training dataset name.
 AML_MODEL_NAME: model name (use in model register)
 
