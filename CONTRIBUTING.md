@@ -2,7 +2,7 @@
 
 Welcome, and thank you for your interest in contributing. There are many ways to contribute:
 
-- [Submit issues](https://github.com/microsoft/dstoolkit-mlops-base/issues) to report bugs and make suggestions. Please search the existing  issues before filing new issues to avoid duplicates.  For new issues, file your bug or feature request as a new Issue and select the appropriate label from the available labels.
+- [Submit issues](https://github.com/microsoft/dstoolkit-mlops-base/issues) to report bugs and make suggestions. Please search the existing  issues before filing new issues to avoid duplicates. For new issues, file your bug or feature request as a new Issue and select the appropriate label from the available labels.
 
 - Review the [source code changes](https://github.com/microsoft/solution-accelerator-many-models/pulls).
   
@@ -27,7 +27,7 @@ To develop in your own environment, you will need an Azure Devops project.
    - Search for the _microsoft/dstoolkit-mlops-base_ in "all repositories" (it may take a while to ADO to find it if you have just set the connection)
    - Select _Existing Azure Pipelines YAML file_, select your branch and the pipeline you want to run ![github-branch-selection](./docs/media/github-pipeline-selection.png)
 
-You should now be able to run azure devops pipeline in your own subscription. Once your satisfied with your changes, you may create a [new pull request](https://github.com/microsoft/dstoolkit-mlops-base/pulls).
+You should now be able to run azure devops pipeline in your own subscription. Once your satisfied with your changes, you may create a [new pull request](https://github.com/microsoft/dstoolkit-mlops-base/pulls). In your comments, please add a reference to the related issue by simply typing "#" and then selecting the issue.
 
 ## Contributor License Agreement
 
