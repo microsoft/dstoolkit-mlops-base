@@ -13,10 +13,11 @@ pr:
     - develop
   paths:
     include:
-    - configuration/compute/*
-    - configuration/configuration-infra-*
-    exclude:
-    - '*'
+    - configuration/compute
+    - configuration/configuration-infra-DEV.variables.yml
+    - configuration/configuration-infra-PRD.variables.yml
+    - azure-pipelines/PIPELINE-0-setup.yml
+
 
 variables:
 - template: ../configuration/configuration-aml.variables.yml
