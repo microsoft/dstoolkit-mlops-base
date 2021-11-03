@@ -44,3 +44,5 @@ KEYVAULT: Name of the key vault. Default name is kv$(NAMESPACE)
 APPINSIGHTS: Name of the app insight. Default name is ai$(NAMESPACE)
 CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE)
 ```
+
+Once you have setup your variable, you may follow the (./SetupInfrastructure.md) procedure to create your infrastructure.
