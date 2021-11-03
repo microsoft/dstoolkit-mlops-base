@@ -2,11 +2,30 @@
 
 Welcome, and thank you for your interest in contributing. There are many ways to contribute:
 
-- [Submit issues](https://github.com/microsoft/dstoolkit-mlops-base/issues) to report bugs and make suggestions. Please search the existing  issues before filing new issues to avoid duplicates.  For new issues, file your bug or feature request as a new Issue.
+- [Submit issues](https://github.com/microsoft/dstoolkit-mlops-base/issues) to report bugs and make suggestions. Please search the existing  issues before filing new issues to avoid duplicates.  For new issues, file your bug or feature request as a new Issue. The naming convention to follow is feature/issueNumber-description (or fix instead of feature)
   
 - Review the [source code changes](https://github.com/microsoft/solution-accelerator-many-models/pulls).
   
 - Contribute features and fixes by forking the repository and creating a [pull request](https://github.com/microsoft/dstoolkit-mlops-base/compare).
+
+## How to get started
+
+To develop in your own environment, you will need an Azure Devops project.
+
+1. Clone your repo locally
+
+2. Define your variables and setup the infrastructure following this [guide](https://github.com/microsoft/dstoolkit-mlops-base/blob/main/docs/how-to/GettingStarted.md)
+
+3. Create a new branch: feature/issueNumber-description (or fix instead of feature)
+
+4. To run your pipeline in your environment:
+   - Go to your Azure Devops project, pipeline and click on new pipeline
+   - Select "GitHub" ![github-pipeline](./docs/media/github-pipeline.png)
+   - Give Azure Devops access to your Github Account
+   - Search for the _microsoft/dstoolkit-mlops-base_ in "all repositories" (it may take a while to ADO to find it if you have just set the connection)
+   - Select _Existing Azure Pipelines YAML file_, select your branch and the pipeline you want to run ![github-branch-selection](./docs/media/github-pipeline-selection.png)
+
+You should now be able to run azure devops pipeline in your own subscription
 
 ## Contributor License Agreement
 
