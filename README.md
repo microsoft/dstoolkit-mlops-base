@@ -66,7 +66,7 @@ For more details on the coding guidelines and explanation on the folder structur
 
 ```bash
 ├───azure-pipelines     # folder containing all the azure devops pipelines
-│   ├───templates   # any yml template files
+│   ├───templates       # any yml template files
 │   └───configuration   # any configuration files
 │       ├───compute
 │       └───environments
