@@ -89,10 +89,11 @@ For more details on the coding guidelines and explanation on the folder structur
 ├── README.md
 └── requirement.txt
 ```
+## Support & FAQ
 
-## FAQ
+If you have any questions, feel free to create a new [Q&A discussion](https://github.com/microsoft/dstoolkit-mlops-base/discussions/categories/q-a)
 
-Frequent questions can be found in [how-to](docs/how-to/FAQ.md)
+Frequently asked questions can be found in [how-to](docs/how-to/FAQ.md)
 
 ## Trademarks
 
