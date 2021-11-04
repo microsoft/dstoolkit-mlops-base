@@ -98,7 +98,7 @@ We welcome any contribution to improve the accelerator. For more information, pl
 
 If you have any questions or new ideas you would like to discuss, you can start a new conversation in the [discussions tab](https://github.com/microsoft/dstoolkit-mlops-base/discussions)
 
-Frequent questions can be found in [how-to](docs/how-to/FAQ.md)
+Frequently asked questions can be found in [how-to](docs/how-to/FAQ.md)
 
 ## Trademarks
 
