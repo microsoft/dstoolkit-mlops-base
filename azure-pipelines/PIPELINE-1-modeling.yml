@@ -26,16 +26,32 @@ variables:
 - ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:  
     # 'develop' or feature branches: DEV environment
     - template: ../configuration/configuration-infra-DEV.variables.yml
+- name: ARTIFACT_NAME
+  value: DeploymentCode
 
 pool:
   vmImage: ubuntu-latest
 
 stages:
 
-- stage: tests
-  displayName: 'Run Code Tests'
+
+##################
+##  CODE BUILD  ##
+##################
+
+- stage: build_code
+  displayName: 'Build Code'
   jobs:
+  # Code tests
   - template: templates/run-code-tests.template.yml
+  # Generate code artifact
+  - job: build_code
+    displayName: 'Build Code'
+    steps:
+      - task: PublishPipelineArtifact@0
+        inputs:
+          artifactName: '$(ARTIFACT_NAME)'
+          targetPath: '$(Build.SourcesDirectory)'
 
 
 ############################
@@ -44,7 +60,7 @@ stages:
 
 - stage: update_data
   displayName: 'Update Data for Training/Retraining'
-  dependsOn: tests
+  dependsOn: build_code
   jobs:
   - template: templates/update-data.template.yml
     parameters:
@@ -70,6 +86,7 @@ stages:
         serviceConnection: $(SERVICECONNECTION_WS)
         resourceGroup: $(RESOURCE_GROUP)
         amlWorkspace: $(AMLWORKSPACE)
+        artifactName: $(ARTIFACT_NAME)
         deploymentScript: operation/execution/build_training_pipeline.py
         scriptArguments: --version $(Build.BuildId)
 
@@ -101,6 +118,7 @@ stages:
       deploymentType: aci
       webserviceName: $(AML_WEBSERVICE)-aci
       deleteAfterwards: true
+      artifactName: $(ARTIFACT_NAME)
 
 
 #####################
@@ -119,3 +137,4 @@ stages:
       amlWorkspace: $(AMLWORKSPACE)
       deploymentType: aks
       webserviceName: $(AML_WEBSERVICE)
+      artifactName: $(ARTIFACT_NAME)

@@ -74,6 +74,7 @@ stages:
         amlWorkspace: $(AMLWORKSPACE)
         deploymentScript: operation/execution/build_batchinference_pipeline.py
         scriptArguments: --version $(Build.BuildId)
+        createArtifact: true
 
     - template: templates/utils/invoke-aml-pipeline.template.yml
       parameters:
