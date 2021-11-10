@@ -4,7 +4,7 @@
 jobs:
 
 - job: 'run_unit_tests'
-  displayName: "Running unit tests"
+  displayName: "Run unit tests"
   steps:
   - task: UsePythonVersion@0
     inputs:

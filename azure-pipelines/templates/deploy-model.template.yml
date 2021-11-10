@@ -19,6 +19,9 @@ parameters:
 - name: deleteAfterwards
   type: string
   default: false
+- name: artifactName
+  type: string
+  default: ''
 
 
 jobs:
@@ -44,6 +47,7 @@ jobs:
     serviceConnection: ${{parameters.serviceConnection}}
     resourceGroup: ${{parameters.resourceGroup}}
     amlWorkspace: ${{parameters.amlWorkspace}}
+    artifactName: ${{parameters.artifactName}}
     deploymentScript: operation/execution/deploy_model.py
     scriptArguments: |
       --model-name $(AML_MODEL_NAME) \

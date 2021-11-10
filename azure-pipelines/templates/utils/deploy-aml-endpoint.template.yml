@@ -25,22 +25,45 @@ parameters:
 - name: dependsOn
   type: object
   default: []
+- name: artifactName
+  type: string
+  default: ''
+- name: createArtifact
+  type: string
+  default: false
 
 jobs:
 
-- job: build_code
-  displayName: 'Build code to deploy'
+- job: artifact_setup
+  displayName: 'Artifact setup'
   dependsOn: ${{parameters.dependsOn}}
   steps:
 
-    - task: PublishPipelineArtifact@0
-      inputs:
-        artifactName: 'DeploymentCode'
-        targetPath: '$(Build.SourcesDirectory)'
+    - bash: |
+        if [ "${{parameters.artifactName}}" == "" ]; then
+          artifact_name='DeploymentCodeInternalArtifact'
+        else
+          artifact_name=${{parameters.artifactName}}
+        fi
+        echo "Artifact name: $artifact_name"
+        echo "##vso[task.setvariable variable=artifact_name;isOutput=true;]$artifact_name"
+      name: set_artifact_name
+      displayName: 'Set artifact name'
+      failOnStderr: true
+
+    - ${{ if eq(parameters.createArtifact, 'true') }}:
+      - task: PublishPipelineArtifact@0
+        inputs:
+          artifactName: '$(set_artifact_name.artifact_name)'
+          targetPath: '$(Build.SourcesDirectory)'
+        name: build_code
+        displayName: 'Build code to deploy'
 
 - deployment: ${{parameters.jobName}}
   displayName: ${{parameters.jobDisplayName}}
-  dependsOn: build_code
+  dependsOn: artifact_setup
+  variables:
+      artifact_name: $[ dependencies.artifact_setup.outputs['set_artifact_name.artifact_name'] ]
   pool:
     vmImage: 'ubuntu-latest'
   environment: ${{parameters.environment}}
@@ -52,7 +75,7 @@ jobs:
           - task: DownloadPipelineArtifact@2
             displayName: 'Download deployment code'
             inputs:
-              artifact: 'DeploymentCode'
+              artifact: '$(ARTIFACT_NAME)'
               path: $(System.ArtifactsDirectory)/deploymentcode/
 
           - template: run-aml-python-code.template.yml
