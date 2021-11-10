@@ -89,9 +89,14 @@ For more details on the coding guidelines and explanation on the folder structur
 ├── README.md
 └── requirement.txt
 ```
+
+## Contribution
+
+We welcome any contribution to improve the accelerator. For more information, please go through the [contribution guideline](./CONTRIBUTING.md)
+
 ## Support & FAQ
 
-If you have any questions, feel free to create a new [Q&A discussion](https://github.com/microsoft/dstoolkit-mlops-base/discussions/categories/q-a)
+If you have any questions or new ideas you would like to discuss, you can start a new conversation in the [discussions tab](https://github.com/microsoft/dstoolkit-mlops-base/discussions)
 
 Frequently asked questions can be found in [how-to](docs/how-to/FAQ.md)
 
