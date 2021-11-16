@@ -29,6 +29,17 @@ steps:
       inputs:
         versionSpec: $(PYTHON_VERSION)
 
+    - task: Bash@3
+        displayName: "Bash: Downgrade AZ CLI to [2.29.2]"
+        inputs:
+          targetType: "inline"
+          workingDirectory: "$(Build.SourcesDirectory)"
+          script: |
+            sudo add-apt-repository https://packages.microsoft.com/repos/azure-cli
+            sudo apt update
+            apt-cache policy azure-cli
+            sudo apt install -y --allow-downgrades azure-cli=2.29.2-1~focal
+
     - task: AzureCLI@1
       displayName: 'Generate AML Workspace Config File'
       inputs:
