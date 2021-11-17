@@ -44,7 +44,6 @@ jobs:
           datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
           # Define target path
           target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")"
-          echo " target_path ${{target_path}}"
           echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
           echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
           failOnStandardError: true
