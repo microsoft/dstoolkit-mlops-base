@@ -43,7 +43,7 @@ jobs:
           workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
           datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
           # Define target path
-          target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")/*.csv"
+          target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")"
           echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
           echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
           echo " data_path ${{target_path}} "
