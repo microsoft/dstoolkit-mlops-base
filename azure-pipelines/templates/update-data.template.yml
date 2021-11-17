@@ -46,7 +46,7 @@ jobs:
           target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")/*.csv"
           echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
           echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
-          echo " data_path ${{$target_path}} "
+          echo " data_path ${{target_path}} "
         failOnStandardError: true
 
     - template: utils/run-aml-python-code.template.yml
