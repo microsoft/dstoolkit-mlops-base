@@ -41,7 +41,6 @@ jobs:
           # Define datastore (get default)
           az extension add -n azure-cli-ml
           workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
-          echo " ${{workspace_params}} "
           az ml datastore show-default $workspace_params --query name --debug
           datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
           # Define target path
