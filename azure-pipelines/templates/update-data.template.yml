@@ -20,16 +20,16 @@ jobs:
 - job: data_snapshot
   displayName: 'Store New Snapshot of Data in Datastore'
   steps:
-#    - task: Bash@3
-#      displayName: "Bash: Downgrade AZ CLI to [2.29.2]"
-#      inputs:
-#        targetType: "inline"
-#        workingDirectory: "$(Build.SourcesDirectory)"
-#        script: |
-#          sudo add-apt-repository https://packages.microsoft.com/repos/azure-cli
-#          sudo apt update
-#          apt-cache policy azure-cli
-#          sudo apt install -y --allow-downgrades azure-cli=2.29.2-1~bionic
+    - task: Bash@3
+      displayName: "Bash: Downgrade AZ CLI to [2.29.2]"
+      inputs:
+        targetType: "inline"
+        workingDirectory: "$(Build.SourcesDirectory)"
+        script: |
+          sudo add-apt-repository https://packages.microsoft.com/repos/azure-cli
+          sudo apt update
+          apt-cache policy azure-cli
+          sudo apt install -y --allow-downgrades azure-cli=2.29.1-1~bionic
 
     - task: AzureCLI@1
       name: datavars
