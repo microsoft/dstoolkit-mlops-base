@@ -40,7 +40,7 @@ def main(model_name):
 
 def is_new_model_better(run, old_model):
     # Do your comparison here
-    if run.get_metrics('auc') > float(old_model.tags.get('auc'))
+    if run.get_metrics('auc').get('auc') > float(old_model.tags.get('auc'))
         return True
 
 
