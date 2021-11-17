@@ -19,18 +19,18 @@ def main(model_name):
 
     """
 
-    run = Run.get_context().parent  # Will fail if offline run, evaluation is only supported in AML runs
+    pipeline_run = Run.get_context().parent  # Will fail if offline run, evaluation is only supported in AML runs
     ws = utils.retrieve_workspace()
 
     try:
         # Retrieve latest model registered with same model_name
         model_registered = Model(ws, model_name)
 
-        if is_new_model_better(run, model_registered):
+        if is_new_model_better(pipeline_run, model_registered):
             print("New trained model is better than latest model.")
         else:
             print("New trained model is not better than latest model. Canceling job.")
-            run.parent.cancel()
+            pipeline_run.cancel()
 
     except WebserviceException:
         print("First model.")
@@ -40,7 +40,8 @@ def main(model_name):
 
 def is_new_model_better(run, old_model):
     # Do your comparison here
-    return True
+    if run.get_metrics('auc') > float(old_model.tags.get('auc'))
+        return True
 
 
 def parse_args(args_list=None):
