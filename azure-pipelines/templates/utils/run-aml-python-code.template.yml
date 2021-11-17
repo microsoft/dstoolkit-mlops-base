@@ -29,6 +29,7 @@ steps:
       inputs:
         versionSpec: $(PYTHON_VERSION)
 
+    # Downgrade az cli due to this error: https://github.com/microsoft/dstoolkit-mlops-base/issues/47
     - task: Bash@3
       displayName: "Bash: Downgrade AZ CLI to [2.29.2]"
       inputs:

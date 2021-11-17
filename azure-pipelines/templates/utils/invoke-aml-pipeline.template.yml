@@ -26,6 +26,7 @@ jobs:
     displayName: 'Get AML Pipeline ID'
     dependsOn: ${{parameters.dependsOn}}
     steps:
+      # Downgrade az cli due to this error: https://github.com/microsoft/dstoolkit-mlops-base/issues/47
       - task: Bash@3
         displayName: "Bash: Downgrade AZ CLI to [2.29.2]"
         inputs:
