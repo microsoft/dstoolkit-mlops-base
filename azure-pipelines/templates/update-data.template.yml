@@ -41,12 +41,9 @@ jobs:
           # Define datastore (get default)
           az extension add -n azure-cli-ml
           workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
-          az ml datastore show-default --workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}} --query name --debug
           datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
           # Define target path
           target_path="${{parameters.dataPath}}_$(date +"%Y%m%d-%H%M%S")"
-          echo " $target_path "
-          echo " $datastore "
           echo "##vso[task.setvariable variable=datastore;isOutput=true;]$datastore"
           echo "##vso[task.setvariable variable=datapath;isOutput=true;]$target_path"
         failOnStandardError: false
