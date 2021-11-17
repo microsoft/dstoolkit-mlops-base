@@ -19,7 +19,7 @@ def main(model_name):
 
     """
 
-    run = Run.get_context()  # Will fail if offline run, evaluation is only supported in AML runs
+    run = Run.get_context().parent  # Will fail if offline run, evaluation is only supported in AML runs
     ws = utils.retrieve_workspace()
 
     try:
