@@ -40,6 +40,7 @@ jobs:
         inlineScript: |
           # Define datastore (get default)
           az extension add -n azure-cli-ml
+          az extension list
           workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
           datastore=$(az ml datastore show-default $workspace_params --query name -o tsv)
           # Define target path
