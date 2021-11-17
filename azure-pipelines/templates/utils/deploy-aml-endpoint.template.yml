@@ -65,7 +65,7 @@ jobs:
   variables:
       artifact_name: $[ dependencies.artifact_setup.outputs['set_artifact_name.artifact_name'] ]
   pool:
-    vmImage: 'ubuntu-latest'
+    vmImage: 'ubuntu-18.04'
   environment: ${{parameters.environment}}
   strategy:
     runOnce:
