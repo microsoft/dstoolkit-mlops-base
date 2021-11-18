@@ -46,8 +46,8 @@ jobs:
           scriptLocation: inlineScript
           inlineScript: |
             # Install ML extension
-            az extension add -n azure-cli-ml
-            az extension add -n azure-devops --version 0.21.0
+            az extension add -n azure-devops --version 0.21.0 --debug
+            az extension add -n azure-cli-ml --debug
             az extension list
             # Get pipeline ID
             workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
