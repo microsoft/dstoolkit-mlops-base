@@ -37,7 +37,6 @@ jobs:
             sudo apt update
             apt-cache policy azure-cli
             sudo apt install -y --allow-downgrades azure-cli=2.29.2-1~bionic
-            sudo apt install -y --allow-downgrades azure-devops=0.21.0-1~bionic
 
       - task: AzureCLI@1
         name: get_pipeline_id
@@ -47,6 +46,8 @@ jobs:
           scriptLocation: inlineScript
           inlineScript: |
             # Install ML extension
+            az extension remove --name azure-devops
+            az extension add --name azure-devops --version 0.21.0
             az extension add -n azure-cli-ml
             az extension list
             # Get pipeline ID
