@@ -30,7 +30,7 @@ variables:
   value: DeploymentCode
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-18.04
 
 stages:
 

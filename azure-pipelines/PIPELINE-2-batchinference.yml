@@ -28,7 +28,7 @@ variables:
     - template: ../configuration/configuration-infra-DEV.variables.yml
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: ubuntu-18.04
 
 stages:
 
