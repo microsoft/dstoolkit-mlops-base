@@ -47,6 +47,8 @@ jobs:
           inlineScript: |
             # Install ML extension
             az extension add -n azure-cli-ml
+            az extension add -n azure-devops --version 0.21.0
+            az extension list
             # Get pipeline ID
             workspace_params="--workspace-name ${{parameters.amlWorkspace}} --resource-group ${{parameters.resourceGroup}}"
             pipeline_id=$(az ml pipeline list $workspace_params --query "[?Name == '${{parameters.pipelineName}}'].Id" -o tsv)    
