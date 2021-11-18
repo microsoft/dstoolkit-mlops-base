@@ -20,6 +20,7 @@ jobs:
 - job: data_snapshot
   displayName: 'Store New Snapshot of Data in Datastore'
   steps:
+    # TODO: temporary fixed for bug in az cli 2.30 is corrected
     # Downgrade azure-devops 0.21.0 due to this error: https://github.com/microsoft/dstoolkit-mlops-base/issues/47
     - task: AzureCLI@1
       displayName: 'Downgrade azure-devops 0.21.0'
