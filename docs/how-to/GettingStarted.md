@@ -1,10 +1,34 @@
 # Getting Started
 
-To setup your own MLOPs project in you azure subscription, follow these steps:
+## Clone it & Create Connection to AML
 
-1. To use the scripts on your local machine, add the azure ml workspace credentials in a **config.json** file in the root directory and **very important (!)** add it to the gitignore file, if it is not present already.
+1. Clone the repo on your local machine
 
-2. Provide the following Environment variables in ADO:
+2. To be able to use the scripts on your local machine, add the azure ml workspace credentials in a **config.json** file in the root directory and, if it is not present already, **very important (!)** add it to the gitignore file.\
+   ![aml-config](./../media/azureml_config.png)
+
+## Setup The Infrastructure
+
+1. Navigate to [Azure DevOps](http://dev.azure.com/) and create a new organization and project. You can also re-use an existing organization and/or project.
+
+2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. To avoid errors due to different namings, we recommend you to have a look at the variable *SERVICECONNECTION_RG* the [configuration file](../../configuration/configuration-infra-DEV.variables.yml). Use this variable for the "Service connection" name. For the "Subscription", select the one where you want to deploy your infrastructure, and **leave empty** "Resource Group".![SetupConnection](../media/create_service_connection.png) ![AddConnection](../media/new_connection.png). Azure DevOps will authenticate using this connection to make deployments to your Azure Subscription. For more information about security and parameters, click on the prior link.
+
+## Run the pipeline
+
+If you want to run the pipeline from your ADO repository, follow the steps bellow. If you want to run them from the github repo, have a look at the [contribution guide](../../CONTRIBUTING.md)
+
+1. Add the pipeline in ADO and run it. For that go to _pipelines_ and click on _new pipeline_ at the top right. You should see the following screen ![IaCpipeline](../media/build-connect.png)
+
+Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing Azure Pipelines YAML file** option and set the path to _/infrastructure/deploy-environment.template.yml_ and click on _continue_ ![SelectIaCPipe](../media/select-iac-pipeline.png) In the _review_ section, click on _run_.
+
+2. If everything has worked well, you should see your new resource groups in the Azure portal.
+
+## Set Service Connection for Azure ML Workspace
+
+
+## (Optional) Set your own variable names
+
+3. Provide the following Environment variables in ADO:
 
 - **[AML-related variables](../../configuration/configuration-aml.variables.yml)**: contains the definition of AML-related environment variables
 
