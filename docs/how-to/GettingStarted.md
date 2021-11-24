@@ -1,5 +1,5 @@
 # Getting Started
-[[__TOC__]]
+
 ## Clone it & Create Connection to AML
 
 1. Clone the repo on your local machine
