@@ -21,17 +21,20 @@ def retrieve_workspace():
 
     # Choose propper authentication method
     if os.environ.get("servicePrincipalId"):  # From AzureCLI DevOps task
+        print('Using Service Principal authentication')
         auth = ServicePrincipalAuthentication(
             tenant_id=os.environ.get("tenantId"),
             service_principal_id=os.environ.get("servicePrincipalId"),
             service_principal_password=os.environ.get("servicePrincipalKey")
         )
     elif os.environ.get("tenantId"):
+        print('Using Interactive Login authentication')
         auth = InteractiveLoginAuthentication(tenant_id=os.environ.get("tenantId"))
     else:
         auth = None
 
     try:
+        print('Trying to load workspace from config file')
         ws = Workspace.from_config(auth=auth)
         return ws
     except Exception as e:
