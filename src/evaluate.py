@@ -39,9 +39,10 @@ def main(model_name):
 
 
 def is_new_model_better(run, old_model):
+    metrics_new_model = run.get_metrics()
+    metrics_old_model = old_model.tags
     # Do your comparison here
-    if run.get_metrics('auc').get('auc') > float(old_model.tags.get('auc'))
-        return True
+    return True
 
 
 def parse_args(args_list=None):
