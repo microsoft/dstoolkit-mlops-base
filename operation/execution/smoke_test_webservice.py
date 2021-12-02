@@ -1,7 +1,9 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
+
 import argparse
-from utils import workspace, webservice
+
+from aml_utils import workspace, webservice
 
 
 def main(webservice_name):

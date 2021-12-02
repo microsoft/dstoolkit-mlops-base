@@ -9,12 +9,12 @@ import joblib
 from azureml.core import Run, Dataset
 from azureml.core.run import _OfflineRun
 
-import utils
+import aml_utils
 
 
 def main(dataset_name, model_name, output_dir):
     run = Run.get_context()
-    ws = utils.retrieve_workspace()
+    ws = aml_utils.retrieve_workspace()
 
     # Get dataset
     dataset = Dataset.get_by_name(ws, name=dataset_name)

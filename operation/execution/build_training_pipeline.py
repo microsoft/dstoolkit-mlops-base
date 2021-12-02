@@ -9,7 +9,7 @@ from azureml.pipeline.core import PipelineData
 from azureml.pipeline.steps import PythonScriptStep
 from azureml.core.runconfig import RunConfiguration
 
-from utils import config, workspace, compute, pipeline
+from aml_utils import config, workspace, compute, pipeline
 
 
 def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, pipeline_version=None):

@@ -3,7 +3,7 @@
 
 import argparse
 
-from utils import workspace, compute
+from aml_utils import workspace, compute
 
 
 def main(name, config_path):

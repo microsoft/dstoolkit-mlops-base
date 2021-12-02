@@ -6,7 +6,7 @@ import argparse
 
 from azureml.core import Datastore
 
-import utils
+import aml_utils
 
 
 def main(datastore, data_path):
@@ -17,7 +17,7 @@ def main(datastore, data_path):
     with open(os.path.join(data_path, 'data.csv'), 'w') as f:
         f.write('column1,column2,column3\n1,2,3\n4,5,6\n7,8,9\n')
 
-    ws = utils.retrieve_workspace()
+    ws = aml_utils.retrieve_workspace()
     datastore = Datastore(ws, name=datastore)
     datastore.upload(
         src_dir=data_path,

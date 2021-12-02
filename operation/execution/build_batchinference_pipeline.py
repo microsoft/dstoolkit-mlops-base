@@ -9,7 +9,7 @@ from azureml.pipeline.steps import PythonScriptStep
 from azureml.data.data_reference import DataReference
 from msrest.exceptions import HttpOperationError
 
-from utils import config, workspace, compute, pipeline
+from aml_utils import config, workspace, compute, pipeline
 
 
 def main(model_name, dataset_name, pipeline_name, compute_name, environment_path,

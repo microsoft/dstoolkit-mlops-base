@@ -3,7 +3,7 @@
 
 import argparse
 
-from utils import workspace, dataset
+from aml_utils import workspace, dataset
 
 
 def main(dataset_name, datastore_name, data_path):

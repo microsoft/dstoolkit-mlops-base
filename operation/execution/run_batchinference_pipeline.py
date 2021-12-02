@@ -6,7 +6,7 @@ import argparse
 from azureml.core import Experiment
 from azureml.pipeline.core import PublishedPipeline
 
-from utils import workspace, config
+from aml_utils import workspace, config
 
 
 def main(pipeline_name, pipeline_version, model_name, experiment_name):
