@@ -36,7 +36,7 @@ def get_dataset(ws, name, path_datastore=None):
     Args:
         ws (Workspace): The Azure Machine Learning workspace object
         name (str): The name or path of the dataset
-        path_datastore (str): The path to a model file (including file name)
+        path_datastore (str): [Optional] The path to the dataset in the default datastore
 
     Returns:
         pandas DataFrame

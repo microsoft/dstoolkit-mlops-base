@@ -96,7 +96,7 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
         allow_reuse=False
     )
 
-    # Inputs: training_output / Output: none
+    # Inputs: training_output, eval_output / Output: none
     register_step = PythonScriptStep(
         name="Register Model",
         source_directory=src_path,
