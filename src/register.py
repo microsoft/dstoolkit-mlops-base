@@ -66,7 +66,7 @@ def is_new_model_better(run, old_model):
     metrics_new_model = run.get_metrics()
     metrics_old_model = old_model.tags
     # Do your comparison here
-    is_better = metrics_new_model['examplemetric1'] > float(metrics_old_model.get('examplemetric1', 0))
+    is_better = metrics_new_model['examplemetric1'] >= float(metrics_old_model.get('examplemetric1', 0))
     return is_better
 
 
