@@ -50,10 +50,11 @@ def main(model_dir, model_name, model_description):
     print(f'Registering model with tags: {model_tags}')
 
     # Register model
-    model_path = os.path.join(model_dir, f'{model_name}.pkl')  # Path as defined in train.py
-    model = Model.register(
-        workspace=ws,
-        model_path=model_path,
+    model_filename = f'{model_name}.pkl'  # As defined in train.py
+    model_path_original = os.path.join(model_dir, model_filename)
+    pipeline_run.upload_file(model_filename, model_path_original)
+    model = pipeline_run.register_model(
+        model_path=model_filename,
         model_name=model_name,
         tags=model_tags,
         description=model_description

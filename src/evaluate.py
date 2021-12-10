@@ -14,7 +14,7 @@ from azureml.exceptions import WebserviceException
 import aml_utils
 
 
-DIR_FIGURES = './outputs/figures/'
+DIR_FIGURES = 'figures/'
 
 
 def main(model_path, dataset_path, output_dir):
