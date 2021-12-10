@@ -5,59 +5,39 @@ import os
 import argparse
 
 import joblib
+import pandas as pd
 # ...
-from azureml.core import Run, Dataset
-from azureml.core.run import _OfflineRun
+from azureml.core import Run
 
 import aml_utils
 
 
-def main(dataset_name, model_name, output_dir):
+def main(dataset_path, model_name, output_dir):
     run = Run.get_context()
     ws = aml_utils.retrieve_workspace()
 
-    # Get dataset
-    dataset = Dataset.get_by_name(ws, name=dataset_name)
-    data = dataset.to_pandas_dataframe()
-
-    print("Preprocessing data...")
-    data = preprocessing(data)
-
-    print("Splitting data into a training and a testing set...")
-    X_train, X_test, y_train, y_test = train_test_split_randomly(data)
+    print("Reading training data...")
+    data = pd.read_csv(dataset_path)
 
     print("Training model...")
+    y_train, X_train = split_data_features(data)
     model = train(X_train, y_train)
 
-    print("Evaluating model...")
-    metrics = get_model_metrics(model, X_test, y_test)
-
-    # Save metrics in run
-    if not isinstance(run, _OfflineRun):
-        for k, v in metrics.items():
-            run.log(k, v)
-            if run.parent is not None:
-                run.parent.log(k, v)
+    # Optionally also take out validation dataset, do hyperparameter search, log metrics etc.
 
     print(f"Saving model in folder {output_dir}...")
     os.makedirs(output_dir, exist_ok=True)
-    model_path = os.path.join(output_dir, model_name)
+    model_path = os.path.join(output_dir, f'{model_name}.pkl')
     with open(model_path, 'wb') as f:
         joblib.dump(model, f)
 
     print('Finished.')
 
 
-def preprocessing(data):
-    # Do your preprocessing here
-    return data
-
-
-def train_test_split_randomly(data):
-    # Do your train-test split here
+def split_data_features(data):
+    # Do your X/y features split here
     y_train, X_train = data.iloc[:, 0], data.iloc[:, 1:]
-    y_test, X_test = data.iloc[:, 0], data.iloc[:, 1:]
-    return X_train, X_test, y_train, y_test
+    return y_train, X_train
 
 
 def train(X_train, y_train):
@@ -66,16 +46,10 @@ def train(X_train, y_train):
     return model
 
 
-def get_model_metrics(model, X_test, y_test):
-    # Evaluate your model here
-    metrics = {}
-    return metrics
-
-
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dataset-name', type=str, default='<your-dataset-name>')
-    parser.add_argument('--model-name', type=str, default='<your-model-name>')
+    parser.add_argument('--dataset', type=str, required=True)
+    parser.add_argument('--model-name', type=str, required=True)
     parser.add_argument('--output-dir', type=str, default='./outputs')
     args_parsed = parser.parse_args(args_list)
     return args_parsed
@@ -85,7 +59,7 @@ if __name__ == '__main__':
     args = parse_args()
 
     main(
-        dataset_name=args.dataset_name,
+        dataset_path=os.path.join(args.dataset, 'dataset.csv'),  # Path as defined in dataprep.py
         model_name=args.model_name,
         output_dir=args.output_dir
     )
