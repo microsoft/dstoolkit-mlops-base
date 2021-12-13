@@ -4,12 +4,12 @@
 import os
 import argparse
 
-from azureml.core import Datastore, Environment
+from azureml.core import Datastore, Dataset, Environment
 from azureml.pipeline.core import PipelineData
 from azureml.pipeline.steps import PythonScriptStep
 from azureml.core.runconfig import RunConfiguration
 
-from utils import config, workspace, compute, pipeline
+from aml_utils import config, workspace, compute, pipeline
 
 
 def main(dataset_name, model_name, pipeline_name, compute_name, environment_path, pipeline_version=None):
@@ -20,59 +20,92 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
     # Get repo root path, every other path will be relative to this
     base_path = config.get_root_path()
 
-    # Training setup
+    # Compute setup
     compute_target = compute.get_compute_target(ws, compute_name)
     environment_path = base_path / environment_path
     env = Environment.load_from_directory(path=environment_path)
     run_config = RunConfiguration()
     run_config.environment = env
 
-    # Create a PipelineData to pass data between steps
-    pipeline_data = PipelineData(
-        'pipeline_data', datastore=Datastore.get(ws, os.getenv('DATASTORE_NAME', 'workspaceblobstore'))
-    )
+    # Data connections setup
+    datastore_name = os.getenv('DATASTORE_NAME')
+    datastore = Datastore.get(ws, datastore_name) if datastore_name else ws.get_default_datastore()
 
-    # Create steps
+    raw_dataset = Dataset.get_by_name(ws, name=dataset_name)
+    raw_dataset_as_input = raw_dataset.as_named_input(dataset_name)
+
+    train_dataset = PipelineData(f'{dataset_name}__train__', datastore=datastore, output_name='train_data')
+    test_dataset = PipelineData(f'{dataset_name}__test__', datastore=datastore, output_name='test_data')
+
+    training_output = PipelineData('training_output', datastore=datastore, output_name='training_output')
+    eval_output = PipelineData('eval_output', datastore=datastore, output_name='eval_output')
+
+    # Steps setup
 
     src_path = base_path / "src"
 
+    # Input: raw_dataset / Outputs: train_dataset, test_dataset
+    dataprep_step = PythonScriptStep(
+        name="Prepare Dataset",
+        source_directory=src_path,
+        script_name="dataprep.py",
+        compute_target=compute_target,
+        inputs=[raw_dataset_as_input],
+        outputs=[train_dataset, test_dataset],
+        arguments=[
+            '--dataset', dataset_name,
+            '--output-train-data', train_dataset,
+            '--output-test-data', test_dataset
+        ],
+        runconfig=run_config,
+        allow_reuse=False
+    )
+
+    # Input: train_dataset / Output: training_output
     train_step = PythonScriptStep(
         name="Train Model",
         source_directory=src_path,
         script_name="train.py",
         compute_target=compute_target,
-        outputs=[pipeline_data],
+        inputs=[train_dataset],
+        outputs=[training_output],
         arguments=[
-            '--dataset-name', dataset_name,
+            '--dataset', train_dataset,
             '--model-name', model_name,
-            '--output-dir', pipeline_data
+            '--output-dir', training_output
         ],
         runconfig=run_config,
         allow_reuse=False
     )
 
+    # Inputs: training_output, test_dataset / Output: eval_output
     evaluate_step = PythonScriptStep(
         name="Evaluate Model",
         source_directory=src_path,
         script_name="evaluate.py",
         compute_target=compute_target,
-        inputs=[pipeline_data],
+        inputs=[training_output, test_dataset],
+        outputs=[eval_output],
         arguments=[
-            '--model-dir', pipeline_data,
-            '--model-name', model_name
+            '--model-dir', training_output,
+            '--model-name', model_name,
+            '--dataset', test_dataset,
+            '--output-dir', eval_output
         ],
         runconfig=run_config,
         allow_reuse=False
     )
 
+    # Inputs: training_output, eval_output / Output: none
     register_step = PythonScriptStep(
         name="Register Model",
         source_directory=src_path,
         script_name="register.py",
         compute_target=compute_target,
-        inputs=[pipeline_data],
+        inputs=[training_output, eval_output],
         arguments=[
-            '--model-dir', pipeline_data,
+            '--model-dir', training_output,
+            '--eval-dir', eval_output,
             '--model-name', model_name
         ],
         runconfig=run_config,
@@ -80,14 +113,16 @@ def main(dataset_name, model_name, pipeline_name, compute_name, environment_path
     )
 
     # Set the sequence of steps in a pipeline
-    evaluate_step.run_after(train_step)
-    register_step.run_after(evaluate_step)
+    # (Here for reference but not needed because we are connecting via inputs/outputs)
+    # train_step.run_after(dataprep_step)
+    # evaluate_step.run_after(train_step)
+    # register_step.run_after(evaluate_step)
 
     # Publish training pipeline
     published_endpoint, published_pipeline = pipeline.publish_pipeline(
         ws,
         name=pipeline_name,
-        steps=[train_step, evaluate_step, register_step],
+        steps=[dataprep_step, train_step, evaluate_step, register_step],
         description="Model training/retraining pipeline",
         version=pipeline_version
     )

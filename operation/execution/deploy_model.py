@@ -5,7 +5,7 @@ import argparse
 
 from azureml.core import Model
 
-from utils import config, workspace, deployment
+from aml_utils import config, workspace, deployment
 
 
 def main(model_name, service_name, compute_config_file, environment_path, aks_target_name=None):

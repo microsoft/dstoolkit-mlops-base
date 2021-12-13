@@ -7,7 +7,7 @@ import argparse
 import joblib
 from azureml.core import Dataset, Model
 
-from utils import retrieve_workspace
+from aml_utils import retrieve_workspace
 
 
 def main(dataset_name, model_name, output_dir, output_file):

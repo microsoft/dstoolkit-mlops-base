@@ -30,13 +30,13 @@ def retrieve_workspace() -> Workspace:
     return ws
 
 
-def get_dataset(ws, filename=None, path_datastore=None):
+def get_dataset(ws, name, path_datastore=None):
     """Get a dataset.
 
     Args:
         ws (Workspace): The Azure Machine Learning workspace object
-        filename (str): The name of VM (compute target)
-        path_datastore (str): The path to a model file (including file name)
+        name (str): The name or path of the dataset
+        path_datastore (str): [Optional] The path to the dataset in the default datastore
 
     Returns:
         pandas DataFrame
@@ -44,25 +44,27 @@ def get_dataset(ws, filename=None, path_datastore=None):
     """
     df = None
 
-    # get the data when run by external scripts
+    # Get dataset from pipeline data connection
     try:
         run = Run.get_context()
         if not isinstance(run, _OfflineRun):
-            dataset = run.input_datasets[filename]
+            dataset = run.input_datasets[name]
             df = dataset.to_pandas_dataframe()
             print('Dataset retrieved from run')
             return df
     except Exception:
-        print('Cannot retrieve dataset from run. Trying to get it from datastore by dataset name...')
-    # get dataset from Dataset registry
+        print('Cannot retrieve dataset from run inputs. Trying to get it by name...')
+
+    # Get dataset from Dataset registry
     try:
-        dataset = Dataset.get_by_name(ws, filename)
+        dataset = Dataset.get_by_name(ws, name)
         df = dataset.to_pandas_dataframe()
         print('Dataset retrieved from datastore by dataset name')
         return df
     except Exception:
-        print('Cannot retrieve dataset from datastore by dataset name. Trying to get it from datastore by path...')
-    # get dataset directly from datastore
+        print('Cannot retrieve dataset by name. Trying to get it from datastore by path...')
+
+    # Get dataset directly from datastore
     try:
         datastore = ws.get_default_datastore()
         dataset = Dataset.Tabular.from_delimited_files(path=(datastore, path_datastore))
@@ -71,19 +73,16 @@ def get_dataset(ws, filename=None, path_datastore=None):
         return df
     except Exception:
         print('Cannot retrieve a dataset from datastore by path. Trying to get it from a local CSV file...')
-    # get dataset from a local CSV file
+
+    # Get dataset from a local CSV file
     try:
-        df = pd.read_csv(filename)
+        df = pd.read_csv(name)
         print('Dataset retrieved from a local CSV file')
         return df
     except Exception:
         print('Cannot retrieve a dataset from a local CSV file.')
 
-    if df is None:
-        print('Cannot retrieve a dataset. Exiting.')
-        sys.exit(-1)
-
-    return df
+    raise RuntimeError(f'Could not retrieve the dataset with name {name}')
 
 
 def get_model(ws, model_name, model_version=None, model_path=None):
