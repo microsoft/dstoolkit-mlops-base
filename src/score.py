@@ -26,8 +26,8 @@ def init():
     model = joblib.load(model_path)
     print(f"Loaded model: '{model_path}'")
 
-# Define your API input/output schema here using StandardPythonParameterType library
-# In below sample, API input is list of coordinates and its predicted output is string
+# Define your API input/output schema here using StandardPythonParameterType library.
+# In below sample, API input is list of coordinates and its predicted output is string.
 
 standard_sample_input = { "input": [1.0, 1.0, 1.0] }
 standard_sample_output = { "output": "class_a" }
