@@ -9,6 +9,8 @@ import joblib
 import pandas as pd
 from azureml.contrib.services.aml_response import AMLResponse
 
+from inference_schema.schema_decorators import input_schema, output_schema
+from inference_schema.parameter_types.standard_py_parameter_type import StandardPythonParameterType
 
 model = None
 
@@ -24,6 +26,14 @@ def init():
     model = joblib.load(model_path)
     print(f"Loaded model: '{model_path}'")
 
+# Define your API input/output schema here using StandardPythonParameterType library.
+# In below sample, API input is list of coordinates and its predicted output is string.
+
+standard_sample_input = { "input": [1.0, 1.0, 1.0] }
+standard_sample_output = { "output": "class_a" }
+
+@input_schema('data', StandardPythonParameterType(standard_sample_input))
+@output_schema(StandardPythonParameterType(standard_sample_output))
 
 def run(data):
     try:
