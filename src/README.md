@@ -8,4 +8,4 @@ Since the core scripts either receive as input a dataset or model and output the
 
 ## Variables
 
-All variables (dataset name, features, model name, etc) must be pass as arguments. The advantage of this approach is that you can add a default value in your parameters while developing and, then, once refactoring the project for production, the variables will come from configuration files and sent to the core scripts via arguments.
+All variables (dataset name, features, model name, etc) must be passed as arguments. The advantage of this approach is that you can add a default value in your parameters while developing and, then, once refactoring the project for production, the variables will come from configuration files and sent to the core scripts via arguments.
