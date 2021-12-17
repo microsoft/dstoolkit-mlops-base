@@ -1,0 +1,11 @@
+channels:
+- conda-forge
+dependencies:
+- python=3.8
+- pip:
+  - azureml-core==1.31.0
+  - azureml-defaults==1.31.0
+  - azure-storage-blob==12.8.1
+  - joblib
+
+name: basic_env
