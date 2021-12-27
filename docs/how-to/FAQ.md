@@ -9,4 +9,4 @@ If you see the error below. You have to ensure that the service connection is cr
 ## I would like to adjust the Docker Image. How can I change the Dockerfile?
 
 Documentation can be found here: 
-**[Custom Dockerfile](/dstoolkit-mlops-base/docs/how-to/AdjustingDockerfile.md)**
+**[Custom Dockerfile](dstoolkit-mlops-base/docs/how-to/AdjustingDockerfile.md)**
