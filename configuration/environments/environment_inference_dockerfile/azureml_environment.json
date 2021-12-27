@@ -1,7 +1,9 @@
 {
-    "name": "MyNewEnv-Scoring",
-    "version": "38",
-    "environmentVariables": {},
+    "name": "environment_inference_dockerfile",
+    "version": "oct21",
+    "environmentVariables": {
+        "EXAMPLE_ENV_VAR": "EXAMPLE_VALUE"
+    },
     "python": {
         "userManagedDependencies": false,
         "interpreterPath": "python",
