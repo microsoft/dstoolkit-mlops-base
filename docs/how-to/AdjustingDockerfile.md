@@ -7,7 +7,7 @@ In case you need to upgrade/change packages in Linux (using for example apt-get 
 **[Environments](../../configuration/environments/)** contains two docker-related folders "environment_inference_dockerfile" and "environment_training_dockerfile" with the corresponding Dockerfile (BaseDockerfile). 
 
 ## Second Step: Change the environment path
-After having set up your Dockerfile, you need to change the paths here: **[Configurations](../../configuration/configuration-aml.variables.yaml)**
+After having set up your Dockerfile, you need to change the paths here: **[Configurations](../../configuration/configuration-aml.variables.yml)**
 
 Replace "AML_TRAINING_ENV_PATH" with "configuration/environments/environment_training_dockerfile" if you need the adjusted dockerfile for training.
 Replace "AML_BATCHINFERENCE_ENV_PATH" with "configuration/environments/environment_inference_dockerfile" if you need the adjusted dockerfile for training.
