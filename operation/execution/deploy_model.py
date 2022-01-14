@@ -7,11 +7,16 @@ from azureml.core import Model
 
 from aml_utils import config, workspace, deployment
 
+import json
 
-def main(model_name, service_name, compute_config_file, environment_path, aks_target_name=None):
+
+def main(model_names, service_name, compute_config_file, environment_path, aks_target_name=None):
 
     ws = workspace.retrieve_workspace()
-    model = Model(ws, name=model_name)  # TODO: support for more than 1 model?
+    models = []
+    for name in model_names:
+        models.append(Model(ws, name=name))
+        print(f"model_name: {name}")
 
     # Get repo root path, every other path will be relative to this
     base_path = config.get_root_path()
@@ -32,7 +37,7 @@ def main(model_name, service_name, compute_config_file, environment_path, aks_ta
     service = deployment.launch_deployment(
         ws,
         service_name=service_name,
-        models=[model],
+        models=models,
         deployment_params=deployment_params
     )
     print(f'Waiting for deployment of {service.name} to finish...')
@@ -41,7 +46,7 @@ def main(model_name, service_name, compute_config_file, environment_path, aks_ta
 
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model-name', type=str, required=True)
+    parser.add_argument('--model-names', type=json.loads, required=True)
     parser.add_argument('--config-path', type=str, required=True)
     parser.add_argument('--env-path', type=str, required=True)
     parser.add_argument('--service-name', type=str, default='webservice')
@@ -53,7 +58,7 @@ if __name__ == "__main__":
     args = parse_args()
 
     main(
-        model_name=args.model_name,
+        model_name=args.model_names,
         service_name=args.service_name,
         compute_config_file=args.config_path,
         environment_path=args.env_path,
