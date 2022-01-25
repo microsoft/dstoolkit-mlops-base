@@ -8,7 +8,7 @@ import argparse
 
 from azureml.core import Model
 
-from utils import workspace
+from aml_utils import workspace
 
 
 def main(model_name, pipeline_version, job_type, model_path):
@@ -29,6 +29,7 @@ def main(model_name, pipeline_version, job_type, model_path):
         local_model_path = os.path.join(model_path, model_name)
         print(local_model_path)
 
+        # TODO - extend tagging for traceability across environments
         model = Model.register(model_path=local_model_path,
                                model_name=model_name,
                                tags={'buildid': str(pipeline_version)},
@@ -44,6 +45,7 @@ def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--model-name', type=str, required=True)
     parser.add_argument('--job-type', type=str, required=True)
+    # TODO set tags argument and make optional
     parser.add_argument('--pipeline-version', type=str, required=True)
     parser.add_argument('--local-model-path', type=str, required=True)
     return parser.parse_args(args_list)
