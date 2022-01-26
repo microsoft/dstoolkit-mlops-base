@@ -30,4 +30,3 @@ variables:
   AML_REALTIMEINFERENCE_ENV_PATH: $(AML_BATCHINFERENCE_ENV_PATH)
   AKS_COMPUTE: aks-compute
   AML_WEBSERVICE: webservice
-  AML_MODELS: '[\"$(AML_MODEL_NAME)\",\"some-other-model\"]'

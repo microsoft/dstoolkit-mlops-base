@@ -50,7 +50,7 @@ jobs:
     artifactName: ${{parameters.artifactName}}
     deploymentScript: operation/execution/deploy_model.py
     scriptArguments: |
-      --model-names $(AML_MODELS) \
+      --model-name $(AML_MODEL_NAME) \
       --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
       --env-path $(AML_REALTIMEINFERENCE_ENV_PATH) \
       --service-name ${{parameters.webserviceName}} \
