@@ -20,28 +20,6 @@ jobs:
 - job: data_snapshot
   displayName: 'Store New Snapshot of Data in Datastore'
   steps:
-    # TODO: temporary fixed for bug in az cli 2.30 is corrected
-    # Downgrade azure-devops 0.21.0 due to this error: https://github.com/microsoft/dstoolkit-mlops-base/issues/47
-    - task: AzureCLI@1
-      displayName: 'Downgrade azure-devops 0.21.0'
-      inputs:
-        azureSubscription: ${{parameters.serviceConnection}}
-        scriptLocation: inlineScript
-        inlineScript: |
-          az extension remove --name azure-devops
-          az extension add --name azure-devops --version 0.21.0
-    # Downgrade az cli due to this error: https://github.com/microsoft/dstoolkit-mlops-base/issues/47
-    - task: Bash@3
-      displayName: "Bash: Downgrade AZ CLI to [2.29.2]"
-      inputs:
-        targetType: "inline"
-        workingDirectory: "$(Build.SourcesDirectory)"
-        script: |
-          sudo add-apt-repository https://packages.microsoft.com/repos/azure-cli
-          sudo apt update
-          apt-cache policy azure-cli
-          sudo apt install -y --allow-downgrades azure-cli=2.29.2-1~bionic
-
     - task: AzureCLI@1
       name: datavars
       displayName: 'Setup Data Paths'
