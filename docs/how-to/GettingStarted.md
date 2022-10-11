@@ -11,7 +11,7 @@
 
 1. Navigate to [Azure DevOps](http://dev.azure.com/) and create a new organization and project. You can also re-use an existing organization and/or project.
 
-2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. To avoid errors due to different namings, we recommend you to have a look at the variable  the [configuration file](../../configuration/configuration-infra-DEV.variables.yml):
+2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. To avoid errors due to different namings, we recommend you to have a look at the variable  the [configuration file for DEV EN] (../../configuration/configuration-infra-DEV.variables.yml) and [configuration for PROD](../../configuration/configuration-infra-PRD.variables.yml):
    - For "Service connection" use the variable *SERVICECONNECTION_RG*
    - For the "Subscription", select the one where you want to deploy your infrastructure
    - Resource Group **leave empty**.
@@ -23,7 +23,7 @@ If you want to run the pipeline from your ADO repository, follow the steps bello
 
 1. Add the pipeline in ADO and run it. For that go to _pipelines_ and click on _new pipeline_ at the top right. You should see the following screen ![IaCpipeline](../media/build-connect.png)
 
-Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing Azure Pipelines YAML file** option and set the path to _/infrastructure/deploy-environment.template.yml_ and click on _continue_ ![SelectIaCPipe](../media/select-iac-pipeline.png) In the _review_ section, click on _run_.
+Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing Azure Pipelines YAML file** option and set the path to _dstoolkit-mlops-base/azure-pipelines/PIPELINE-0-setup.yml_ and click on _continue_ ![SelectIaCPipe](../media/select-iac-pipeline.png) In the _review_ section, click on _run_.
 
 2. If everything worked well, you should see your new resource groups in the Azure portal with the AML resources.
 
@@ -31,12 +31,12 @@ Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing
 
 Now that you have your infrastructure, you only need to setup two extra service connections so that the devops pipeline can connect to AML DEV and AML PROD.
 
-As for the infrastructure, create a new service connection with Azure Resource manager, but this time select "Machine Learning Workspace" as Scope level.
+For the infrastructure, create a new service connection with Azure Resource manager, but this time select "Machine Learning Workspace" as Scope level.
 ![AddConnectionAML](../../docs/media/create_service_connection_aml.png)
 
 ## (Optional) Set your own variable names
 
-You might want to use your own variables when setting up the infrastructure, service connection, and AML components (dataset name, model name, etc). In order to the pipeline to run with the correct variable name, you need to update the following configuration files:
+You might want to use your own variables when setting up the infrastructure, service connection, and AML components (dataset name, model name, etc). To run the pipeline with the correct variable name, you need to update the following configuration files:
 
 - **infra-related variables**: contains the definition of infra-related variables in DEV. By default, the template provides 2 environments: **[DEV](../../configuration/configuration-infra-DEV.variables.yml)** (configuration-infra-DEV.variables.yml) and **[PRD](../../configuration/configuration-infra-PRD.variables.yml)** (configuration-infra-PRD.variables.yml)
 
