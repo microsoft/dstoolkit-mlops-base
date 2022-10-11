@@ -11,7 +11,7 @@
 
 1. Navigate to [Azure DevOps](http://dev.azure.com/) and create a new organization and project. You can also re-use an existing organization and/or project.
 
-2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. To avoid errors due to different namings, we recommend you to have a look at the variable  the [configuration file for DEV EN](../../configuration/configuration-infra-DEV.variables.yml) and [configuration for PROD](../../configuration/configuration-infra-PRD.variables.yml):
+2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. To avoid errors due to different namings, we recommend you to have a look at the variable the [configuration for DEV](../../configuration/configuration-infra-DEV.variables.yml) and [configuration for PROD](../../configuration/configuration-infra-PRD.variables.yml):
    - For "Service connection" use the variable *SERVICECONNECTION_RG*
    - For the "Subscription", select the one where you want to deploy your infrastructure
    - Resource Group **leave empty**.
