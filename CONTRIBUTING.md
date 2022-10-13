@@ -14,11 +14,11 @@ Welcome, and thank you for your interest in contributing. There are many ways to
 
 To develop in your own environment, you will need an Azure Devops project.
 
-1. Clone this repo on your local machine
+1. Fork this repo to your own repository.
 
 2. Define your variables and setup the infrastructure following this [guide](https://github.com/microsoft/dstoolkit-mlops-base/blob/main/docs/how-to/GettingStarted.md)
 
-3. Create a new branch: feature/issueNumber-description (or fix instead of feature)
+3. Create a new branch: feature/_your-custom-name_ (or fix instead of feature)
 
 4. To run your ADO pipeline in your environment:
    - Go to your Azure Devops project, pipeline and click on new pipeline
