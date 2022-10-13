@@ -11,11 +11,15 @@
 
 1. Navigate to [Azure DevOps](http://dev.azure.com/) and create a new organization and project. You can also re-use an existing organization and/or project.
 
-2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. To avoid errors due to different namings, we recommend you to have a look at the variable the [configuration for DEV](../../configuration/configuration-infra-DEV.variables.yml) and [configuration for PROD](../../configuration/configuration-infra-PRD.variables.yml):
+2. Create a new [service connection](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/service-endpoints?view=azure-devops&tabs=yaml) in Azure DevOps using **Azure Resource Manager**. 
    - For "Service connection" use the variable *SERVICECONNECTION_RG*
    - For the "Subscription", select the one where you want to deploy your infrastructure
    - Resource Group **leave empty**.
-   ![SetupConnection](../media/create_service_connection.png) ![AddConnection](../media/new_connection.png). Azure DevOps will authenticate using this connection to make deployments to your Azure Subscription. For more information about security and parameters, click on the prior link.
+   ![SetupConnection](../media/create_service_connection.png) ![AddConnection](../media/new_connection.png)
+   
+   Azure DevOps will authenticate using this connection to make deployments to your Azure Subscription. For more information about security and parameters, click on the prior link.
+
+> ⚠️ Some infastructure component names (resource groups, etc) have to be unique in your Azure org. Before running the pipelines, make sure that the names given to the components in [configuration for DEV](../../configuration/configuration-infra-DEV.variables.yml) and [configuration for PROD](../../configuration/configuration-infra-PRD.variables.yml) are unique your Azure org, or simply go ahead and update the files with your own prefered names. If the infastructure pipeline fails, it might be due to the fact that the names are already taken.
 
 ## Run the pipeline
 
@@ -32,6 +36,7 @@ Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing
 Now that you have your infrastructure, you only need to setup two extra service connections so that the devops pipeline can connect to AML DEV and AML PROD.
 
 For the infrastructure, create a new service connection with Azure Resource manager, but this time select "Machine Learning Workspace" as Scope level.
+
 ![AddConnectionAML](../../docs/media/create_service_connection_aml.png)
 
 ## (Optional) Set your own variable names
