@@ -16,7 +16,7 @@ pr:
     - configuration/compute
     - configuration/configuration-infra-DEV.variables.yml
     - configuration/configuration-infra-PRD.variables.yml
-    - azure-pipelines/PIPELINE-0-setup.yml
+    - infra/PIPELINE-0-setup.yml
 
 
 variables:
@@ -38,7 +38,7 @@ stages:
   variables:
   - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
-  - template: templates/deploy-env-infra.template.yml
+  - template: ../azure-pipelines/templates/deploy-env-infra.template.yml
     parameters:
       environment: $(ENVIRONMENT)
       serviceConnection: $(SERVICECONNECTION_RG)
@@ -57,7 +57,7 @@ stages:
   variables:
   - template: ../configuration/configuration-infra-PRD.variables.yml
   jobs:
-  - template: templates/deploy-env-infra.template.yml
+  - template: ../azure-pipelines/templates/deploy-env-infra.template.yml
     parameters:
       environment: $(ENVIRONMENT)
       serviceConnection: $(SERVICECONNECTION_RG)
@@ -81,7 +81,7 @@ stages:
   variables:
   - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
-  - template: templates/setup-compute.template.yml
+  - template: ../azure-pipelines/templates/setup-compute.template.yml
     parameters:
       environment: $(ENVIRONMENT)
       serviceConnection: $(SERVICECONNECTION_RG)
@@ -96,7 +96,7 @@ stages:
   variables:
   - template: ../configuration/configuration-infra-PRD.variables.yml
   jobs:
-  - template: templates/setup-compute.template.yml
+  - template: ../azure-pipelines/templates/setup-compute.template.yml
     parameters:
       environment: $(ENVIRONMENT)
       serviceConnection: $(SERVICECONNECTION_RG)
@@ -115,7 +115,7 @@ stages:
   variables:
   - template: ../configuration/configuration-infra-DEV.variables.yml
   jobs:
-  - template: templates/update-data.template.yml
+  - template: ../azure-pipelines/templates/update-data.template.yml
     parameters:
       serviceConnection: $(SERVICECONNECTION_RG)
       resourceGroup: $(RESOURCE_GROUP)
@@ -129,7 +129,7 @@ stages:
   variables:
   - template: ../configuration/configuration-infra-PRD.variables.yml
   jobs:
-  - template: templates/update-data.template.yml
+  - template: ../azure-pipelines/templates/update-data.template.yml
     parameters:
       serviceConnection: $(SERVICECONNECTION_RG)
       resourceGroup: $(RESOURCE_GROUP)

@@ -9,8 +9,8 @@ variables:
   ENVIRONMENT: DEV
   RESOURCE_GROUP: rg-mlops-template-dev-001
   LOCATION: westeurope
-  NAMESPACE: mlopsdevtmpl
-  SERVICECONNECTION_RG: conn-mlops-sub-infra
+  NAMESPACE: mlopsdev
+  SERVICECONNECTION_RG: conn-mlops-subscription
   SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev-tmpl
   AMLWORKSPACE: aml$(NAMESPACE)
   STORAGEACCOUNT: sa$(NAMESPACE)
