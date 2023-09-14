@@ -60,5 +60,5 @@ jobs:
       serviceConnection: ${{parameters.serviceConnection}}
       resourceGroup: ${{parameters.resourceGroup}}
       amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/register_dataset.py
+      scriptPath: mlops/register_dataset.py
       scriptArguments: --name $(AML_DATASET) --datastore $(DATASTORE) --path $(DATAPATH)
