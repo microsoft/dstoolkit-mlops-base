@@ -1,7 +1,7 @@
 import os
 import argparse
 
-import pandas as pd
+# import pandas as pd
 from azureml.core import Run
 
 import aml_utils

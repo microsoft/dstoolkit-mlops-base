@@ -5,3 +5,4 @@ scikit-learn==0.22.1
 pandas==1.0.0
 azureml-core==1.35.0
 azureml-opendatasets==1.35.0
+pyyaml

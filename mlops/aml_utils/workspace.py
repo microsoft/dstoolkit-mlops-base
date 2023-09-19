@@ -2,7 +2,6 @@
 # Licensed under the MIT License.
 
 import os
-import sys
 
 from azureml.core import Workspace
 from azureml.core.authentication import ServicePrincipalAuthentication, InteractiveLoginAuthentication
@@ -37,9 +36,9 @@ def retrieve_workspace():
         print('Trying to load workspace from config file')
         ws = Workspace.from_config(auth=auth)
         return ws
-    except Exception as e:
+    except Exception as ex:
         print('Workspace could not be loaded from config file.')
-        print(e)
+        print(ex)
 
     try:
         print('Trying to load workspace from name')
@@ -50,8 +49,10 @@ def retrieve_workspace():
             auth=auth
         )
         return ws
-    except Exception as e:
+    except KeyError:
+        print('Environment variables missing: AMLWORKSPACE, RESOURCE_GROUP or SUBSCRIPTION_ID.')
+    except Exception as ex:
         print('Workspace not found.')
-        print(e)
+        print(ex)
 
     raise RuntimeError('Error - Workspace not found')
