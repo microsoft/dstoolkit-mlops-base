@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 import os
-import yaml
 import inspect
 import importlib
 from pathlib import Path
+import yaml
 
 
 def get_env_var(name):

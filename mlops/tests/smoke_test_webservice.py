@@ -3,6 +3,7 @@
 
 import argparse
 
+import conftest  # Configures paths for tests
 from aml_utils import workspace, webservice
 
 
