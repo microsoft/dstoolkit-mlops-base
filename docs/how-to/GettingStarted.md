@@ -63,7 +63,7 @@ CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE
 
 ```
 PYTHON_VERSION: the version of python. Default value is 3.8
-SDK_VERSION: the version of Azure ML SDK. Default value is 1.35
+SDK_VERSION: the version of Azure ML SDK. Default value is 1.53
 AML_DATASET: training dataset name.
 AML_MODEL_NAME: model name (use in model register)
 

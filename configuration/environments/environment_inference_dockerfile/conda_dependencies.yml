@@ -3,9 +3,9 @@ channels:
 dependencies:
 - python=3.8
 - pip:
-  - azureml-core==1.43.0
-  - azureml-defaults==1.43.0
-  - azureml-contrib-services==1.43.0
+  - azureml-core==1.53.0
+  - azureml-defaults==1.53.0
+  - azureml-contrib-services==1.53.0
   - pandas
   - joblib
 
