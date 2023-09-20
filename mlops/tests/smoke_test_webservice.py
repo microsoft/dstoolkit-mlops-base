@@ -3,7 +3,7 @@
 
 import argparse
 
-import conftest  # NOQA: F401 - Configures paths for tests
+import conftest  # NOQA: F401 - Configures path to use aml_utils
 from aml_utils import workspace, webservice
 
 

@@ -2,7 +2,8 @@
 
 # MLOps Solution Accelerator
 
-This repository contains the basic repository structure for machine learning projects based on Azure technologies (Azure ML and Azure DevOps). The folder names and files are chosen based on personal experience. You can find the principles and ideas behind the structure, which we recommend to follow when customizing your own project and MLOps process. Also, we expect users to be familiar with azure machine learning concepts and how to use the technology.
+This repository contains the basic repository structure for machine learning projects based on Azure technologies (Azure Machine Learning and Azure DevOps).
+The folder names and files are chosen based on personal experience. You can find the principles and ideas behind the structure, which we recommend to follow when customizing your own project and MLOps process. Also, we expect users to be familiar with Azure Machine Learning (AML) concepts and how to use the technology.
 
 ## Prerequisites
 
@@ -20,21 +21,21 @@ Follow the step below to setup the project in your subscription.
 
    - For general best-practices, we invite you to visit the official [Cloud Adoption Framework](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/ai-machine-learning-resource-organization?branch=pr-en-us-1541)
 
-   - if you are starting with MLOps, you will find the necessary Azure Devops pipelines and ARM templates in the folder _infrastructure_ to setup the recommended infrastructure. To deploy the infrastructure have a look at [Infrastructure Setup](./docs/how-to/InfrastructureDesign.md).
+   - if you are starting with MLOps, you will find the necessary Azure Devops pipelines and ARM templates in the folder _infra_ to setup the recommended infrastructure. To deploy the infrastructure have a look at [Infrastructure Setup](./docs/how-to/InfrastructureDesign.md).
 
    - if you already have a preferred architecture and Azure resources, you can delete the infrastructure folder. Nevertheless, we invite you to have a look the recommended infrastructure ['AzureDevops'](./docs/how-to/GettingStarted.md#run-the-pipeline). To use this template, you need to create a service principal to [manage identities in ADO](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/connect-to-azure?view=azure-devops), (if needed) [connect Azure KeyVault to ADO](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/azure-key-vault?view=azure-devops), and [add environmental variables to in ADO](https://docs.microsoft.com/en-us/azure/devops/pipelines/library/variable-groups?view=azure-devops&tabs=classic).
 
-2. **Creating your CI/CD Pipeline to Azure Devops.** In the folder **./azure-pipelines** you will find the yaml file to setup your CI/CD pipeline in Azure Devops (ADO). To do so, have a look at ['Azure Devops Setup'](./docs/how-to/GettingStarted.md#run-the-pipeline).
+2. **Creating your CI/CD Pipeline to Azure Devops.** In the folder **./azure-pipelines** you will find the yaml files to setup your CI/CD pipeline in Azure Devops (ADO). To do so, have a look at ['Azure Devops Setup'](./docs/how-to/GettingStarted.md#run-the-pipeline).
 
-If you have managed to run the entire example, well done ! You can now adapt the same code to your own use case with the exact same infrastructure and CI/CD pipeline. To do so, follow these steps:
+If you have managed to run the entire example, well done! You can now adapt the same code to your own use case with the exact same infrastructure and CI/CD pipeline. To do so, follow these steps:
 
-1. Add your AML-related variables (model, dataset name, experiment name, pipeline name ...) in [configuration-aml.variable](./configuration/configuration-aml.variables.yml) in the _configuration folder_
+1. Add your AML-related variables (model, dataset name, experiment name, pipeline name ...) in the configuration file [configuration-aml.variables.yml](./configuration/configuration-aml.variables.yml).
 
-2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra*.variables](./configuration/configuration-infra-DEV.variables.yml) in the _configuration folder_. By default, the template provides two yml files for DEV and PROD environment.
+2. Add your infra-related environment variables (azure environment, ...) in [configuration-infra-*.variables.yml](./configuration/configuration-infra-DEV.variables.yml) in the [**./configuration**](./configuration/) folder. By default, the template provides two yaml files for DEV and PROD environment.
 
-3. Add your core machine learning code (feature engineering, training, scoring, etc) in **./src**. We provide the structure of the core scripts. You can fill the core scripts with your own functions.
+3. Add your core machine learning code (feature engineering, training, scoring, etc) in [**./src**](./src/). We provide the structure of the core scripts. You can fill the core scripts with your own functionality.
 
-4. Add your operation scripts that handle the core scripts (e.g sending the training script to a compute target, registering a model, creating an azure ml pipeline,etc) to **operation/execution**. We provide some examples to easily setup your experiments and Azure Machine Learning Pipeline
+4. If needed, adapt the ML operation scripts that handle the core scripts (e.g sending the training script to a compute target, registering a model, creating an azure ml pipeline,etc) in [**./mlops**](./mlops/). We provide some examples to easily setup your experiments and Azure Machine Learning pipelines.
 
 The project folders are structured in a way to rapidly move from a notebook experimentation to refactored code ready for deployment as following: ![design folder](docs/media/folder_design.PNG)
 
@@ -60,34 +61,27 @@ For more details on the coding guidelines and explanation on the folder structur
    - (A) for local dev/experimentation: may be stored in the project root folder (requirement.txt or environment.yml). It is required to install the project environment on a different laptop, devops agent, etc.
    - (B) for remote compute: stored in **_configuration/environments_** contains only the necessary packages to be installed on remote compute targets or AKS.
 
-4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
+4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_aml_utils_** file/module in both **_src_** and **_mlops_**.
 
 ## Default Directory Structure
 
 ```bash
-├───azure-pipelines     # folder containing all the azure devops pipelines
-│   ├───templates       # any yml template files
-│   └───configuration   # any configuration files
-│       ├───compute
-│       └───environments
-├── docs
-│   ├── code            # documenting everything in the code directory (could be sphinx project for example)
-│   ├── data            # documenting datasets, data profiles, behaviors, column definitions, etc
-│   ├── how-to          # documents on how to use this template and how to setup the environment
-│   ├── media           # storing images, videos, etc, needed for docs.
-│   └── references      # for collecting and documenting external resources relevant to the project
-├───notebooks           # experimentation folder with notebooks, code and other. The files don't need to be committed
-├───operation           # all the code to execute the source scripts
-│   ├───execution       # azure ml scripts to run source script on remote
-│   ├───monitoring      # anything related to monitoring, model performance, data drifts, model scoring, etc
-│   └───tests           # for testing your code, data, and outputs
-│       ├───data_validation     # any data validation scripts
-│       ├───integration         # integration tests like training pipeline, scoring script on AKS, etc
-│       └───unit                # unit tests
-|── src
+├───azure-pipelines       # folder containing all the azure devops pipelines for CI/CD
+│   └───templates         # any yaml template files
+├───configuration         # all configuration files
+│       ├───compute       # definitions of computes used for training and inference
+│       └───environments  # definitions of environments used for training and inference
+├── docs                  # documentation folder
+│   ├── how-to            # documents on how to use this template and how to setup the environment
+│   ├── media             # storing images, videos, etc, needed for docs.
+│   └── references        # external resources relevant to the project
+├───notebooks             # experimentation folder with notebooks, code and other. This code is not part of the operationalized flow.
+├───mlops                 # all the code to orchestrate machine learning operations
+│   └───tests             # for testing your code, data, and outputs
+├── src                   # data science code adapted to the particular use case.
 ├── .gitignore
 ├── README.md
-└── requirement.txt
+└── requirements.txt
 ```
 
 ## Contribution
