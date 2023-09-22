@@ -6,7 +6,7 @@
 variables:
 
   PYTHON_VERSION: 3.8
-  SDK_VERSION: 1.43
+  SDK_VERSION: 1.53
   VM_VERSION: ubuntu-20.04
 
   AML_DATASET: mydataset
