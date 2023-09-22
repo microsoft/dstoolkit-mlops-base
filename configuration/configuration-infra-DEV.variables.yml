@@ -7,13 +7,13 @@ variables:
 
   # DEV Environment
   ENVIRONMENT: DEV
-  RESOURCE_GROUP: rg-mlops-template-dev-001
+  RESOURCE_GROUP: rg-mlops-base
   LOCATION: westeurope
-  NAMESPACE: mlopsdev
-  SERVICECONNECTION_RG: conn-mlops-subscription
-  SERVICECONNECTION_WS: conn-mlops-aml-bsc-dev-tmpl
-  AMLWORKSPACE: aml$(NAMESPACE)
-  STORAGEACCOUNT: sa$(NAMESPACE)
-  KEYVAULT: kv$(NAMESPACE)
-  APPINSIGHTS: ai$(NAMESPACE)
-  CONTAINERREGISTRY: cr$(NAMESPACE)
+  NAMESPACE: mlopsbasedev
+  AMLWORKSPACE: $(NAMESPACE)aml
+  STORAGEACCOUNT: $(NAMESPACE)sa
+  KEYVAULT: $(NAMESPACE)kv
+  APPINSIGHTS: $(NAMESPACE)ai
+  CONTAINERREGISTRY: $(NAMESPACE)cr
+  SERVICECONNECTION_RG: conn-mlopsbase-rg
+  SERVICECONNECTION_WS: conn-mlopsbase-amldev
