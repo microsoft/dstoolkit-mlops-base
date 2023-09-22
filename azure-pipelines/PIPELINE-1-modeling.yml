@@ -87,7 +87,7 @@ stages:
         resourceGroup: $(RESOURCE_GROUP)
         amlWorkspace: $(AMLWORKSPACE)
         artifactName: $(ARTIFACT_NAME)
-        deploymentScript: operation/execution/build_training_pipeline.py
+        deploymentScript: mlops/build_training_pipeline.py
         scriptArguments: --version $(Build.BuildId)
 
     - template: templates/utils/invoke-aml-pipeline.template.yml
