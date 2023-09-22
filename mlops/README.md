@@ -1,15 +1,11 @@
-# Operation directory
+# MLOps directory
 
-The operation directory contains all the logic and configuration to operationalize your data science project.
+The mlops directory contains all the logic and configuration to operationalize your data science project.
 
-## Execution folder
+The python scripts in is folder contain all the code that manages the end-to-end orchestration of ML artifacts through Azure Machine Learning. 
+For instance, sending the training to a remote target, creating data science pipelines, using automl, etc.
+Basically, everything functionalities that is not core data science scripts.
 
-This folder contains all the code that manages the core scripts as, for instance, sending the training to a remote target, creating data science pipelines, using automl, etc. Basically, everything functionalities that is not core data science scripts.
+The `aml_utils` folder is a helper module used by these mlops scripts to interact with Azure Machine Learning through the SDK.
 
-## Tests
-
-This folder contains all the different tests to be run in the CI/CD pipeline: data tests, integration tests, unit tests, etc
-
-## Monitoring
-
-This folder contains all the logic to monitor the artifacts: the models performance, model interpretability, data drifts, logging, model prediction logs.
+The `tests` folder contains different tests to be run in the CI/CD pipeline: unit tests, integration tests, etc.
