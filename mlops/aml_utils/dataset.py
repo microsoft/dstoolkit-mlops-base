@@ -1,8 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import sys
-
 from azureml.core import Dataset, Datastore
 
 
@@ -10,14 +8,13 @@ def register_dataset(ws, datastore, data_path, dataset_name):
     """Upload a local dataset to datastore and register it as a dataset.
 
     Args:
-        ws (Workspace): The Azure Machine Learning workspace object
-        datastore (str): The Azure datastore name
+        ws (Workspace): The Azure Machine Learning workspace object.
+        datastore (str): The Azure datastore name.
         data_path (str): The path to the dataset on the storage account. Example: path/to/my/data.csv
-        dataset_name (str): The dataset name (without the file extension) listed in AML workspace.  
+        dataset_name (str): The dataset name (without the file extension) listed in AML workspace.
 
     Returns:
         Dataset
-
     """
 
     if isinstance(datastore, str):
