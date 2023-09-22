@@ -1,6 +1,6 @@
 {
     "name": "environment_inference",
-    "version": "oct21",
+    "version": "sep23",
     "environmentVariables": {
         "EXAMPLE_ENV_VAR": "EXAMPLE_VALUE"
     },
@@ -12,7 +12,7 @@
     },
     "docker": {
         "enabled": false,
-        "baseImage": "mcr.microsoft.com/azureml/openmpi3.1.2-ubuntu18.04:20210922.v1",
+        "baseImage": "mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:20230727.v1",
         "baseDockerfile": null,
         "sharedVolumes": true,
         "shmSize": "2g",
