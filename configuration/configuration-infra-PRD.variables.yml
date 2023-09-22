@@ -9,11 +9,11 @@ variables:
   ENVIRONMENT: PRD
   RESOURCE_GROUP: rg-mlops-template-prod-001
   LOCATION: westeurope
-  NAMESPACE: mlopsprodtmpl
+  NAMESPACE: mlopsprod
   AMLWORKSPACE: aml$(NAMESPACE)
   STORAGEACCOUNT: sa$(NAMESPACE)
   KEYVAULT: kv$(NAMESPACE)
   APPINSIGHTS: ai$(NAMESPACE)
   CONTAINERREGISTRY: cr$(NAMESPACE)
-  SERVICECONNECTION_RG: conn-mlops-sub-infra
+  SERVICECONNECTION_RG: conn-mlops-subscription
   SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod-tmpl
