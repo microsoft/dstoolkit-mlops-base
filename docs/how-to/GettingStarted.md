@@ -27,7 +27,7 @@ If you want to run the pipeline from your ADO repository, follow the steps bello
 
 1. Add the pipeline in ADO and run it. For that go to _pipelines_ and click on _new pipeline_ at the top right. You should see the following screen ![IaCpipeline](../media/build-connect.png)
 
-Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing Azure Pipelines YAML file** option and set the path to _dstoolkit-mlops-base/azure-pipelines/PIPELINE-0-setup.yml_ and click on _continue_ ![SelectIaCPipe](../media/select-iac-pipeline.png) In the _review_ section, click on _run_.
+Select: **Azure Repos Git**, the name repo where you clone this repo, **Existing Azure Pipelines YAML file** option and set the path to _dstoolkit-mlops-base/infra/PIPELINE-0-setup.yml_ and click on _continue_ ![SelectIaCPipe](../media/select-iac-pipeline.png) In the _review_ section, click on _run_.
 
 2. If everything worked well, you should see your new resource groups in the Azure portal with the AML resources.
 
@@ -50,22 +50,24 @@ ENVIRONMENT: Name of environment. We use uppercase DEV, TEST, PRD to refer to en
 RESOURCE_GROUP: Name of the resourceGroup to create in this environment
 LOCATION: Location for the resourceGroup in this environment
 NAMESPACE: Namespace in this environment (use to identify and refer to the name of resources used in this environment).
-SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
-SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for this environment
 AMLWORKSPACE: Name of the azure machine learning workspace in this environment. Default name is aml$(NAMESPACE)
 STORAGEACCOUNT: Name of the storage account. Default name is sa$(NAMESPACE)
 KEYVAULT: Name of the key vault. Default name is kv$(NAMESPACE)
 APPINSIGHTS: Name of the app insight. Default name is ai$(NAMESPACE)
 CONTAINERREGISTRY: Name of the container registry. Default name is cr$(NAMESPACE)
+SERVICECONNECTION_RG: Name of the Service Connection in Azure DevOps in subscription scope level
+SERVICECONNECTION_WS: Name of the Service Connection in Azure DevOps in machine learning workspace scope level for this environment
 ```
 
 - **[AML-related variables](../../configuration/configuration-aml.variables.yml)**: contains the definition of AML-related environment variables
 
 ```
 PYTHON_VERSION: the version of python. Default value is 3.8
-SDK_VERSION: the version of Azure ML SDK. Default value is 1.35
+SDK_VERSION: the version of Azure ML SDK. Default value is 1.53
+VM_VERSION: the version for the agent in Azure DevOps. Default value is ubuntu-20.04
+
 AML_DATASET: training dataset name.
-AML_MODEL_NAME: model name (use in model register)
+AML_MODEL_NAME: model name used in model registry
 
 # Training
 TRAINING_EXPERIMENT: training experiment name

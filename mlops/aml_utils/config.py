@@ -2,10 +2,10 @@
 # Licensed under the MIT License.
 
 import os
-import yaml
 import inspect
 import importlib
 from pathlib import Path
+import yaml
 
 
 def get_env_var(name):
@@ -34,7 +34,7 @@ def get_env_var(name):
 
 
 def get_root_path():
-    return Path(__file__).parents[3]  # go 2 layer up
+    return Path(__file__).parents[2]  # go 2 layers up
 
 
 def retrieve_config():

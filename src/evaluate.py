@@ -6,12 +6,9 @@ import argparse
 
 import joblib
 import pandas as pd
-from matplotlib import pyplot as plt
-from azureml.core import Run, Model
+# from matplotlib import pyplot as plt
+from azureml.core import Run
 from azureml.core.run import _OfflineRun
-from azureml.exceptions import WebserviceException
-
-import aml_utils
 
 
 DIR_FIGURES = 'figures/'
@@ -32,7 +29,6 @@ def main(model_path, dataset_path, output_dir):
 
     step_run = Run.get_context()
     pipeline_run = step_run.parent
-    ws = aml_utils.retrieve_workspace()
 
     print("Loading model...")
     model = joblib.load(model_path)
@@ -74,11 +70,11 @@ def split_data_features(data):
 
 def get_model_evaluation(model, X_test, y_test):
     # Evaluate your model here
-    metrics = { 'examplemetric1': 0.1, 'examplemetric2': 2.2 }
+    metrics = {'examplemetric1': 0.1, 'examplemetric2': 2.2}
     plots = {
-        'scatter': pd.DataFrame({'pred': [1, 0.2, 0.3], 'real': [0.9, 0.15, 0.5]}) \
-                        .plot(x='real', y='pred', kind='scatter', figsize=(5, 5)) \
-                        .get_figure()
+        'scatter': pd.DataFrame({'pred': [1, 0.2, 0.3], 'real': [0.9, 0.15, 0.5]})
+                     .plot(x='real', y='pred', kind='scatter', figsize=(5, 5))
+                     .get_figure()
     }
     return metrics, plots
 

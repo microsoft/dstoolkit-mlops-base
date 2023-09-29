@@ -7,13 +7,13 @@ variables:
 
   # PRD Environment
   ENVIRONMENT: PRD
-  RESOURCE_GROUP: rg-mlops-template-prod-001
+  RESOURCE_GROUP: rg-mlops-base
   LOCATION: westeurope
-  NAMESPACE: mlopsprodtmpl
-  AMLWORKSPACE: aml$(NAMESPACE)
-  STORAGEACCOUNT: sa$(NAMESPACE)
-  KEYVAULT: kv$(NAMESPACE)
-  APPINSIGHTS: ai$(NAMESPACE)
-  CONTAINERREGISTRY: cr$(NAMESPACE)
-  SERVICECONNECTION_RG: conn-mlops-sub-infra
-  SERVICECONNECTION_WS: conn-mlops-aml-bsc-prod-tmpl
+  NAMESPACE: mlopsbaseprod
+  AMLWORKSPACE: $(NAMESPACE)aml
+  STORAGEACCOUNT: $(NAMESPACE)sa
+  KEYVAULT: $(NAMESPACE)kv
+  APPINSIGHTS: $(NAMESPACE)ai
+  CONTAINERREGISTRY: $(NAMESPACE)cr
+  SERVICECONNECTION_RG: conn-mlopsbase-rg
+  SERVICECONNECTION_WS: conn-mlopsbase-amlprod

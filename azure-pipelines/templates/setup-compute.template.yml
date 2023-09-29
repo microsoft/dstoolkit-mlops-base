@@ -27,7 +27,7 @@ jobs:
       serviceConnection: ${{parameters.serviceConnection}}
       resourceGroup: ${{parameters.resourceGroup}}
       amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/create_compute.py
+      scriptPath: mlops/create_compute.py
       scriptArguments: |
         --name $(AML_TRAINING_COMPUTE) \
         --config-path configuration/compute/${{parameters.environment}}-training-compute.yml
@@ -41,7 +41,7 @@ jobs:
       serviceConnection: ${{parameters.serviceConnection}}
       resourceGroup: ${{parameters.resourceGroup}}
       amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/create_compute.py
+      scriptPath: mlops/create_compute.py
       scriptArguments: |
         --name $(AML_BATCHINFERENCE_COMPUTE) \
         --config-path configuration/compute/${{parameters.environment}}-batchinference-compute.yml
@@ -61,7 +61,7 @@ jobs:
       serviceConnection: ${{parameters.serviceConnection}}
       resourceGroup: ${{parameters.resourceGroup}}
       amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/create_compute.py
+      scriptPath: mlops/create_compute.py
       scriptArguments: |
         --name $(AKS_COMPUTE) \
         --config-path configuration/compute/${{parameters.environment}}-realtimeinference-compute-aks.yml

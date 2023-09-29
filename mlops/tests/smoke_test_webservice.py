@@ -3,6 +3,7 @@
 
 import argparse
 
+import conftest  # NOQA: F401 - Configures path to use aml_utils
 from aml_utils import workspace, webservice
 
 
@@ -12,7 +13,7 @@ def main(webservice_name):
     if aml_webservice is not None:
         scoring_uri = aml_webservice.scoring_uri
         key = webservice.retrieve_authentication_key(aml_webservice)
-        sample_file_path = 'operation/tests/data_validation/smoke_test_ws_sample_data.json'
+        sample_file_path = 'mlops/tests/smoke_test_ws_sample_data.json'
         resp = webservice.call_webservice(scoring_uri, sample_file_path, key)
         print(resp)
 

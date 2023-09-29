@@ -2,10 +2,11 @@ channels:
 - conda-forge
 dependencies:
 - python=3.8
+- pip
 - pip:
-  - azureml-core==1.43.0
-  - azureml-defaults==1.43.0
-  - pandas
+  - azureml-core==1.53.0
+  - azureml-defaults==1.53.0
   - joblib
-
-name: basic_env
+  - pandas
+  - matplotlib
+name: basic_training_env

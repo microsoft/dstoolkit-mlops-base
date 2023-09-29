@@ -38,7 +38,7 @@ Azure machine learning provides a lot of different APIs and tools to create an o
 
 It is important to understand how training is performed in azure. In essence, one writes normal core machine learning scripts like train.py, score.py, etc and another set of separate scripts that will perform environment configuration and execute the core scripts on a remote machine, as for instance a VM or AKS cluster as explained [here](https://docs.microsoft.com/en-us/azure/machine-learning/concept-environments). One can choose to either use python scripts (or R) to execute the remote run or Azure CLI. We do not recommend the later as it constrains too much the experimentation (question 1).
 
-For simplicity, I will call the set of core script "Core Scripts", that you can find in the **src folder**, and the other set "Ops Scripts", saved in the **operation folder** as they handle the operation. Why is this distinction so important ? Azure has different ways for handling credentials and each set of scripts use different approaches to handle access to the workspace and datasets. We discuss this point in the next section.
+For simplicity, I will call the set of core script "Core Scripts", that you can find in the **src folder**, and the other set "Ops Scripts", saved in the **mlops folder** as they handle the operation. Why is this distinction so important ? Azure has different ways for handling credentials and each set of scripts use different approaches to handle access to the workspace and datasets. We discuss this point in the next section.
 
 ### Workspace/Secrets
 
@@ -54,7 +54,7 @@ ws = run.experiment.workspace
 
 3. Through a service principal stored as environment variable. This method is used in devops pipelines when performing integration. To generate and use service principals follow [this link](https://docs.microsoft.com/en-us/azure/machine-learning/how-to-setup-authentication)
 
-In the **src** and **operation/execution** folder, one can find the _utils.py_ scripts that shows how the credentials are retrieved.
+In the **src** and **mlops** folder, one can find the _utils.py_ scripts that shows how the credentials are retrieved.
 
 Now that we know how to get the workspace credentials we can show how to train a model, handle the data, and define a scoring script.
 
@@ -110,7 +110,7 @@ We will list here the different approach to package your service:
 
 ## How to use
 
-Examples of core machine learning scripts like training, scoring, etc are saved in **_src_**. The other scripts that managed the core scripts by, for instance, sending to training compute target, to ask, registering a model, etc are all stored in **_operation/execution_**. The folder contains some examples using the azureml python sdk. It is also possible to use the azure-cli to handle the execution of the core scripts, which is the preferred option by DevOps engineers usually.
+Examples of core machine learning scripts like training, scoring, etc are saved in **_src_**. The other scripts that managed the core scripts by, for instance, sending to training compute target, to ask, registering a model, etc are all stored in **_mlops_**. The folder contains some examples using the azureml python sdk. It is also possible to use the azure-cli to handle the execution of the core scripts, which is the preferred option by DevOps engineers usually.
 
 To use the scripts on your local machine, add the azure ml workspace credentials in a **config.json** file in the root directory and **very important (!)** add it to the gitignore file, if it is not present already.
 
@@ -123,7 +123,7 @@ Some general guidelines:
 3. There are 2 distinct configuration files for environment creation: (1) for local dev/experimentation which can be stored in the project root folder (as requirement.txt, environment.yml), and (2) in **_configuration/environments/_** in whatever format accepted by azureml (**_yml_**, **_json_**, etc). (1)
 is required to install the project environment on a different laptop, devops agent, etc and (2) contains only the necessary packages to be installed on remote compute targets or AKS that are hosting the core scripts
 
-4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_operation/execution_**.
+4. There are only 2 core secrets to handle: the azureml workspace authentication key and a service principal. Depending on your use-case or constraints, these secrets may be required in the core scripts or execution scripts. We provide the logic to retrieve them in a **_utils.py_** file in both **_src_** and **_mlops_**.
 
 Environment variables must be provided:
 

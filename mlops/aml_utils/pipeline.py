@@ -24,7 +24,7 @@ def publish_pipeline(ws, name, steps, description=None, version=None):
     try:
         published_endpoint = PipelineEndpoint.get(workspace=ws, name=pipeline_endpoint_name)
         published_endpoint.add_default(published_pipeline)
-    except:
+    except Exception:
         published_endpoint = PipelineEndpoint.publish(
             workspace=ws,
             name=pipeline_endpoint_name,

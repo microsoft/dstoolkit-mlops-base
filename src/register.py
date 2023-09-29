@@ -24,7 +24,6 @@ def main(model_dir, model_name, model_description):
 
     """
 
-    #TODO: what's the expected behaviour for offline runs?
     step_run = Run.get_context()
     pipeline_run = step_run.parent
     ws = aml_utils.retrieve_workspace()
@@ -73,7 +72,7 @@ def is_new_model_better(run, old_model):
 def parse_args(args_list=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('--model-dir', type=str, required=True, help='Input from training step output')
-    parser.add_argument('--eval-dir', type=str, required=True, help='Input from evaluation step output') 
+    parser.add_argument('--eval-dir', type=str, required=True, help='Input from evaluation step output')
     parser.add_argument('--model-name', type=str)
     parser.add_argument('--model-description', type=str)
 

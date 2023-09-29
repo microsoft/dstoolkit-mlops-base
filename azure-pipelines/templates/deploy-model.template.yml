@@ -48,7 +48,7 @@ jobs:
     resourceGroup: ${{parameters.resourceGroup}}
     amlWorkspace: ${{parameters.amlWorkspace}}
     artifactName: ${{parameters.artifactName}}
-    deploymentScript: operation/execution/deploy_model.py
+    deploymentScript: mlops/deploy_model.py
     scriptArguments: |
       --model-name $(AML_MODEL_NAME) \
       --config-path configuration/compute/${{parameters.environment}}-realtimeinference-webservice-${{parameters.deploymentType}}.yml \
@@ -65,7 +65,7 @@ jobs:
       serviceConnection: ${{parameters.serviceConnection}}
       resourceGroup: ${{parameters.resourceGroup}}
       amlWorkspace: ${{parameters.amlWorkspace}}
-      scriptPath: operation/execution/smoke_test_webservice.py
+      scriptPath: mlops/tests/smoke_test_webservice.py
       scriptArguments: --webservice-name ${{parameters.webserviceName}}
       scriptExtraDependencies: pyyaml requests
 

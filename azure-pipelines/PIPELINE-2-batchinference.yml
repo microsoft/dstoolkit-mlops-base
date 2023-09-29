@@ -72,7 +72,7 @@ stages:
         serviceConnection: $(SERVICECONNECTION_WS)
         resourceGroup: $(RESOURCE_GROUP)
         amlWorkspace: $(AMLWORKSPACE)
-        deploymentScript: operation/execution/build_batchinference_pipeline.py
+        deploymentScript: mlops/build_batchinference_pipeline.py
         scriptArguments: --version $(Build.BuildId)
         createArtifact: true
 
