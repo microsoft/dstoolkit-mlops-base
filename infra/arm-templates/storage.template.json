@@ -16,6 +16,9 @@
         },
         "accessTier": {
             "type": "string"
+        },
+        "minimumTlsVersion": {
+            "type": "string"
         }
     },
     "variables": {},
@@ -31,6 +34,7 @@
             "kind": "[parameters('kind')]",
             "properties": {
                 "accessTier": "[parameters('accessTier')]",
+                "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
                 "supportsHttpsTrafficOnly": true
             }
         }

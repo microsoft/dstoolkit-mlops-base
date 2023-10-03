@@ -10,6 +10,9 @@
         },
         "accessTier": {
             "value": "Hot"
+        },
+        "minimumTlsVersion": {
+            "value": "TLS1_2"
         }
     }
 }
