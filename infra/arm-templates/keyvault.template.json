@@ -10,10 +10,12 @@
         },
         "createMode": {
             "type": "string"
+        },
+        "publicNetworkAccess": {
+            "type": "string"
         }
     },
-    "variables": {
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
@@ -28,7 +30,8 @@
                 "tenantId": "[subscription().tenantId]",
                 "createMode": "[parameters('createMode')]",
                 "enabledForTemplateDeployment": true,
-                "accessPolicies": []
+                "accessPolicies": [],
+                "publicNetworkAccess": "[parameters('publicNetworkAccess')]"
             },
             "scale": null,
             "tags": {}

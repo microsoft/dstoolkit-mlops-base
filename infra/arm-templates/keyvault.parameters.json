@@ -4,6 +4,9 @@
     "parameters": {
         "createMode": {
             "value": "default"
+        },
+        "publicNetworkAccess": {
+            "value": "Disabled"
         }
     }
 }
