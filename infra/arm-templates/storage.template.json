@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "name": {
@@ -16,13 +16,16 @@
         },
         "accessTier": {
             "type": "string"
+        },
+        "minimumTlsVersion": {
+            "type": "string"
         }
     },
     "variables": {},
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
-            "apiVersion": "2018-07-01",
+            "apiVersion": "2019-06-01",
             "name": "[parameters('name')]",
             "location": "[parameters('location')]",
             "sku": {
@@ -31,6 +34,7 @@
             "kind": "[parameters('kind')]",
             "properties": {
                 "accessTier": "[parameters('accessTier')]",
+                "minimumTlsVersion": "[parameters('minimumTlsVersion')]",
                 "supportsHttpsTrafficOnly": true
             }
         }
